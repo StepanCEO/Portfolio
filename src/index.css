@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Manrope:wght@500;700;800&family=Unbounded:wght@700;800;900&display=swap');
+
+:root {
+  --black: #11100e;
+  --page: #f5f7f1;
+  --paper: #fbfcf7;
+  --text: #20211f;
+  --muted: rgba(245, 247, 241, 0.62);
+  --muted-dark: #65685f;
+  --line: #d9ddd0;
+  --line-strong: #c7ccbf;
+  --acid: #d9ff4a;
+  --coral: #ff5b3f;
+  --cyan: #8fe8ff;
+  --font-ui: 'Manrope', 'Segoe UI', sans-serif;
+  --font-display: 'Unbounded', 'Arial Black', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Consolas', monospace;
+  color: var(--text);
+  font: 500 16px/1.5 var(--font-ui);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--page);
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  background: var(--page);
+  overflow-x: clip;
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+#root {
+  min-height: 100svh;
+  overflow-x: clip;
+}
+
+:focus-visible {
+  outline: 3px solid var(--coral);
+  outline-offset: 3px;
+}
