@@ -8,17 +8,9 @@
       content="Портфолио StepanCEO: разработка лендингов, Telegram-ботов и Mini Apps."
     />
     <title>StepanCEO | Лендинги, Telegram-боты и Mini Apps</title>
-    <script type="module">
-      const isGitHubPages = location.hostname.endsWith('github.io')
-
-      if (isGitHubPages) {
-        location.replace(new URL('./dist/app.html', location.href).href)
-      } else {
-        import('/src/main.jsx')
-      }
-    </script>
   </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
