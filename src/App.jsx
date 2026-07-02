@@ -2,6 +2,7 @@ import { startTransition, useState } from 'react'
 import './App.css'
 
 const telegramUrl = 'https://t.me/SStepCEO'
+const reviewImage = (name) => `${import.meta.env.BASE_URL}reviews/${name}`
 
 const services = [
   {
@@ -77,15 +78,15 @@ const projects = [
 
 const reviews = [
   {
-    image: '/reviews/review-01.png',
+    image: reviewImage('review-01.png'),
     alt: 'Отзывы клиентов о Telegram-боте для фильтрации контента и мониторинге групп',
   },
   {
-    image: '/reviews/review-02.png',
+    image: reviewImage('review-02.png'),
     alt: 'Отзывы клиентов о Telegram-боте для магазина одежды и софте для рассылки',
   },
   {
-    image: '/reviews/review-03.png',
+    image: reviewImage('review-03.png'),
     alt: 'Отзывы клиентов о Telegram-боте по продаже курсов и Mini App frontend',
   },
 ]
