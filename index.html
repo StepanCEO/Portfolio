@@ -12,7 +12,7 @@
       const isGitHubPages = location.hostname.endsWith('github.io')
 
       if (isGitHubPages) {
-        location.replace(new URL('./dist/app.html', location.href).href)
+        location.replace(new URL('./dist/index.html', location.href).href)
       } else {
         import('/src/main.jsx')
       }
