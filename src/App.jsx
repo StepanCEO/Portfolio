@@ -1,9 +1,22 @@
 import { startTransition, useEffect, useRef, useState } from 'react'
 import './App.css'
 
-const telegramUrl = 'https://t.me/SStepCEO'
+// Текст, который сразу подставляется в чат при клике на «Написать».
+const contactText = 'Здравствуйте, я по поводу разработки под заказ!'
+// t.me/<user>?text= — большинство клиентов открывают чат с уже введённым
+// текстом. На всякий случай при клике дублируем текст в буфер обмена.
+const telegramUrl = `https://t.me/SStepCEO?text=${encodeURIComponent(contactText)}`
 const telegramHandle = '@SStepCEO'
 const reviewImage = (name) => `${import.meta.env.BASE_URL}reviews/${name}`
+const projectImage = (name) => `${import.meta.env.BASE_URL}projects/${name}`
+
+function copyContactText() {
+  try {
+    navigator.clipboard?.writeText(contactText)
+  } catch {
+    // не критично: текст всё равно уйдёт через ?text=
+  }
+}
 
 const marqueeText =
   'Лендинги под ключ ✦ Telegram-боты ✦ Mini Apps ✦ Вёрстка ✦ Дизайн ✦ Пиксель-анимации ✦ Деплой ✦ Поддержка ✦ '
@@ -37,6 +50,7 @@ const projects = [
     tags: ['CRM', 'Фронтенд', 'Интерфейс'],
     link: 'https://lsgarden.ru/',
     action: 'Открыть',
+    image: projectImage('crm-flower.png'),
     seed: 3,
   },
   {
@@ -48,6 +62,7 @@ const projects = [
     result: 'Новые заказы и вакансии приходят без ручного просмотра десятков чатов.',
     tags: ['Парсинг', 'Уведомления', 'Telegram'],
     action: 'Обсудить похожий',
+    image: projectImage('jobs-monitor.png'),
     seed: 7,
   },
   {
@@ -59,6 +74,7 @@ const projects = [
     result: 'Пользователь получает быстрый инструмент вместо хаотичного диалога с ИИ.',
     tags: ['ИИ', 'UX бота', 'Автоматизация'],
     action: 'Обсудить похожий',
+    image: projectImage('slides-ai.png'),
     seed: 12,
   },
   {
@@ -561,7 +577,7 @@ function App() {
           <a href="#proof">Отзывы</a>
           <a href="#contact">Контакт</a>
         </nav>
-        <a className="header-cta" href={telegramUrl}>
+        <a className="header-cta" href={telegramUrl} onClick={copyContactText}>
           Telegram
           <ArrowIcon />
         </a>
@@ -590,7 +606,7 @@ function App() {
               аккуратность и понятная подача.
             </p>
             <div className="hero-actions">
-              <a className="primary-action" href={telegramUrl}>
+              <a className="primary-action" href={telegramUrl} onClick={copyContactText}>
                 Написать в Telegram
                 <ArrowIcon />
               </a>
@@ -674,7 +690,16 @@ function App() {
             {visibleProjects.map((project, index) => (
               <article className="project-row reveal" key={project.id}>
                 <div className="project-cover">
-                  <WorkCover seed={project.seed} />
+                  {project.image ? (
+                    <img
+                      className="work-photo"
+                      src={project.image}
+                      alt={project.title}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <WorkCover seed={project.seed} />
+                  )}
                   <span className="project-index mono">
                     {String(index + 1).padStart(2, '0')}
                   </span>
@@ -697,6 +722,7 @@ function App() {
                   href={project.link ?? telegramUrl}
                   target={project.link ? '_blank' : undefined}
                   rel={project.link ? 'noreferrer' : undefined}
+                  onClick={project.link ? undefined : copyContactText}
                 >
                   {project.action}
                   <ArrowIcon />
@@ -749,7 +775,7 @@ function App() {
               Напиши в Telegram: опиши, что хочешь — лендинг, бота или mini app.
               Задам пару уточняющих вопросов и прикину сроки и стоимость.
             </p>
-            <a className="primary-action" href={telegramUrl}>
+            <a className="primary-action" href={telegramUrl} onClick={copyContactText}>
               Написать {telegramHandle}
               <ArrowIcon />
             </a>
