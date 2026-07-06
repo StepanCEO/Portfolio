@@ -54,6 +54,18 @@ const projects = [
     seed: 3,
   },
   {
+    id: 'nexora',
+    type: 'site',
+    category: 'Web / Agency',
+    title: 'Сайт для digital-агентства',
+    summary: 'Премиальный лендинг для агентства NEXORA: 3D-визуал, крупная типографика, блоки услуг и метрик.',
+    result: 'Сайт с первого экрана задаёт статус агентства и удерживает внимание.',
+    tags: ['Лендинг', '3D / визуал', 'Анимации'],
+    action: 'Обсудить похожий',
+    image: projectImage('nexora-agency.png'),
+    seed: 5,
+  },
+  {
     id: 'jobs-bot',
     type: 'bot',
     category: 'Telegram / Parser',
