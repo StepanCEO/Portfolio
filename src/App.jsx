@@ -86,6 +86,7 @@ const projects = [
     result: 'Путь до покупки стал понятным, а обработка заявок автоматизированной.',
     tags: ['Продажи', 'Курсы', 'Подписка'],
     action: 'Обсудить похожий',
+    image: projectImage('courses-familia.jpg'),
     seed: 18,
   },
   {
@@ -97,6 +98,7 @@ const projects = [
     result: 'Клиент быстрее получает ответ, бренд выглядит собраннее в переписке.',
     tags: ['Сценарии', 'Лид-ген', 'Поддержка'],
     action: 'Обсудить похожий',
+    image: projectImage('water-aqua.jpg'),
     seed: 24,
   },
 ]
@@ -704,6 +706,15 @@ function App() {
                     {String(index + 1).padStart(2, '0')}
                   </span>
                 </div>
+                {project.image && (
+                  <img
+                    className="cover-full"
+                    src={project.image}
+                    alt=""
+                    aria-hidden="true"
+                    loading="lazy"
+                  />
+                )}
                 <div className="project-main">
                   <span className="mono">{project.category}</span>
                   <h3>{project.title}</h3>

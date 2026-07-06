@@ -412,6 +412,7 @@ canvas.work-cover {
 }
 
 .project-row {
+  position: relative;
   display: grid;
   grid-template-columns: 128px minmax(240px, 1fr) minmax(240px, 0.9fr) 160px;
   gap: 24px;
@@ -442,6 +443,43 @@ canvas.work-cover {
   height: 100%;
   object-fit: cover;
   object-position: center top;
+  transition: opacity 200ms ease;
+}
+
+/* полное фото-превью, всплывает при наведении на кейс (десктоп).
+   Лежит в .project-row (а не в .project-cover с overflow:hidden),
+   иначе превью обрезалось бы миниатюрой. */
+.cover-full {
+  position: absolute;
+  top: 18px;
+  left: 0;
+  transform: scale(0.94);
+  transform-origin: top left;
+  width: 460px;
+  max-width: 62vw;
+  height: 300px;
+  padding: 8px;
+  object-fit: contain;
+  background: #0d0c0b;
+  border: 1px solid rgba(245, 247, 241, 0.14);
+  border-radius: 12px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease,
+    visibility 220ms ease;
+  z-index: 45;
+}
+
+@media (hover: hover) and (min-width: 900px) {
+  .project-row:hover .cover-full {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+  }
 }
 
 .project-cover .project-index {
