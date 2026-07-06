@@ -563,6 +563,8 @@ function ArrowIcon() {
 
 function App() {
   const [activeFilter, setActiveFilter] = useState('all')
+  // открытый на весь экран скриншот кейса (null — лайтбокс закрыт)
+  const [lightbox, setLightbox] = useState(null)
   useReveal()
 
   const visibleProjects =
@@ -575,6 +577,21 @@ function App() {
       setActiveFilter(filter)
     })
   }
+
+  // пока лайтбокс открыт — блокируем прокрутку фона и закрываем по Escape
+  useEffect(() => {
+    if (!lightbox) return
+    const onKey = (event) => {
+      if (event.key === 'Escape') setLightbox(null)
+    }
+    document.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [lightbox])
 
   return (
     <div className="site-shell">
@@ -703,21 +720,34 @@ function App() {
           <div className="project-list">
             {visibleProjects.map((project, index) => (
               <article className="project-row reveal" key={project.id}>
-                <div className="project-cover">
-                  {project.image ? (
+                {project.image ? (
+                  <button
+                    type="button"
+                    className="project-cover is-tappable"
+                    onClick={() => setLightbox(project)}
+                    aria-label={`Открыть скриншот: ${project.title}`}
+                  >
                     <img
                       className="work-photo"
                       src={project.image}
                       alt={project.title}
                       loading="lazy"
                     />
-                  ) : (
+                    <span className="project-index mono">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <span className="cover-hint mono" aria-hidden="true">
+                      Открыть
+                    </span>
+                  </button>
+                ) : (
+                  <div className="project-cover">
                     <WorkCover seed={project.seed} />
-                  )}
-                  <span className="project-index mono">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                </div>
+                    <span className="project-index mono">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                  </div>
+                )}
                 {project.image && (
                   <img
                     className="cover-full"
@@ -814,6 +844,31 @@ function App() {
         </a>
         <p>Разработка лендингов, Telegram-ботов и Mini Apps. Работаю удалённо.</p>
       </footer>
+
+      {lightbox && (
+        <div
+          className="lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={lightbox.title}
+          onClick={() => setLightbox(null)}
+        >
+          <button
+            type="button"
+            className="lightbox-close"
+            aria-label="Закрыть"
+            onClick={() => setLightbox(null)}
+          >
+            ✕
+          </button>
+          <figure className="lightbox-figure" onClick={(event) => event.stopPropagation()}>
+            <img src={lightbox.image} alt={lightbox.title} />
+            <figcaption className="mono">
+              {lightbox.category} — {lightbox.title}
+            </figcaption>
+          </figure>
+        </div>
+      )}
     </div>
   )
 }
