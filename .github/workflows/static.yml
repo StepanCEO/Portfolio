@@ -35,8 +35,11 @@ jobs:
           node-version: 22
           cache: npm
 
+      # npm install (not npm ci): the lockfile only records optional deps
+      # for the platform it was generated on, so `npm ci` can fail on Linux
+      # runners over missing platform-specific optional packages.
       - name: Install dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Build
         run: npm run build
