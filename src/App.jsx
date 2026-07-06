@@ -5,11 +5,6 @@ const telegramUrl = 'https://t.me/SStepCEO'
 const telegramHandle = '@SStepCEO'
 const reviewImage = (name) => `${import.meta.env.BASE_URL}reviews/${name}`
 
-// Приёмник формы. Пусто => заявка копируется в буфер и открывается Telegram,
-// сайт работает без бэкенда. Подставь сюда URL воркера/Formspree — и форма
-// начнёт слать POST-запросы, ничего больше менять не нужно.
-const FORM_ENDPOINT = ''
-
 const marqueeText =
   'Лендинги под ключ ✦ Telegram-боты ✦ Mini Apps ✦ Вёрстка ✦ Дизайн ✦ Пиксель-анимации ✦ Деплой ✦ Поддержка ✦ '
 
@@ -536,114 +531,6 @@ function ArrowIcon() {
   )
 }
 
-/* ---------- форма заявки ---------- */
-
-function ContactForm() {
-  const [status, setStatus] = useState('')
-  const [tone, setTone] = useState('idle')
-  const [sending, setSending] = useState(false)
-
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    const form = event.currentTarget
-    const data = new FormData(form)
-
-    // honeypot: боты заполняют скрытое поле — тихо игнорируем
-    if ((data.get('company') || '').toString().trim()) return
-
-    const name = (data.get('name') || '').toString().trim()
-    const phone = (data.get('phone') || '').toString().trim()
-    const message = (data.get('message') || '').toString().trim()
-
-    if (!name || !phone || !message) {
-      setTone('error')
-      setStatus('Заполни имя, номер и описание задачи.')
-      return
-    }
-
-    // если приёмник настроен — шлём POST
-    if (FORM_ENDPOINT) {
-      setSending(true)
-      setTone('idle')
-      setStatus('Отправляю…')
-      try {
-        const res = await fetch(FORM_ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, phone, message, page: location.href }),
-        })
-        if (!res.ok) throw new Error(String(res.status))
-        setTone('ok')
-        setStatus('Готово! Заявка отправлена — отвечу в ближайшее время.')
-        form.reset()
-      } catch {
-        setTone('error')
-        setStatus(`Не отправилось. Напиши напрямую в Telegram: ${telegramHandle}`)
-      } finally {
-        setSending(false)
-      }
-      return
-    }
-
-    // без бэкенда: копируем заявку и открываем Telegram
-    const plain = `Заявка со Step Studio\n\nИмя: ${name}\nНомер: ${phone}\nЗадача: ${message}`
-    try {
-      await navigator.clipboard.writeText(plain)
-      setTone('ok')
-      setStatus('Готово! Заявка скопирована — вставь её в чат Telegram (открылся в новой вкладке).')
-    } catch {
-      setTone('ok')
-      setStatus(`Заявка готова. Открываю Telegram — напиши мне ${telegramHandle}.`)
-    }
-    window.open(telegramUrl, '_blank', 'noopener')
-    form.reset()
-  }
-
-  return (
-    <form className="contact-form reveal" onSubmit={handleSubmit} noValidate>
-      <div className="hp-field" aria-hidden="true">
-        <label>
-          Не заполняйте это поле
-          <input type="text" name="company" tabIndex={-1} autoComplete="off" />
-        </label>
-      </div>
-
-      <label className="field">
-        <span>Имя</span>
-        <input type="text" name="name" placeholder="Как к тебе обращаться" autoComplete="name" />
-      </label>
-
-      <label className="field">
-        <span>Номер</span>
-        <input
-          type="tel"
-          name="phone"
-          placeholder="+7 900 000-00-00 или @telegram"
-          autoComplete="tel"
-        />
-      </label>
-
-      <label className="field">
-        <span>Что хочешь</span>
-        <textarea
-          name="message"
-          rows={4}
-          placeholder="Опиши задачу: лендинг, бот, mini app, сроки, ориентиры по стилю…"
-        />
-      </label>
-
-      <button className="primary-action form-submit" type="submit" disabled={sending}>
-        {sending ? 'Отправляю…' : 'Отправить заявку'}
-        <ArrowIcon />
-      </button>
-
-      <p className={`form-status mono ${tone}`} role="status" aria-live="polite">
-        {status}
-      </p>
-    </form>
-  )
-}
-
 function App() {
   const [activeFilter, setActiveFilter] = useState('all')
   useReveal()
@@ -672,7 +559,7 @@ function App() {
           <a href="#work">Кейсы</a>
           <a href="#services">Услуги</a>
           <a href="#proof">Отзывы</a>
-          <a href="#contact">Заявка</a>
+          <a href="#contact">Контакт</a>
         </nav>
         <a className="header-cta" href={telegramUrl}>
           Telegram
@@ -703,8 +590,8 @@ function App() {
               аккуратность и понятная подача.
             </p>
             <div className="hero-actions">
-              <a className="primary-action" href="#contact">
-                Оставить заявку
+              <a className="primary-action" href={telegramUrl}>
+                Написать в Telegram
                 <ArrowIcon />
               </a>
               <a className="secondary-action" href="#work">
@@ -854,13 +741,13 @@ function App() {
 
         <section className="contact" id="contact">
           <div className="contact-copy reveal">
-            <span className="mono">04 · Заявка</span>
+            <span className="mono">04 · Контакт</span>
             <h2>
               <ScrambleText text="Расскажи о задаче — соберу под ключ" />
             </h2>
             <p>
-              Оставь имя, номер и короткое описание того, что хочешь. Отвечу в
-              Telegram, задам пару уточняющих вопросов и прикину сроки и стоимость.
+              Напиши в Telegram: опиши, что хочешь — лендинг, бота или mini app.
+              Задам пару уточняющих вопросов и прикину сроки и стоимость.
             </p>
             <a className="primary-action" href={telegramUrl}>
               Написать {telegramHandle}
@@ -868,7 +755,6 @@ function App() {
             </a>
             <p className="contact-direct mono">// или напрямую: {telegramHandle}</p>
           </div>
-          <ContactForm />
         </section>
       </main>
 
