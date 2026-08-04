@@ -598,9 +598,9 @@ function App() {
       <div className="scanlines" aria-hidden="true" />
 
       <header className="site-header">
-        <a className="brand" href="#top" aria-label="Step Studio">
-          <span>St</span>
-          Step Studio
+        <a className="brand" href="#top" aria-label="Its Step">
+          <span>IS</span>
+          Its Step
         </a>
         <nav className="site-nav" aria-label="Навигация">
           <a href="#work">Кейсы</a>
@@ -627,9 +627,9 @@ function App() {
           </div>
 
           <div className="hero-content reveal">
-            <p className="hero-label mono">// step studio — лендинги / telegram-боты / mini apps</p>
+            <p className="hero-label mono">// its step — лендинги / telegram-боты / mini apps</p>
             <h1>
-              <ScrambleText text="Step Studio" delay={200} />
+              <ScrambleText text="Its Step" delay={200} />
             </h1>
             <p className="hero-lead">
               Большие идеи начинаются с пикселя. Разрабатываю премиальные сайты,
@@ -838,9 +838,9 @@ function App() {
       </main>
 
       <footer className="site-footer">
-        <a className="brand" href="#top" aria-label="Step Studio">
-          <span>St</span>
-          Step Studio
+        <a className="brand" href="#top" aria-label="Its Step">
+          <span>IS</span>
+          Its Step
         </a>
         <p>Разработка лендингов, Telegram-ботов и Mini Apps. Работаю удалённо.</p>
       </footer>
