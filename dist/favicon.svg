@@ -1,6 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#181713" />
-  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="13.25" fill="none" stroke="#2c2a24" stroke-width="1.5" />
-  <rect x="16" y="14" width="19" height="19" fill="#d9ff4a" />
-  <rect x="30" y="30" width="19" height="19" fill="#6b6f63" />
+  <!-- светлая подложка: глубокий синий на графите на 16px сливается в пятно -->
+  <rect width="64" height="64" rx="14" fill="#fefefd" />
+  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="13.25" fill="none" stroke="#cdcfda" stroke-width="1.5" />
+  <rect x="16" y="14" width="19" height="19" fill="#0231bf" />
+  <rect x="30" y="30" width="19" height="19" fill="#2d2d2e" />
 </svg>

@@ -1,17 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Manrope:wght@500;700;800&family=Unbounded:wght@700;800;900&display=swap');
 
 :root {
-  --black: #11100e;
-  --page: #f5f7f1;
-  --paper: #fbfcf7;
-  --text: #20211f;
-  --muted: rgba(245, 247, 241, 0.62);
-  --muted-dark: #65685f;
-  --line: #d9ddd0;
-  --line-strong: #c7ccbf;
-  --acid: #d9ff4a;
-  --coral: #ff5b3f;
-  --cyan: #8fe8ff;
+  /* базовая тройка: бумага, графит, электрический синий */
+  --black: #2d2d2e;
+  --paper: #fefefd;
+  --accent: #0231bf;
+  /* тот же синий, поднятый по яркости: на графите #0231bf даёт 1.4:1 и
+     не читается, поэтому на тёмных секциях используется этот вариант */
+  --accent-bright: #6d9bff;
+
+  --page: #f2f3f7;
+  --text: #2d2d2e;
+  --muted: rgba(254, 254, 253, 0.62);
+  --muted-dark: #63636e;
+  --line: #e0e1e8;
+  --line-strong: #cdcfda;
   --font-ui: 'Manrope', 'Segoe UI', sans-serif;
   --font-display: 'Unbounded', 'Arial Black', sans-serif;
   --font-mono: 'IBM Plex Mono', 'Consolas', monospace;
@@ -62,6 +65,6 @@ svg {
 }
 
 :focus-visible {
-  outline: 3px solid var(--coral);
+  outline: 3px solid var(--accent);
   outline-offset: 3px;
 }
