@@ -2,13 +2,13 @@ import { startTransition, useEffect, useRef, useState } from 'react'
 import './App.css'
 
 // Текст, который сразу подставляется в чат при клике на «Написать».
-const contactText = 'Здравствуйте, я по поводу разработки под заказ!'
+const contactText = 'Здравствуйте! Хочу обсудить автоматизацию / разработку проекта.'
 // t.me/<user>?text= — большинство клиентов открывают чат с уже введённым
 // текстом. На всякий случай при клике дублируем текст в буфер обмена.
 const telegramUrl = `https://t.me/SStepCEO?text=${encodeURIComponent(contactText)}`
 const telegramHandle = '@SStepCEO'
-const reviewImage = (name) => `${import.meta.env.BASE_URL}reviews/${name}`
 const projectImage = (name) => `${import.meta.env.BASE_URL}projects/${name}`
+const aboutPhoto = `${import.meta.env.BASE_URL}about/stepan.jpg`
 
 function copyContactText() {
   try {
@@ -19,35 +19,85 @@ function copyContactText() {
 }
 
 const marqueeText =
-  'Лендинги под ключ ✦ Telegram-боты ✦ Mini Apps ✦ Вёрстка ✦ Дизайн ✦ Пиксель-анимации ✦ Деплой ✦ Поддержка ✦ '
+  'AI-менеджеры ✦ Telegram-боты с оплатой ✦ CRM-интеграции ✦ Воронки продаж ✦ Личные кабинеты ✦ Дашборды ✦ Парсинг и мониторинг ✦ Поддержка ✦ '
 
 const services = [
   {
     number: '01',
-    title: 'Лендинги',
-    body: 'Собираю структуру, тексты, визуал и адаптив под заявки, рекламу и личный бренд.',
+    title: 'Автоматизация и AI',
+    body: 'Telegram-боты и AI-менеджеры: принимают заявки, отвечают на вопросы по вашей базе знаний, принимают оплату, ведут подписки и рассылки. Забирают рутину у людей.',
+    price: 'от 50 000 ₽',
+    term: '1–2 недели',
   },
   {
     number: '02',
-    title: 'Telegram-боты',
-    body: 'Делаю ботов для продаж, мониторинга, уведомлений, оплаты, подписок и клиентских сценариев.',
+    title: 'Веб-сервисы и кабинеты',
+    body: 'CRM, админки, личные кабинеты и дашборды. Данные в одном месте, интеграции с amoCRM, Битрикс24 и платёжными системами — ЮKassa, Tribute.',
+    price: 'от 150 000 ₽',
+    term: '3–6 недель',
   },
   {
     number: '03',
-    title: 'Mini Apps',
-    body: 'Проектирую аккуратные интерфейсы внутри Telegram: каталоги, кабинеты, CRM и админки.',
+    title: 'Продукт под ключ',
+    body: 'MVP или SaaS с нуля: архитектура, интерфейс, биллинг, аналитика. Для стартапов под инвестиции и внутренних систем бизнеса.',
+    price: 'от 300 000 ₽',
+    term: 'от 6 недель',
   },
 ]
 
 const projects = [
   {
+    id: 'hayat',
+    type: 'bot',
+    category: 'Telegram / Продажи',
+    title: 'Бот брачного агентства',
+    summary:
+      'Закрытая анкетная воронка с модерацией, платным доступом и автоматической обработкой заявок. Агентство перестало вести переписку руками.',
+    metric: '100 000 ₽ за первую неделю',
+    result:
+      '50 оплат по 2 000 ₽ за 7 дней после запуска. Сейчас в системе 991 пользователь и 262 анкеты.',
+    tags: ['Оплата', 'Воронка', 'Модерация'],
+    link: 'https://t.me/Hayatnikah_bot',
+    action: 'Открыть бота',
+    image: projectImage('hayat-nikah.png'),
+    seed: 2,
+  },
+  {
+    id: 'novoterskaya',
+    type: 'site',
+    category: 'Web / Бренд',
+    title: 'Сайт бренда минеральной воды',
+    summary:
+      'Имиджевый сайт «Новотерская Целебная»: история бренда, продуктовая линейка, крупная типографика и анимации. Проект в работе.',
+    metric: 'Бюджет 200 000 ₽',
+    result: 'Самый крупный текущий проект — от концепции до запуска.',
+    tags: ['Бренд', 'Анимации', 'Адаптив'],
+    action: 'Обсудить похожий',
+    image: projectImage('water-novoterskaya.jpg'),
+    seed: 9,
+  },
+  {
+    id: 'pizza',
+    type: 'site',
+    category: 'Web / E-commerce',
+    title: 'Сайт пиццерии с онлайн-заказом',
+    summary:
+      'Меню, корзина, оформление доставки и приём оплаты. Заказ доходит до кухни без звонка и без ручного переноса в таблицу.',
+    result: 'Сайт приносит заказы с первого дня, работаем дальше на поддержке.',
+    tags: ['Корзина', 'Оплата', 'Доставка'],
+    action: 'Обсудить похожий',
+    image: projectImage('pizza-bella.jpg'),
+    seed: 14,
+  },
+  {
     id: 'lsgarden',
     type: 'site',
-    category: 'Web / CRM',
+    category: 'Web / Внутренняя система',
     title: 'CRM для цветочного магазина',
-    summary: 'Система для заказов, клиентов и ежедневной операционной работы цветочного магазина.',
-    result: 'Команде проще видеть статусы, заявки и клиентский поток.',
-    tags: ['CRM', 'Фронтенд', 'Интерфейс'],
+    summary:
+      'Внутренняя система: заказы, клиентская база, статусы и ежедневная операционка в одном окне вместо переписки и таблиц.',
+    result: 'Команда видит поток заявок и статусы, ничего не теряется между сменами.',
+    tags: ['CRM', 'Внутренний продукт', 'Интерфейс'],
     link: 'https://lsgarden.ru/',
     action: 'Открыть',
     image: projectImage('crm-flower.png'),
@@ -81,61 +131,79 @@ const projects = [
     id: 'slides-ai',
     type: 'bot',
     category: 'Telegram / AI',
-    title: 'ИИ-бот презентаций',
-    summary: 'Сценарий генерации структуры и материалов для презентаций прямо в Telegram.',
-    result: 'Пользователь получает быстрый инструмент вместо хаотичного диалога с ИИ.',
-    tags: ['ИИ', 'UX бота', 'Автоматизация'],
+    title: 'AI-бот генерации презентаций',
+    summary:
+      'Работа с языковой моделью по сценарию: бот собирает вводные, генерирует структуру и материалы презентации прямо в Telegram.',
+    result: 'Пользователь получает готовый инструмент вместо хаотичного диалога с нейросетью.',
+    tags: ['LLM', 'Промпт-сценарии', 'Автоматизация'],
     action: 'Обсудить похожий',
     image: projectImage('slides-ai.png'),
     seed: 12,
   },
   {
-    id: 'familia',
+    id: 'course-funnel',
     type: 'bot',
-    category: 'Telegram / Sales',
-    title: 'Бот продажи курсов',
-    summary: 'Воронка продаж для дизайнерской компании @familiainfobot с подпиской и оплатой.',
-    result: 'Путь до покупки стал понятным, а обработка заявок автоматизированной.',
-    tags: ['Продажи', 'Курсы', 'Подписка'],
+    category: 'Telegram / Воронка',
+    title: 'Воронка продаж онлайн-курсов',
+    summary:
+      'Лид-магнит, прогрев по сценарию, подписка и оплата внутри Telegram. Автор перестал вручную отвечать каждому и вести таблицу оплат.',
+    metric: '20 оплат за 7 дней',
+    result: 'Путь от лид-магнита до покупки проходит без участия человека.',
+    tags: ['Лид-магнит', 'Подписка', 'Оплата'],
     action: 'Обсудить похожий',
     image: projectImage('courses-familia.jpg'),
     seed: 18,
   },
+]
+
+// Отзывы — расшифровка реальных сообщений клиентов.
+// Текстом, а не скриншотом: читается на телефоне и не зависит от вёрстки чужого интерфейса.
+const reviews = [
   {
-    id: 'water-brand',
-    type: 'bot',
-    category: 'Brand / Chatbot',
-    title: 'Чат-бот бренда воды',
-    summary: 'Брендовый сценарий общения: продукты, консультации, навигация и быстрый контакт.',
-    result: 'Клиент быстрее получает ответ, бренд выглядит собраннее в переписке.',
-    tags: ['Сценарии', 'Лид-ген', 'Поддержка'],
-    action: 'Обсудить похожий',
-    image: projectImage('water-aqua.jpg'),
-    seed: 24,
+    name: 'GrigoriySE',
+    project: 'Бот брачного агентства',
+    text: 'Всё получилось даже лучше, чем я ожидал. Телеграм-бот работает именно так, как и хотелось, все пожелания были учтены. Степан — настоящий профессионал своего дела. Всегда был на связи, быстро отвечал на вопросы, вносил правки без лишних проблем и довёл проект до отличного результата. Однозначно рекомендую к сотрудничеству!',
+  },
+  {
+    name: 'MarinaPizzaLove',
+    project: 'Сайт пиццерии',
+    text: 'Нужен был современный, удобный и аппетитный сайт с меню, онлайн-заказом и доставкой. Степан учёл все пожелания: подобрал стиль, сделал понятную структуру, интегрировал корзину и оплату. Сайт отлично выглядит на всех устройствах и уже приносит заказы. Очень довольны результатом и продолжаем сотрудничество по поддержке!',
+  },
+  {
+    name: 'STIZO',
+    project: 'Telegram Mini App',
+    text: 'Обратился с задачей, когда сроки уже поджимали, думал, что придётся ждать неделю. Но программист удивил: сделал качественную работающую программу менее чем за сутки. Всё чётко, без воды, багов не заметил. Приятно работать с человеком, который ценит и своё, и чужое время. Рекомендую на 100%!',
+  },
+  {
+    name: 'partyzan77777',
+    project: 'Мониторинг групп с уведомлениями о заказах',
+    text: 'Поставил задачу — сделать бота для мониторинга групп с поиском по ключам. Исполнитель сделал всё качественно и оперативно. Бот работает стабильно, интерфейс удобный. Контакт сохранил, в будущем планирую заказывать доработки. 10/10',
+    repeat: true,
+  },
+  {
+    name: 'daneley',
+    project: 'Магазин одежды в Telegram',
+    text: 'Всё супер! Перенёс магазин одежды в ТГ, сделали быстро и со вкусом. Оформление прям под наш стиль, каталог удобный, клиентам теперь легко заказывать. Отдельное спасибо за автоответчик — заявки летят даже ночью. Рекомендую!',
+  },
+  {
+    name: 'Traffic_Arbitration',
+    project: 'Софт для рассылок',
+    text: 'После установки и запуска софт отрабатывает на все 100%, установлена гибкая и тонкая настройка. Телеграм не видит, что это софт, — как будто эти действия делает человек, из-за этого аккаунты очень хорошо живут в работе. Сэкономил кучу времени: загрузил 3–4 аккаунта, запустил, и он работает без проблем 8–10 часов.',
   },
 ]
 
-const reviews = [
-  {
-    image: reviewImage('review-01.png'),
-    alt: 'Отзывы клиентов о Telegram-боте для фильтрации контента и мониторинге групп',
-  },
-  {
-    image: reviewImage('review-02.png'),
-    alt: 'Отзывы клиентов о Telegram-боте для магазина одежды и софте для рассылки',
-  },
-  {
-    image: reviewImage('review-03.png'),
-    alt: 'Отзывы клиентов о Telegram-боте по продаже курсов и Mini App frontend',
-  },
+const stats = [
+  { value: '2 года', label: 'в коммерческой разработке' },
+  { value: '20+', label: 'проектов доведено до запуска' },
+  { value: '2–3', label: 'проекта в работе одновременно' },
 ]
 
 const workflow = [
-  'Бриф и цель проекта',
-  'Структура, сценарии, тексты',
-  'Дизайн и сборка',
-  'Адаптив, тесты, запуск',
-  'Поддержка после релиза',
+  'Бесплатный разбор задачи — 30 минут в Telegram',
+  'Фиксирую объём, сроки и цену в договоре',
+  'Прототип и согласование до старта разработки',
+  'Разработка с демо каждую неделю',
+  'Запуск, передача доступов и 2 недели поддержки',
 ]
 
 /* ---------- пиксельный дизеринг: общие константы ---------- */
@@ -603,10 +671,10 @@ function App() {
           Its Step
         </a>
         <nav className="site-nav" aria-label="Навигация">
+          <a href="#services">Услуги и цены</a>
           <a href="#work">Кейсы</a>
-          <a href="#services">Услуги</a>
+          <a href="#about">Обо мне</a>
           <a href="#proof">Отзывы</a>
-          <a href="#contact">Контакт</a>
         </nav>
         <a className="header-cta" href={telegramUrl} onClick={copyContactText}>
           Telegram
@@ -620,25 +688,24 @@ function App() {
             <div className="scene-grid"></div>
             <HeroDither />
             <div className="scene-code">
-              <span>bot.status = online</span>
-              <span>landing.conversion += clarity</span>
-              <span>miniapp.flow = smooth</span>
+              <span>ai_manager.status = online</span>
+              <span>leads → crm: auto</span>
+              <span>manual_work −= 80%</span>
             </div>
           </div>
 
           <div className="hero-content reveal">
-            <p className="hero-label mono">// its step — лендинги / telegram-боты / mini apps</p>
+            <p className="hero-label mono">// its step — автоматизация и ai для бизнеса</p>
             <h1>
-              <ScrambleText text="Its Step" delay={200} />
+              <ScrambleText text="Системы, которые работают вместо отдела" delay={200} />
             </h1>
             <p className="hero-lead">
-              Большие идеи начинаются с пикселя. Разрабатываю премиальные сайты,
-              ботов и Telegram Mini Apps для проектов, которым важны скорость,
-              аккуратность и понятная подача.
+              AI-менеджеры, CRM-интеграции, воронки с оплатой и дашборды.
+              Меньше ручной работы — больше обработанных лидов.
             </p>
             <div className="hero-actions">
               <a className="primary-action" href={telegramUrl} onClick={copyContactText}>
-                Написать в Telegram
+                Обсудить автоматизацию
                 <ArrowIcon />
               </a>
               <a className="secondary-action" href="#work">
@@ -648,8 +715,9 @@ function App() {
           </div>
 
           <div className="hero-footer">
-            <span>Удалённо</span>
-            <span>От идеи до запуска</span>
+            <span>2 года в разработке</span>
+            <span>20+ проектов до запуска</span>
+            <span>Работаю по договору</span>
             <span>Ответ в Telegram: {telegramHandle}</span>
           </div>
         </section>
@@ -660,17 +728,18 @@ function App() {
 
         <section className="intro-strip" aria-label="Коротко">
           <p>
-            Я не делаю «просто красивую страницу». Сначала собираю смысл,
-            потом превращаю его в интерфейс, который выглядит уверенно и
-            помогает человеку быстрее оставить заявку.
+            Я не продаю «сайт» или «бота». Я закрываю участок работы, который
+            сейчас делают руками: приём заявок, ответы клиентам, оплаты,
+            отчётность. Результат считается в заявках и сэкономленных часах,
+            а не в количестве экранов.
           </p>
         </section>
 
         <section className="services" id="services">
           <div className="section-title reveal">
-            <span className="mono">Услуги</span>
+            <span className="mono">Услуги и цены</span>
             <h2>
-              <ScrambleText text="Три направления, в которых я полезен" />
+              <ScrambleText text="Три формата работы" />
             </h2>
           </div>
           <div className="service-list">
@@ -679,9 +748,16 @@ function App() {
                 <span className="mono">{service.number}</span>
                 <h3>{service.title}</h3>
                 <p>{service.body}</p>
+                <div className="service-price">
+                  <strong>{service.price}</strong>
+                  <span className="mono">{service.term}</span>
+                </div>
               </article>
             ))}
           </div>
+          <p className="services-note mono">
+            // точная цена — после разбора задачи. Смета и сроки фиксируются в договоре
+          </p>
         </section>
 
         <section className="work" id="work">
@@ -689,7 +765,7 @@ function App() {
             <div>
               <span className="mono">Кейсы</span>
               <h2>
-                <ScrambleText text="Работы без лишнего шума" />
+                <ScrambleText text="Что уже работает у клиентов" />
               </h2>
             </div>
             <div className="filter-tabs" aria-label="Фильтр кейсов">
@@ -705,14 +781,14 @@ function App() {
                 className={activeFilter === 'site' ? 'is-active' : ''}
                 onClick={() => handleFilter('site')}
               >
-                Сайты
+                Сайты и сервисы
               </button>
               <button
                 type="button"
                 className={activeFilter === 'bot' ? 'is-active' : ''}
                 onClick={() => handleFilter('bot')}
               >
-                Боты
+                Боты и AI
               </button>
             </div>
           </div>
@@ -763,6 +839,9 @@ function App() {
                   <p>{project.summary}</p>
                 </div>
                 <div className="project-result">
+                  {project.metric && (
+                    <strong className="project-metric">{project.metric}</strong>
+                  )}
                   <p>{project.result}</p>
                   <ul>
                     {project.tags.map((tag) => (
@@ -785,18 +864,61 @@ function App() {
           </div>
         </section>
 
+        <section className="about" id="about">
+          <div className="about-grid">
+            <figure className="about-photo reveal">
+              <img
+                src={aboutPhoto}
+                alt="Степан — разработчик Its Step"
+                onError={(event) => {
+                  // фото ещё не загружено в public/about — прячем рамку и схлопываем
+                  // сетку в одну колонку, иначе текст остаётся в узком столбце
+                  event.currentTarget.closest('.about-grid')?.classList.add('is-photoless')
+                }}
+              />
+            </figure>
+            <div className="about-copy reveal">
+              <span className="mono">Кто делает</span>
+              <h2>
+                <ScrambleText text="Степан, соло-разработчик" />
+              </h2>
+              <p>
+                Веду проект один и целиком: разбор задачи, архитектура, интерфейс,
+                код, интеграции, запуск. Вы общаетесь напрямую со мной — без
+                менеджеров, пересказов и потерянного контекста между людьми.
+              </p>
+              <p>
+                Самозанятый, работаю по договору. Беру 2–3 проекта параллельно,
+                чтобы не растягивать сроки.
+              </p>
+              <ul className="about-stats">
+                {stats.map((item) => (
+                  <li key={item.label}>
+                    <strong>{item.value}</strong>
+                    <span>{item.label}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
         <section className="proof" id="proof">
           <div className="section-title reveal">
             <span className="mono">Отзывы</span>
             <h2>
-              <ScrambleText text="Реальные скриншоты вместо цитат" />
+              <ScrambleText text="Что говорят клиенты" />
             </h2>
           </div>
           <div className="review-wall">
-            {reviews.map((review, index) => (
-              <figure className="review-shot reveal" key={review.image}>
-                <img src={review.image} alt={review.alt} loading="lazy" />
-                <figcaption className="mono">Отзыв {index + 1}</figcaption>
+            {reviews.map((review) => (
+              <figure className="review-card reveal" key={review.name}>
+                <blockquote>{review.text}</blockquote>
+                <figcaption>
+                  <strong>{review.name}</strong>
+                  <span className="mono">{review.project}</span>
+                  {review.repeat && <em className="review-repeat">повторный заказ</em>}
+                </figcaption>
               </figure>
             ))}
           </div>
@@ -806,7 +928,7 @@ function App() {
           <div className="section-title reveal">
             <span className="mono">Процесс</span>
             <h2>
-              <ScrambleText text="Как проект двигается к запуску" />
+              <ScrambleText text="Как мы работаем и где ваши риски" />
             </h2>
           </div>
           <ol className="workflow-list">
@@ -820,16 +942,17 @@ function App() {
 
         <section className="contact" id="contact">
           <div className="contact-copy reveal">
-            <span className="mono">04 · Контакт</span>
+            <span className="mono">05 · Контакт</span>
             <h2>
-              <ScrambleText text="Расскажи о задаче — соберу под ключ" />
+              <ScrambleText text="Расскажите, что у вас делают руками" />
             </h2>
             <p>
-              Напиши в Telegram: опиши, что хочешь — лендинг, бота или mini app.
-              Задам пару уточняющих вопросов и прикину сроки и стоимость.
+              Напишите в Telegram и опишите задачу в двух словах. Задам пару
+              уточняющих вопросов и в тот же день скажу, сколько это стоит и
+              сколько займёт. Разбор бесплатный и ни к чему не обязывает.
             </p>
             <a className="primary-action" href={telegramUrl} onClick={copyContactText}>
-              Написать {telegramHandle}
+              Написать в Telegram
               <ArrowIcon />
             </a>
             <p className="contact-direct mono">// или напрямую: {telegramHandle}</p>
@@ -842,7 +965,10 @@ function App() {
           <span>IS</span>
           Its Step
         </a>
-        <p>Разработка лендингов, Telegram-ботов и Mini Apps. Работаю удалённо.</p>
+        <p>
+          Автоматизация, AI-агенты и веб-сервисы для бизнеса. Самозанятый,
+          работаю по договору, удалённо.
+        </p>
       </footer>
 
       {lightbox && (

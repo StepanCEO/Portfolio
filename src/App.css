@@ -276,9 +276,11 @@ canvas.work-cover {
   margin: 0;
   color: var(--paper);
   font-family: var(--font-display);
-  font-size: 112px;
+  /* заголовок теперь фраза, а не одно слово — размер подстраивается,
+     чтобы 4 строки помещались в первый экран */
+  font-size: clamp(38px, 6.4vw, 86px);
   font-weight: 900;
-  line-height: 0.9;
+  line-height: 0.94;
 }
 
 .hero-lead {
@@ -419,6 +421,8 @@ canvas.work-cover {
 }
 
 .service-item {
+  display: flex;
+  flex-direction: column;
   min-height: 280px;
   padding: 24px;
   background: var(--paper);
@@ -435,9 +439,9 @@ canvas.work-cover {
 }
 
 .service-item h3 {
-  margin: 72px 0 18px;
+  margin: 56px 0 16px;
   font-family: var(--font-display);
-  font-size: 42px;
+  font-size: 38px;
   line-height: 1;
 }
 
@@ -448,6 +452,36 @@ canvas.work-cover {
   line-height: 1.5;
 }
 
+/* ценник прижат к низу карточки — во всех трёх колонках на одной линии */
+.service-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.service-price strong {
+  font-family: var(--font-display);
+  font-size: 26px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.service-price span {
+  color: var(--muted-dark);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.services-note {
+  margin: 18px 0 0;
+  color: var(--muted-dark);
+  font-size: 13px;
+}
+
 .service-item:hover {
   background: var(--black);
   color: var(--paper);
@@ -456,6 +490,14 @@ canvas.work-cover {
 .service-item:hover p,
 .service-item:hover span {
   color: rgba(245, 247, 241, 0.72);
+}
+
+.service-item:hover .service-price {
+  border-top-color: rgba(245, 247, 241, 0.24);
+}
+
+.service-item:hover .service-price strong {
+  color: var(--acid);
 }
 
 .filter-tabs {
@@ -650,6 +692,19 @@ button.project-cover:focus-visible .work-photo {
 .project-result {
   display: grid;
   gap: 16px;
+  align-content: start;
+}
+
+/* цифра результата — единственное, что должно цеплять взгляд в строке кейса */
+.project-metric {
+  display: inline-block;
+  justify-self: start;
+  padding: 6px 10px;
+  background: var(--acid);
+  color: var(--black);
+  font-family: var(--font-display);
+  font-size: 19px;
+  line-height: 1.15;
 }
 
 .project-result ul {
@@ -699,30 +754,158 @@ button.project-cover:focus-visible .work-photo {
   align-items: start;
 }
 
-.review-shot {
+.review-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
   margin: 0;
-}
-
-.review-shot img {
-  width: 100%;
-  aspect-ratio: 1.2;
-  object-fit: cover;
-  object-position: left top;
+  padding: 22px;
   border: 1px solid rgba(245, 247, 241, 0.18);
   border-radius: 8px;
-  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.36);
+  background: rgba(245, 247, 241, 0.04);
 }
 
-.review-shot:nth-child(2) {
-  margin-top: 54px;
+.review-card blockquote {
+  margin: 0;
+  color: rgba(245, 247, 241, 0.86);
+  font-size: 16px;
+  line-height: 1.55;
 }
 
-.review-shot figcaption {
-  margin-top: 10px;
-  color: rgba(245, 247, 241, 0.62);
-  font-family: var(--font-mono);
+.review-card blockquote::before {
+  content: '«';
+}
+
+.review-card blockquote::after {
+  content: '»';
+}
+
+.review-card figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(245, 247, 241, 0.14);
+}
+
+.review-card figcaption strong {
+  color: var(--paper);
+  font-size: 15px;
+}
+
+.review-card figcaption .mono {
+  flex: 1 1 100%;
+  color: rgba(245, 247, 241, 0.56);
   font-size: 12px;
   text-transform: uppercase;
+}
+
+.review-repeat {
+  padding: 3px 7px;
+  border-radius: 4px;
+  background: var(--acid);
+  color: var(--black);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+/* ---------- обо мне ---------- */
+
+.about {
+  width: min(1240px, calc(100% - 32px));
+  margin-inline: auto;
+  padding: 78px 0;
+  border-top: 1px solid var(--line);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 380px) minmax(0, 1fr);
+  gap: 44px;
+  align-items: start;
+}
+
+/* фото не загрузилось — секция работает как обычный текстовый блок */
+.about-grid.is-photoless {
+  grid-template-columns: 1fr;
+}
+
+.about-grid.is-photoless .about-photo {
+  display: none;
+}
+
+.about-photo {
+  margin: 0;
+  border: 1px solid var(--black);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--black);
+}
+
+.about-photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.about-copy h2 {
+  margin: 0 0 20px;
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.about-copy > span {
+  display: block;
+  margin-bottom: 14px;
+  color: var(--muted-dark);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.about-copy p {
+  max-width: 620px;
+  margin: 0 0 16px;
+  color: var(--muted-dark);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin: 30px 0 0;
+  padding: 0;
+  background: var(--line);
+  border: 1px solid var(--line);
+  list-style: none;
+}
+
+.about-stats li {
+  display: grid;
+  gap: 6px;
+  padding: 18px;
+  background: var(--paper);
+}
+
+.about-stats strong {
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 1;
+}
+
+.about-stats span {
+  color: var(--muted-dark);
+  font-size: 14px;
+  line-height: 1.35;
 }
 
 .workflow-list {
@@ -793,14 +976,14 @@ button.project-cover:focus-visible .work-photo {
 
 .service-item:nth-child(2),
 .project-row:nth-child(2),
-.review-shot:nth-child(2),
+.review-card:nth-child(2),
 .workflow-list li:nth-child(2) {
   transition-delay: 80ms;
 }
 
 .service-item:nth-child(3),
 .project-row:nth-child(3),
-.review-shot:nth-child(3),
+.review-card:nth-child(3),
 .workflow-list li:nth-child(3) {
   transition-delay: 160ms;
 }
@@ -916,9 +1099,21 @@ button.project-cover:focus-visible .work-photo {
     grid-column: 1;
   }
 
-  .service-list,
-  .review-wall {
+  .service-list {
     grid-template-columns: 1fr;
+  }
+
+  .review-wall {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .about-photo {
+    max-width: 320px;
   }
 
   .service-item {
@@ -944,10 +1139,6 @@ button.project-cover:focus-visible .work-photo {
 
   .workflow-list {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .review-shot:nth-child(2) {
-    margin-top: 0;
   }
 }
 
@@ -1010,6 +1201,7 @@ button.project-cover:focus-visible .work-photo {
   .intro-strip,
   .services,
   .work,
+  .about,
   .proof,
   .workflow,
   .contact,
@@ -1020,11 +1212,24 @@ button.project-cover:focus-visible .work-photo {
   .intro-strip,
   .services,
   .work,
+  .about,
   .proof,
   .workflow,
   .contact {
     padding-top: 54px;
     padding-bottom: 54px;
+  }
+
+  .review-wall {
+    grid-template-columns: 1fr;
+  }
+
+  .about-copy h2 {
+    font-size: 36px;
+  }
+
+  .about-stats {
+    grid-template-columns: 1fr;
   }
 
   .intro-strip p {
