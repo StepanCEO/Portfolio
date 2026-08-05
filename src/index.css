@@ -1,30 +1,39 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Manrope:wght@500;700;800&family=Unbounded:wght@700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Manrope:wght@300;400;500&family=Unbounded:wght@200;300&display=swap');
 
 :root {
-  /* базовая тройка: бумага, графит, электрический синий */
-  --black: #2d2d2e;
+  /* Три цвета на весь сайт. Бумага — почти всё полотно, чернила — текст и один
+     финальный разворот, синий появляется считанные разы. Отдельного серого в
+     палитре нет: именно он и делал страницу серой. Полутона — тот же
+     чернильный тон в прозрачности, поэтому воздух остаётся белым и тёплым. */
   --paper: #fefefd;
-  --accent: #0231bf;
-  /* тот же синий, поднятый по яркости: на графите #0231bf даёт 1.4:1 и
-     не читается, поэтому на тёмных секциях используется этот вариант */
-  --accent-bright: #6d9bff;
+  --ink: #2d2d2e;
+  --blue: #0231bf;
 
-  --page: #f2f3f7;
-  --text: #2d2d2e;
-  --muted: rgba(254, 254, 253, 0.62);
-  --muted-dark: #63636e;
-  --line: #e0e1e8;
-  --line-strong: #cdcfda;
-  --font-ui: 'Manrope', 'Segoe UI', sans-serif;
-  --font-display: 'Unbounded', 'Arial Black', sans-serif;
-  --font-mono: 'IBM Plex Mono', 'Consolas', monospace;
-  color: var(--text);
-  font: 500 16px/1.5 var(--font-ui);
+  --ink-soft: rgba(45, 45, 46, 0.72); /* 5.3:1 на бумаге — годится для текста */
+  --rule: rgba(45, 45, 46, 0.11);
+
+  /* на чернильном развороте: #0231bf на #2d2d2e даёт 1.4:1 и не читается */
+  --paper-soft: rgba(254, 254, 253, 0.7);
+  --blue-lift: #7ea2ff;
+
+  /* Unbounded в весе 200 — широкий, геометрический, с родной кириллицей.
+     Manrope 300 под ним намеренно незаметен. Моноширинный оставлен только для
+     того, что действительно печатает машина: время, суммы, сроки. */
+  --display: 'Unbounded', 'Segoe UI', sans-serif;
+  --body: 'Manrope', 'Segoe UI', sans-serif;
+  --mono: 'IBM Plex Mono', 'Consolas', monospace;
+
+  /* одно поле на всю страницу: полноширинные секции совпадают с колонкой */
+  --gutter: max(24px, calc((100vw - 1180px) / 2));
+
+  color: var(--ink);
+  font: 300 17px/1.65 var(--body);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
+  scroll-padding-top: 96px;
 }
 
 *,
@@ -34,13 +43,13 @@
 }
 
 html {
-  background: var(--page);
+  background: var(--paper);
 }
 
 body {
   min-width: 320px;
   margin: 0;
-  background: var(--page);
+  background: var(--paper);
   overflow-x: clip;
 }
 
@@ -65,6 +74,6 @@ svg {
 }
 
 :focus-visible {
-  outline: 3px solid var(--accent);
-  outline-offset: 3px;
+  outline: 2px solid var(--blue);
+  outline-offset: 4px;
 }

@@ -1,10 +1,7 @@
-import { startTransition, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 
-// Текст, который сразу подставляется в чат при клике на «Написать».
 const contactText = 'Здравствуйте! Хочу обсудить автоматизацию / разработку проекта.'
-// t.me/<user>?text= — большинство клиентов открывают чат с уже введённым
-// текстом. На всякий случай при клике дублируем текст в буфер обмена.
 const telegramUrl = `https://t.me/SStepCEO?text=${encodeURIComponent(contactText)}`
 const telegramHandle = '@SStepCEO'
 const projectImage = (name) => `${import.meta.env.BASE_URL}projects/${name}`
@@ -18,26 +15,34 @@ function copyContactText() {
   }
 }
 
-const marqueeText =
-  'AI-менеджеры ✦ Telegram-боты с оплатой ✦ CRM-интеграции ✦ Воронки продаж ✦ Личные кабинеты ✦ Дашборды ✦ Парсинг и мониторинг ✦ Поддержка ✦ '
+// Журнал системы вместо картинки продукта на первом экране: это буквально то,
+// что бот и AI-менеджер печатают сами, пока никого нет на месте. Пример
+// типичной ночи, а не выгрузка конкретного клиента.
+const nightLog = [
+  ['02:41', 'заявка принята'],
+  ['02:41', 'ответ отправлен'],
+  ['03:18', 'вопрос по каталогу закрыт'],
+  ['04:02', 'оплата 12 000 ₽'],
+  ['04:03', 'чек и доступ выданы'],
+  ['05:26', 'напоминание клиенту'],
+  ['06:31', 'сделка передана в CRM'],
+  ['07:04', 'смена открыта: 6 новых заявок'],
+]
 
 const services = [
   {
-    number: '01',
     title: 'Автоматизация и AI',
     body: 'Telegram-боты и AI-менеджеры: принимают заявки, отвечают на вопросы по вашей базе знаний, принимают оплату, ведут подписки и рассылки. Забирают рутину у людей.',
     price: 'от 50 000 ₽',
     term: '1–2 недели',
   },
   {
-    number: '02',
     title: 'Веб-сервисы и кабинеты',
     body: 'CRM, админки, личные кабинеты и дашборды. Данные в одном месте, интеграции с amoCRM, Битрикс24 и платёжными системами — ЮKassa, Tribute.',
     price: 'от 150 000 ₽',
     term: '3–6 недель',
   },
   {
-    number: '03',
     title: 'Продукт под ключ',
     body: 'MVP или SaaS с нуля: архитектура, интерфейс, биллинг, аналитика. Для стартапов под инвестиции и внутренних систем бизнеса.',
     price: 'от 300 000 ₽',
@@ -48,7 +53,6 @@ const services = [
 const projects = [
   {
     id: 'hayat',
-    type: 'bot',
     category: 'Telegram / Продажи',
     title: 'Бот брачного агентства',
     summary:
@@ -60,11 +64,9 @@ const projects = [
     link: 'https://t.me/Hayatnikah_bot',
     action: 'Открыть бота',
     image: projectImage('hayat-nikah.png'),
-    seed: 2,
   },
   {
     id: 'novoterskaya',
-    type: 'site',
     category: 'Web / Бренд',
     title: 'Сайт бренда минеральной воды',
     summary:
@@ -74,11 +76,9 @@ const projects = [
     tags: ['Бренд', 'Анимации', 'Адаптив'],
     action: 'Обсудить похожий',
     image: projectImage('water-novoterskaya.jpg'),
-    seed: 9,
   },
   {
     id: 'pizza',
-    type: 'site',
     category: 'Web / E-commerce',
     title: 'Сайт пиццерии с онлайн-заказом',
     summary:
@@ -87,11 +87,9 @@ const projects = [
     tags: ['Корзина', 'Оплата', 'Доставка'],
     action: 'Обсудить похожий',
     image: projectImage('pizza-bella.jpg'),
-    seed: 14,
   },
   {
     id: 'lsgarden',
-    type: 'site',
     category: 'Web / Внутренняя система',
     title: 'CRM для цветочного магазина',
     summary:
@@ -101,23 +99,20 @@ const projects = [
     link: 'https://lsgarden.ru/',
     action: 'Открыть',
     image: projectImage('crm-flower.png'),
-    seed: 3,
   },
   {
     id: 'nexora',
-    type: 'site',
     category: 'Web / Agency',
     title: 'Сайт для digital-агентства',
-    summary: 'Премиальный лендинг для агентства NEXORA: 3D-визуал, крупная типографика, блоки услуг и метрик.',
+    summary:
+      'Премиальный лендинг для агентства NEXORA: 3D-визуал, крупная типографика, блоки услуг и метрик.',
     result: 'Сайт с первого экрана задаёт статус агентства и удерживает внимание.',
     tags: ['Лендинг', '3D / визуал', 'Анимации'],
     action: 'Обсудить похожий',
     image: projectImage('nexora-agency.png'),
-    seed: 5,
   },
   {
     id: 'jobs-bot',
-    type: 'bot',
     category: 'Telegram / Parser',
     title: 'Бот мониторинга вакансий',
     summary: 'Бот отслеживает группы и находит свежие вакансии по ключевым словам.',
@@ -125,11 +120,9 @@ const projects = [
     tags: ['Парсинг', 'Уведомления', 'Telegram'],
     action: 'Обсудить похожий',
     image: projectImage('jobs-monitor.png'),
-    seed: 7,
   },
   {
     id: 'slides-ai',
-    type: 'bot',
     category: 'Telegram / AI',
     title: 'AI-бот генерации презентаций',
     summary:
@@ -138,11 +131,9 @@ const projects = [
     tags: ['LLM', 'Промпт-сценарии', 'Автоматизация'],
     action: 'Обсудить похожий',
     image: projectImage('slides-ai.png'),
-    seed: 12,
   },
   {
     id: 'course-funnel',
-    type: 'bot',
     category: 'Telegram / Воронка',
     title: 'Воронка продаж онлайн-курсов',
     summary:
@@ -152,7 +143,6 @@ const projects = [
     tags: ['Лид-магнит', 'Подписка', 'Оплата'],
     action: 'Обсудить похожий',
     image: projectImage('courses-familia.jpg'),
-    seed: 18,
   },
 ]
 
@@ -207,423 +197,40 @@ const workflow = [
 ]
 
 // Разделы в том порядке, в котором сайт ведёт читателя: цена → доказательства
-// → кто делает → отзывы → процесс → контакт. Тот же порядок используется для
-// подсветки активного пункта в шапке.
+// → кто делает → отзывы. Тот же порядок подсвечивает активный пункт в шапке.
 const navItems = [
-  { id: 'services', label: 'Услуги и цены' },
+  { id: 'services', label: 'Услуги' },
   { id: 'work', label: 'Кейсы' },
   { id: 'about', label: 'Обо мне' },
   { id: 'proof', label: 'Отзывы' },
 ]
 
-/* ---------- пиксельный дизеринг: общие константы ---------- */
+function prefersReducedMotion() {
+  return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+}
 
-// матрица упорядоченного дизеринга 8×8 (Bayer) — сердце «пиксельного» вида
-const BAYER8 = [
-  [0, 32, 8, 40, 2, 34, 10, 42],
-  [48, 16, 56, 24, 50, 18, 58, 26],
-  [12, 44, 4, 36, 14, 46, 6, 38],
-  [60, 28, 52, 20, 62, 30, 54, 22],
-  [3, 35, 11, 43, 1, 33, 9, 41],
-  [51, 19, 59, 27, 49, 17, 57, 25],
-  [15, 47, 7, 39, 13, 45, 5, 37],
-  [63, 31, 55, 23, 61, 29, 53, 21],
-]
+/* ---------- журнал системы ---------- */
 
-// канвасы всегда рисуются на графитовом фоне, поэтому акцент здесь берётся
-// в осветлённом варианте: чистый #0231bf на #2d2d2e почти не виден
-const C_DIM = [64, 66, 82] // тусклый пиксель
-const C_INK = [244, 245, 250] // светлый пиксель
-const C_ACC = [109, 155, 255] // акцент (электрический синий)
-
-const prefersReducedMotion = () =>
-  typeof window !== 'undefined' &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-/* ---------- эффект «дешифровки» текста ---------- */
-
-const GLYPHS = '▓▒░█#<>/\\*+=~'
-
-function ScrambleText({ text, delay = 0 }) {
-  const [display, setDisplay] = useState(text)
+// Строки печатаются по одной. Появление сделано через DOM, а не через
+// прозрачность: журнал остаётся читаемым, даже если анимации не проигрываются.
+function useNightLog() {
+  const [shown, setShown] = useState(1)
 
   useEffect(() => {
     if (prefersReducedMotion()) {
-      setDisplay(text)
+      setShown(nightLog.length)
       return
     }
-
-    let frame = 0
-    let interval = 0
-    const framesPerChar = 2
-    const total = text.length
-
-    const start = setTimeout(() => {
-      interval = setInterval(() => {
-        const revealed = Math.floor(frame / framesPerChar)
-        let out = ''
-        for (let i = 0; i < total; i++) {
-          if (i < revealed || text[i] === ' ') {
-            out += text[i]
-          } else {
-            out += GLYPHS[(Math.random() * GLYPHS.length) | 0]
-          }
-        }
-        setDisplay(out)
-        frame++
-        if (revealed >= total) {
-          clearInterval(interval)
-          setDisplay(text)
-        }
-      }, 30)
-    }, delay)
-
-    return () => {
-      clearTimeout(start)
-      clearInterval(interval)
-    }
-  }, [text, delay])
-
-  return <span className="scramble">{display}</span>
-}
-
-/* ---------- циклическая пиксельная волна в hero ---------- */
-
-function HeroDither() {
-  const canvasRef = useRef(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    const parent = canvas?.parentElement
-    if (!canvas || !parent) return
-
-    const ctx = canvas.getContext('2d')
-    const CELL = 5 // размер «пикселя» в css-px
-    let W = 0
-    let H = 0
-    let img = null
-    let crestBack = null
-    let crestFront = null
-    let rafId = 0
-    let last = 0
-    let visible = true
-    const reduceMotion = prefersReducedMotion()
-
-    // один слой волны: всё ниже линии гребня заливается дизерингом,
-    // плотность тает с глубиной; overwrite затирает задний слой
-    function drawWave(crest, fadeLen, crestColor, overwrite) {
-      const data = img.data
-      for (let x = 0; x < W; x++) {
-        const top = Math.max(0, crest[x] | 0)
-        for (let y = top; y < H; y++) {
-          const depth = y - crest[x]
-          const v = 1 - depth / fadeLen
-          if (v <= 0) break
-          const i = (y * W + x) * 4
-          if (v * 64 > BAYER8[y & 7][x & 7]) {
-            const c = depth < 2 ? crestColor : depth < 8 ? C_INK : C_DIM
-            data[i] = c[0]
-            data[i + 1] = c[1]
-            data[i + 2] = c[2]
-            data[i + 3] = 255
-          } else if (overwrite) {
-            data[i + 3] = 0
-          }
-        }
-      }
-    }
-
-    function render(now) {
-      if (!img) return
-      const phase = now * 0.0012
-      img.data.fill(0)
-
-      // гребни — сумма двух синусоид на колонку, фаза бежит по кругу
-      for (let x = 0; x < W; x++) {
-        crestBack[x] =
-          H * 0.66 +
-          H * 0.045 * Math.sin(x * 0.05 + phase * 1.6) +
-          H * 0.028 * Math.sin(x * 0.023 - phase * 2.4)
-        crestFront[x] =
-          H * 0.78 +
-          H * 0.055 * Math.sin(x * 0.042 - phase * 2.0) +
-          H * 0.032 * Math.sin(x * 0.019 + phase * 1.2)
-      }
-
-      drawWave(crestBack, H * 0.4, C_INK, false)
-      drawWave(crestFront, H * 0.5, C_ACC, true)
-      ctx.putImageData(img, 0, 0)
-    }
-
-    function frame(now) {
-      rafId = 0
-      if (now - last > 90) {
-        // ~11 fps — дизеринг любит «дёрганость»
-        last = now
-        render(now)
-      }
-      schedule()
-    }
-
-    function schedule() {
-      if (!reduceMotion && visible && !document.hidden && !rafId) {
-        rafId = requestAnimationFrame(frame)
-      }
-    }
-
-    function resize() {
-      const rect = parent.getBoundingClientRect()
-      W = Math.max(1, Math.ceil(rect.width / CELL))
-      H = Math.max(1, Math.ceil(rect.height / CELL))
-      canvas.width = W
-      canvas.height = H
-      img = ctx.createImageData(W, H)
-      crestBack = new Float32Array(W)
-      crestFront = new Float32Array(W)
-      render(performance.now())
-    }
-
-    const ro = new ResizeObserver(resize)
-    ro.observe(parent)
-    resize()
-
-    const io = new IntersectionObserver((entries) => {
-      visible = entries[0].isIntersecting
-      schedule()
-    })
-    io.observe(parent)
-
-    const onVisibility = () => schedule()
-    document.addEventListener('visibilitychange', onVisibility)
-    schedule()
-
-    return () => {
-      ro.disconnect()
-      io.disconnect()
-      document.removeEventListener('visibilitychange', onVisibility)
-      if (rafId) cancelAnimationFrame(rafId)
-    }
+    let printed = 1
+    const timer = window.setInterval(() => {
+      printed += 1
+      setShown(printed)
+      if (printed >= nightLog.length) window.clearInterval(timer)
+    }, 230)
+    return () => window.clearInterval(timer)
   }, [])
 
-  return <canvas ref={canvasRef} className="dither-hero" aria-hidden="true" />
-}
-
-/* ---------- пиксельный тикер-бегущая строка ---------- */
-
-function PixelTicker({ text }) {
-  const canvasRef = useRef(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    const parent = canvas?.parentElement
-    if (!canvas || !parent) return
-
-    const ctx = canvas.getContext('2d')
-    const CELL = 4
-    const STRIP = 64
-    let W = 0
-    let H = 0
-    let img = null
-    let mask = null
-    let maskW = 1
-    let rafId = 0
-    let last = 0
-    let visible = true
-    const reduceMotion = prefersReducedMotion()
-
-    // текст → offscreen-канвас → битовая маска пикселей
-    function buildMask() {
-      const value = text.toUpperCase()
-      const m = document.createElement('canvas')
-      const mc = m.getContext('2d')
-      const font = `${H - 4}px "IBM Plex Mono", monospace`
-      mc.font = font
-      maskW = Math.max(1, Math.ceil(mc.measureText(value).width))
-      m.width = maskW
-      m.height = H
-      mc.font = font
-      mc.textBaseline = 'middle'
-      mc.fillStyle = '#fff'
-      mc.fillText(value, 0, H / 2 + 1)
-
-      const d = mc.getImageData(0, 0, maskW, H).data
-      mask = new Uint8Array(maskW * H)
-      for (let i = 0; i < mask.length; i++) mask[i] = d[i * 4 + 3] > 120 ? 1 : 0
-    }
-
-    function render(now) {
-      if (!mask) return
-      const data = img.data
-      data.fill(0)
-
-      const offset = Math.floor(now * 0.02) % maskW
-      const phase = now * 0.0025
-      const FADE = Math.min(14, W >> 2)
-
-      for (let sx = 0; sx < W; sx++) {
-        const mx = (sx + offset) % maskW
-        // волна прокатывается по строке: буквы приподнимаются,
-        // на гребне подсвечиваются акцентом
-        const wobble = Math.sin(sx * 0.09 - phase)
-        const dy = Math.round(wobble * 1.6)
-        const c = wobble > 0.9 ? C_ACC : C_INK
-        const edge = Math.min(sx, W - 1 - sx)
-
-        for (let sy = 0; sy < H; sy++) {
-          const my = sy - dy
-          if (my < 0 || my >= H) continue
-          if (!mask[my * maskW + mx]) continue
-          if (edge < FADE && (edge / FADE) * 64 <= BAYER8[sy & 7][sx & 7]) continue
-          const i = (sy * W + sx) * 4
-          data[i] = c[0]
-          data[i + 1] = c[1]
-          data[i + 2] = c[2]
-          data[i + 3] = 255
-        }
-      }
-      ctx.putImageData(img, 0, 0)
-    }
-
-    function frame(now) {
-      rafId = 0
-      if (now - last > 70) {
-        last = now
-        render(now)
-      }
-      schedule()
-    }
-
-    function schedule() {
-      if (!reduceMotion && visible && !document.hidden && !rafId) {
-        rafId = requestAnimationFrame(frame)
-      }
-    }
-
-    function resize() {
-      const rect = parent.getBoundingClientRect()
-      W = Math.max(1, Math.ceil(rect.width / CELL))
-      H = Math.round(STRIP / CELL)
-      canvas.width = W
-      canvas.height = H
-      img = ctx.createImageData(W, H)
-      buildMask()
-      render(performance.now())
-    }
-
-    const ro = new ResizeObserver(resize)
-    ro.observe(parent)
-    resize()
-
-    const io = new IntersectionObserver((entries) => {
-      visible = entries[0].isIntersecting
-      schedule()
-    })
-    io.observe(parent)
-
-    const onVisibility = () => schedule()
-    document.addEventListener('visibilitychange', onVisibility)
-
-    // моноширинный шрифт мог ещё грузиться — перерисуем маску начисто
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(() => {
-        buildMask()
-        render(performance.now())
-      })
-    }
-    schedule()
-
-    return () => {
-      ro.disconnect()
-      io.disconnect()
-      document.removeEventListener('visibilitychange', onVisibility)
-      if (rafId) cancelAnimationFrame(rafId)
-    }
-  }, [text])
-
-  return <canvas ref={canvasRef} className="pixel-ticker" aria-hidden="true" />
-}
-
-/* ---------- статичная дизеринг-обложка проекта ---------- */
-
-function WorkCover({ seed }) {
-  const canvasRef = useRef(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    const parent = canvas?.parentElement
-    if (!canvas || !parent) return
-
-    const ctx = canvas.getContext('2d')
-    const CELL = 5
-
-    function draw() {
-      const rect = canvas.getBoundingClientRect()
-      const W = Math.max(1, Math.ceil(rect.width / CELL))
-      const H = Math.max(1, Math.ceil(rect.height / CELL))
-      canvas.width = W
-      canvas.height = H
-
-      const img = ctx.createImageData(W, H)
-      const data = img.data
-      for (let y = 0; y < H; y++) {
-        for (let x = 0; x < W; x++) {
-          // диагональный градиент + волна, у каждой обложки свой характер от seed
-          const v =
-            (x / W) * 0.5 +
-            (1 - y / H) * 0.25 +
-            0.3 * Math.sin(x * 0.09 * (1 + seed * 0.13) + y * 0.07 + seed) +
-            0.15 * Math.sin(y * 0.2 + seed * 2)
-
-          const i = (y * W + x) * 4
-          if (v * 64 > BAYER8[y & 7][x & 7]) {
-            const c = v > 0.9 ? C_ACC : v > 0.6 ? C_INK : C_DIM
-            data[i] = c[0]
-            data[i + 1] = c[1]
-            data[i + 2] = c[2]
-            data[i + 3] = 255
-          } else {
-            data[i] = 17
-            data[i + 1] = 17
-            data[i + 2] = 20
-            data[i + 3] = 255
-          }
-        }
-      }
-      ctx.putImageData(img, 0, 0)
-    }
-
-    const ro = new ResizeObserver(draw)
-    ro.observe(parent)
-    draw()
-    return () => ro.disconnect()
-  }, [seed])
-
-  return <canvas ref={canvasRef} className="work-cover" aria-hidden="true" />
-}
-
-/* ---------- появление блоков при скролле ---------- */
-
-function useReveal() {
-  useEffect(() => {
-    const nodes = document.querySelectorAll('.reveal')
-    if (prefersReducedMotion()) {
-      nodes.forEach((el) => el.classList.add('visible'))
-      return
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible')
-            io.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.15 },
-    )
-    nodes.forEach((el) => io.observe(el))
-    return () => io.disconnect()
-  }, [])
+  return shown
 }
 
 /* ---------- сценарий чтения: прогресс и активный раздел ---------- */
@@ -675,22 +282,6 @@ function useReadingProgress() {
   return { activeId, progressRef }
 }
 
-// Переход к следующему разделу: не даём странице закончиться «в никуда»,
-// каждый блок сам говорит, что смотреть дальше.
-function SectionBridge({ href, children }) {
-  // reveal висит на обёртке: у самой ссылки свой transition для ховера,
-  // и общий shorthand его бы перебил
-  return (
-    <div className="section-bridge-wrap reveal">
-      <a className="section-bridge" href={href}>
-        <span className="mono">Дальше</span>
-        {children}
-        <ArrowIcon />
-      </a>
-    </div>
-  )
-}
-
 function ArrowIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -700,29 +291,31 @@ function ArrowIcon() {
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth="2"
+        strokeWidth="1.5"
       />
     </svg>
   )
 }
 
+// Переход к следующему разделу: страница нигде не заканчивается «в никуда»,
+// каждый блок сам говорит, что смотреть дальше.
+function Bridge({ href, children }) {
+  return (
+    <div className="bridge-wrap">
+      <a className="bridge" href={href}>
+        <span>Дальше</span>
+        {children}
+        <ArrowIcon />
+      </a>
+    </div>
+  )
+}
+
 function App() {
-  const [activeFilter, setActiveFilter] = useState('all')
   // открытый на весь экран скриншот кейса (null — лайтбокс закрыт)
   const [lightbox, setLightbox] = useState(null)
   const { activeId, progressRef } = useReadingProgress()
-  useReveal()
-
-  const visibleProjects =
-    activeFilter === 'all'
-      ? projects
-      : projects.filter((project) => project.type === activeFilter)
-
-  const handleFilter = (filter) => {
-    startTransition(() => {
-      setActiveFilter(filter)
-    })
-  }
+  const printed = useNightLog()
 
   // пока лайтбокс открыт — блокируем прокрутку фона и закрываем по Escape
   useEffect(() => {
@@ -741,12 +334,9 @@ function App() {
 
   return (
     <div className="site-shell">
-      <div className="scanlines" aria-hidden="true" />
-
       <header className="site-header" ref={progressRef}>
         <span className="header-progress" aria-hidden="true" />
-        <a className="brand" href="#top" aria-label="Its Step">
-          <span>IS</span>
+        <a className="brand" href="#top">
           Its Step
         </a>
         <nav className="site-nav" aria-label="Навигация">
@@ -769,41 +359,42 @@ function App() {
 
       <main>
         <section className="hero" id="top">
-          <div className="hero-scene" aria-hidden="true">
-            <div className="scene-grid"></div>
-            <HeroDither />
-            <div className="scene-code">
-              <span>ai_manager.status = online</span>
-              <span>leads → crm: auto</span>
-              <span>manual_work −= 80%</span>
-            </div>
-          </div>
-
-          {/* первый экран должен читаться без анимаций: заголовок статичный,
-              под ним сразу что делаем, для кого, от скольки и за какой срок */}
-          <div className="hero-content">
-            <p className="hero-label mono">// its step — автоматизация, ai и веб-сервисы</p>
+          <div className="hero-main">
             <h1>Системы, которые работают вместо отдела</h1>
             <p className="hero-lead">
               Боты, AI-менеджеры и веб-сервисы: принимают заявки, отвечают
               клиентам, берут оплату — без участия людей.
             </p>
-            <p className="hero-offer">
-              <strong>От 50 000 ₽</strong>
-              <span aria-hidden="true">·</span>
-              <strong>запуск от 1 недели</strong>
+            <p className="hero-terms">
+              <span>От 50 000 ₽</span>
+              <i aria-hidden="true">·</i>
+              <span>запуск от 1 недели</span>
             </p>
             <div className="hero-actions">
-              <a className="primary-action" href={telegramUrl} onClick={copyContactText}>
+              <a className="action" href={telegramUrl} onClick={copyContactText}>
                 Рассказать о задаче
                 <ArrowIcon />
               </a>
-              <a className="secondary-action" href="#services">
+              <a className="action-text" href="#services">
                 Смотреть, как это работает
-                <span aria-hidden="true">↓</span>
               </a>
             </div>
           </div>
+
+          <aside className="hero-log">
+            <h2>Журнал системы · ночь</h2>
+            <ol>
+              {nightLog.slice(0, printed).map(([time, event]) => (
+                <li key={time + event}>
+                  <time>{time}</time>
+                  <span>{event}</span>
+                </li>
+              ))}
+            </ol>
+            {printed === nightLog.length && (
+              <p>Обычная ночь. Ни одного человека в переписке.</p>
+            )}
+          </aside>
 
           <div className="hero-footer">
             <span>20+ проектов до запуска</span>
@@ -812,136 +403,66 @@ function App() {
           </div>
         </section>
 
-        <section className="marquee-band" aria-hidden="true">
-          <PixelTicker text={marqueeText} />
-        </section>
-
-        <section className="intro-strip" aria-label="Коротко">
-          <p>
-            Я не продаю «сайт» или «бота». Я закрываю участок работы, который
-            сейчас делают руками: приём заявок, ответы клиентам, оплаты,
-            отчётность. Результат считается в заявках и сэкономленных часах,
-            а не в количестве экранов.
+        <section className="intro" aria-label="Коротко">
+          <p className="intro-lead">Я не продаю «сайт» или «бота».</p>
+          <p className="intro-body">
+            Я закрываю участок работы, который сейчас делают руками: приём
+            заявок, ответы клиентам, оплаты, отчётность. Результат считается в
+            заявках и сэкономленных часах, а не в количестве экранов.
           </p>
         </section>
 
-        <section className="services" id="services">
-          <div className="section-title reveal">
-            <span className="mono">01 · Услуги и цены</span>
-            <h2>
-              <ScrambleText text="Три формата работы" />
-            </h2>
+        <section className="section" id="services">
+          <div className="section-head">
+            <h2>Три формата работы</h2>
           </div>
-          <div className="service-list">
-            {services.map((service) => (
-              <article className="service-item reveal" key={service.title}>
-                <span className="mono">{service.number}</span>
+          {services.map((service) => (
+            <article className="service" key={service.title}>
+              <div>
                 <h3>{service.title}</h3>
                 <p>{service.body}</p>
-                <div className="service-price">
-                  <strong>{service.price}</strong>
-                  <span className="mono">{service.term}</span>
-                </div>
-              </article>
-            ))}
-          </div>
-          <p className="services-note mono">
-            // точная цена — после разбора задачи. Смета и сроки фиксируются в договоре
+              </div>
+              <div className="service-terms">
+                <strong>{service.price}</strong>
+                <span>{service.term}</span>
+              </div>
+            </article>
+          ))}
+          <p className="note">
+            Точная цена — после разбора задачи. Смета и сроки фиксируются в договоре.
           </p>
-          <SectionBridge href="#work">Что из этого уже работает у клиентов</SectionBridge>
+          <Bridge href="#work">Что из этого уже работает у клиентов</Bridge>
         </section>
 
-        <section className="work" id="work">
-          <div className="section-title section-title-row reveal">
-            <div>
-              <span className="mono">02 · Кейсы</span>
-              <h2>
-                <ScrambleText text="Что уже работает у клиентов" />
-              </h2>
-            </div>
-            <div className="filter-tabs" aria-label="Фильтр кейсов">
-              <button
-                type="button"
-                className={activeFilter === 'all' ? 'is-active' : ''}
-                onClick={() => handleFilter('all')}
-              >
-                Все
-              </button>
-              <button
-                type="button"
-                className={activeFilter === 'site' ? 'is-active' : ''}
-                onClick={() => handleFilter('site')}
-              >
-                Сайты и сервисы
-              </button>
-              <button
-                type="button"
-                className={activeFilter === 'bot' ? 'is-active' : ''}
-                onClick={() => handleFilter('bot')}
-              >
-                Боты и AI
-              </button>
-            </div>
+        <section className="section" id="work">
+          <div className="section-head">
+            <h2>Что уже работает у клиентов</h2>
           </div>
-
-          <div className="project-list">
-            {visibleProjects.map((project, index) => (
-              <article className="project-row reveal" key={project.id}>
-                {project.image ? (
-                  <button
-                    type="button"
-                    className="project-cover is-tappable"
-                    onClick={() => setLightbox(project)}
-                    aria-label={`Открыть скриншот: ${project.title}`}
-                  >
-                    <img
-                      className="work-photo"
-                      src={project.image}
-                      alt={project.title}
-                      loading="lazy"
-                    />
-                    <span className="project-index mono">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                    <span className="cover-hint mono" aria-hidden="true">
-                      Открыть
-                    </span>
-                  </button>
-                ) : (
-                  <div className="project-cover">
-                    <WorkCover seed={project.seed} />
-                    <span className="project-index mono">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                  </div>
+          {projects.map((project) => (
+            <article className="project" key={project.id}>
+              <button
+                type="button"
+                className="project-shot"
+                onClick={() => setLightbox(project)}
+                aria-label={`Открыть скриншот: ${project.title}`}
+              >
+                <img src={project.image} alt={project.title} loading="lazy" />
+              </button>
+              <div className="project-body">
+                <span className="project-cat">{project.category}</span>
+                <h3>{project.title}</h3>
+                <p>{project.summary}</p>
+                {project.metric && (
+                  <strong className="project-metric">{project.metric}</strong>
                 )}
-                {project.image && (
-                  <img
-                    className="cover-full"
-                    src={project.image}
-                    alt=""
-                    aria-hidden="true"
-                    loading="lazy"
-                  />
-                )}
-                <div className="project-main">
-                  <span className="mono">{project.category}</span>
-                  <h3>{project.title}</h3>
-                  <p>{project.summary}</p>
-                </div>
-                <div className="project-result">
-                  {project.metric && (
-                    <strong className="project-metric">{project.metric}</strong>
-                  )}
-                  <p>{project.result}</p>
-                  <ul>
-                    {project.tags.map((tag) => (
-                      <li key={tag}>{tag}</li>
-                    ))}
-                  </ul>
-                </div>
+                <p>{project.result}</p>
+                <ul className="project-tags">
+                  {project.tags.map((tag) => (
+                    <li key={tag}>{tag}</li>
+                  ))}
+                </ul>
                 <a
-                  className="project-action"
+                  className="action-text"
                   href={project.link ?? telegramUrl}
                   target={project.link ? '_blank' : undefined}
                   rel={project.link ? 'noreferrer' : undefined}
@@ -950,15 +471,15 @@ function App() {
                   {project.action}
                   <ArrowIcon />
                 </a>
-              </article>
-            ))}
-          </div>
-          <SectionBridge href="#about">Кто это делает</SectionBridge>
+              </div>
+            </article>
+          ))}
+          <Bridge href="#about">Кто это делает</Bridge>
         </section>
 
-        <section className="about" id="about">
+        <section className="section" id="about">
           <div className="about-grid">
-            <figure className="about-photo reveal">
+            <figure className="about-photo">
               <img
                 src={aboutPhoto}
                 alt="Степан — разработчик Its Step"
@@ -969,11 +490,8 @@ function App() {
                 }}
               />
             </figure>
-            <div className="about-copy reveal">
-              <span className="mono">03 · Кто делает</span>
-              <h2>
-                <ScrambleText text="Степан, соло-разработчик" />
-              </h2>
+            <div className="about-copy">
+              <h2>Степан, соло-разработчик</h2>
               <p>
                 Веду проект один и целиком: разбор задачи, архитектура, интерфейс,
                 код, интеграции, запуск. Вы общаетесь напрямую со мной — без
@@ -993,74 +511,73 @@ function App() {
               </ul>
             </div>
           </div>
-          <SectionBridge href="#proof">Что говорят те, кто уже работал</SectionBridge>
+          <Bridge href="#proof">Что говорят те, кто уже работал</Bridge>
         </section>
 
-        <section className="proof" id="proof">
-          <div className="section-title reveal">
-            <span className="mono">04 · Отзывы</span>
-            <h2>
-              <ScrambleText text="Что говорят клиенты" />
-            </h2>
+        <section className="section" id="proof">
+          <div className="section-head">
+            <h2>Что говорят клиенты</h2>
           </div>
-          <div className="review-wall">
+          <div className="reviews">
             {reviews.map((review) => (
-              <figure className="review-card reveal" key={review.name}>
+              <figure className="review" key={review.name}>
                 <blockquote>{review.text}</blockquote>
                 <figcaption>
                   <strong>{review.name}</strong>
-                  <span className="mono">{review.project}</span>
+                  <span>{review.project}</span>
                   {review.repeat && <em className="review-repeat">повторный заказ</em>}
                 </figcaption>
               </figure>
             ))}
           </div>
-          <SectionBridge href="#process">Как проходит работа и где ваши риски</SectionBridge>
+          <Bridge href="#process">Как проходит работа и где ваши риски</Bridge>
         </section>
 
-        <section className="workflow" id="process">
-          <div className="section-title reveal">
-            <span className="mono">05 · Процесс</span>
-            <h2>
-              <ScrambleText text="Как мы работаем и где ваши риски" />
-            </h2>
+        <section className="section" id="process">
+          <div className="section-head">
+            <h2>Как мы работаем и где ваши риски</h2>
           </div>
           <ol className="workflow-list">
-            {workflow.map((step, index) => (
-              <li className={index === 0 ? 'reveal is-first' : 'reveal'} key={step}>
+            {workflow.map((step) => (
+              <li key={step}>
                 {step}
               </li>
             ))}
           </ol>
-          <SectionBridge href="#contact">Начать с бесплатного разбора</SectionBridge>
+          <Bridge href="#contact">Начать с бесплатного разбора</Bridge>
         </section>
 
-        <section className="contact" id="contact">
-          <div className="contact-copy reveal">
-            <span className="mono">06 · Контакт</span>
-            <h2>
-              <ScrambleText text="Расскажите, что у вас делают руками" />
-            </h2>
-            <p>
-              Напишите в Telegram и опишите задачу в двух словах. Задам пару
-              уточняющих вопросов и в тот же день скажу, сколько это стоит и
-              сколько займёт. Разбор бесплатный и ни к чему не обязывает.
-            </p>
-            <p className="contact-step mono">
-              Шаг 1 из 5 · разбор 30 минут · без оплаты и обязательств
-            </p>
-            <a className="primary-action" href={telegramUrl} onClick={copyContactText}>
+        <section className="section contact" id="contact">
+          <h2>Расскажите, что у вас делают руками</h2>
+          <p>
+            Напишите в Telegram и опишите задачу в двух словах. Задам пару
+            уточняющих вопросов и в тот же день скажу, сколько это стоит и
+            сколько займёт. Разбор бесплатный и ни к чему не обязывает.
+          </p>
+          <p className="contact-step">
+            Шаг 1 из 5 · разбор 30 минут · без оплаты и обязательств
+          </p>
+          <div>
+            <a
+              className="action action-invert"
+              href={telegramUrl}
+              onClick={copyContactText}
+            >
               Написать в Telegram
               <ArrowIcon />
             </a>
-            <p className="contact-direct mono">// или напрямую: {telegramHandle}</p>
           </div>
+          <p className="contact-direct">
+            Или напрямую:{' '}
+            <a href={telegramUrl} onClick={copyContactText}>
+              {telegramHandle}
+            </a>
+          </p>
         </section>
       </main>
 
       <footer className="site-footer">
-        <a className="brand" href="#top" aria-label="Its Step">
-          <span>IS</span>
+        <a className="brand" href="#top">
           Its Step
         </a>
         <p>
@@ -1087,7 +604,7 @@ function App() {
           </button>
           <figure className="lightbox-figure" onClick={(event) => event.stopPropagation()}>
             <img src={lightbox.image} alt={lightbox.title} />
-            <figcaption className="mono">
+            <figcaption>
               {lightbox.category} — {lightbox.title}
             </figcaption>
           </figure>
