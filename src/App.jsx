@@ -206,6 +206,16 @@ const workflow = [
   'Запуск, передача доступов и 2 недели поддержки',
 ]
 
+// Разделы в том порядке, в котором сайт ведёт читателя: цена → доказательства
+// → кто делает → отзывы → процесс → контакт. Тот же порядок используется для
+// подсветки активного пункта в шапке.
+const navItems = [
+  { id: 'services', label: 'Услуги и цены' },
+  { id: 'work', label: 'Кейсы' },
+  { id: 'about', label: 'Обо мне' },
+  { id: 'proof', label: 'Отзывы' },
+]
+
 /* ---------- пиксельный дизеринг: общие константы ---------- */
 
 // матрица упорядоченного дизеринга 8×8 (Bayer) — сердце «пиксельного» вида
@@ -616,6 +626,71 @@ function useReveal() {
   }, [])
 }
 
+/* ---------- сценарий чтения: прогресс и активный раздел ---------- */
+
+function useReadingProgress() {
+  const [activeId, setActiveId] = useState('')
+  const progressRef = useRef(null)
+
+  useEffect(() => {
+    const sections = navItems
+      .map((item) => document.getElementById(item.id))
+      .filter(Boolean)
+    let frame = 0
+
+    const update = () => {
+      frame = 0
+      const doc = document.documentElement
+      const scrolled = doc.scrollTop
+      const max = doc.scrollHeight - doc.clientHeight
+      progressRef.current?.style.setProperty(
+        '--progress',
+        max > 0 ? String(Math.min(1, scrolled / max)) : '0',
+      )
+      // активен последний раздел, чья верхняя граница уже ушла под шапку —
+      // иначе на длинных секциях подсветка прыгает туда-сюда
+      const line = scrolled + 160
+      let current = ''
+      sections.forEach((section) => {
+        if (section.offsetTop <= line) current = section.id
+      })
+      setActiveId(current)
+    }
+
+    const onScroll = () => {
+      if (frame) return
+      frame = requestAnimationFrame(update)
+    }
+
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      if (frame) cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [])
+
+  return { activeId, progressRef }
+}
+
+// Переход к следующему разделу: не даём странице закончиться «в никуда»,
+// каждый блок сам говорит, что смотреть дальше.
+function SectionBridge({ href, children }) {
+  // reveal висит на обёртке: у самой ссылки свой transition для ховера,
+  // и общий shorthand его бы перебил
+  return (
+    <div className="section-bridge-wrap reveal">
+      <a className="section-bridge" href={href}>
+        <span className="mono">Дальше</span>
+        {children}
+        <ArrowIcon />
+      </a>
+    </div>
+  )
+}
+
 function ArrowIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -635,6 +710,7 @@ function App() {
   const [activeFilter, setActiveFilter] = useState('all')
   // открытый на весь экран скриншот кейса (null — лайтбокс закрыт)
   const [lightbox, setLightbox] = useState(null)
+  const { activeId, progressRef } = useReadingProgress()
   useReveal()
 
   const visibleProjects =
@@ -667,16 +743,23 @@ function App() {
     <div className="site-shell">
       <div className="scanlines" aria-hidden="true" />
 
-      <header className="site-header">
+      <header className="site-header" ref={progressRef}>
+        <span className="header-progress" aria-hidden="true" />
         <a className="brand" href="#top" aria-label="Its Step">
           <span>IS</span>
           Its Step
         </a>
         <nav className="site-nav" aria-label="Навигация">
-          <a href="#services">Услуги и цены</a>
-          <a href="#work">Кейсы</a>
-          <a href="#about">Обо мне</a>
-          <a href="#proof">Отзывы</a>
+          {navItems.map((item) => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              className={activeId === item.id ? 'is-current' : ''}
+              aria-current={activeId === item.id ? 'true' : undefined}
+            >
+              {item.label}
+            </a>
+          ))}
         </nav>
         <a className="header-cta" href={telegramUrl} onClick={copyContactText}>
           Telegram
@@ -696,30 +779,35 @@ function App() {
             </div>
           </div>
 
-          <div className="hero-content reveal">
-            <p className="hero-label mono">// its step — автоматизация и ai для бизнеса</p>
-            <h1>
-              <ScrambleText text="Системы, которые работают вместо отдела" delay={200} />
-            </h1>
+          {/* первый экран должен читаться без анимаций: заголовок статичный,
+              под ним сразу что делаем, для кого, от скольки и за какой срок */}
+          <div className="hero-content">
+            <p className="hero-label mono">// its step — автоматизация, ai и веб-сервисы</p>
+            <h1>Системы, которые работают вместо отдела</h1>
             <p className="hero-lead">
-              AI-менеджеры, CRM-интеграции, воронки с оплатой и дашборды.
-              Меньше ручной работы — больше обработанных лидов.
+              Боты, AI-менеджеры и веб-сервисы: принимают заявки, отвечают
+              клиентам, берут оплату — без участия людей.
+            </p>
+            <p className="hero-offer">
+              <strong>От 50 000 ₽</strong>
+              <span aria-hidden="true">·</span>
+              <strong>запуск от 1 недели</strong>
             </p>
             <div className="hero-actions">
               <a className="primary-action" href={telegramUrl} onClick={copyContactText}>
-                Обсудить автоматизацию
+                Рассказать о задаче
                 <ArrowIcon />
               </a>
-              <a className="secondary-action" href="#work">
-                Смотреть кейсы
+              <a className="secondary-action" href="#services">
+                Смотреть, как это работает
+                <span aria-hidden="true">↓</span>
               </a>
             </div>
           </div>
 
           <div className="hero-footer">
-            <span>2 года в разработке</span>
             <span>20+ проектов до запуска</span>
-            <span>Работаю по договору</span>
+            <span>По договору</span>
             <span>Ответ в Telegram: {telegramHandle}</span>
           </div>
         </section>
@@ -739,7 +827,7 @@ function App() {
 
         <section className="services" id="services">
           <div className="section-title reveal">
-            <span className="mono">Услуги и цены</span>
+            <span className="mono">01 · Услуги и цены</span>
             <h2>
               <ScrambleText text="Три формата работы" />
             </h2>
@@ -760,12 +848,13 @@ function App() {
           <p className="services-note mono">
             // точная цена — после разбора задачи. Смета и сроки фиксируются в договоре
           </p>
+          <SectionBridge href="#work">Что из этого уже работает у клиентов</SectionBridge>
         </section>
 
         <section className="work" id="work">
           <div className="section-title section-title-row reveal">
             <div>
-              <span className="mono">Кейсы</span>
+              <span className="mono">02 · Кейсы</span>
               <h2>
                 <ScrambleText text="Что уже работает у клиентов" />
               </h2>
@@ -864,6 +953,7 @@ function App() {
               </article>
             ))}
           </div>
+          <SectionBridge href="#about">Кто это делает</SectionBridge>
         </section>
 
         <section className="about" id="about">
@@ -880,7 +970,7 @@ function App() {
               />
             </figure>
             <div className="about-copy reveal">
-              <span className="mono">Кто делает</span>
+              <span className="mono">03 · Кто делает</span>
               <h2>
                 <ScrambleText text="Степан, соло-разработчик" />
               </h2>
@@ -903,11 +993,12 @@ function App() {
               </ul>
             </div>
           </div>
+          <SectionBridge href="#proof">Что говорят те, кто уже работал</SectionBridge>
         </section>
 
         <section className="proof" id="proof">
           <div className="section-title reveal">
-            <span className="mono">Отзывы</span>
+            <span className="mono">04 · Отзывы</span>
             <h2>
               <ScrambleText text="Что говорят клиенты" />
             </h2>
@@ -924,27 +1015,29 @@ function App() {
               </figure>
             ))}
           </div>
+          <SectionBridge href="#process">Как проходит работа и где ваши риски</SectionBridge>
         </section>
 
-        <section className="workflow">
+        <section className="workflow" id="process">
           <div className="section-title reveal">
-            <span className="mono">Процесс</span>
+            <span className="mono">05 · Процесс</span>
             <h2>
               <ScrambleText text="Как мы работаем и где ваши риски" />
             </h2>
           </div>
           <ol className="workflow-list">
-            {workflow.map((step) => (
-              <li className="reveal" key={step}>
+            {workflow.map((step, index) => (
+              <li className={index === 0 ? 'reveal is-first' : 'reveal'} key={step}>
                 {step}
               </li>
             ))}
           </ol>
+          <SectionBridge href="#contact">Начать с бесплатного разбора</SectionBridge>
         </section>
 
         <section className="contact" id="contact">
           <div className="contact-copy reveal">
-            <span className="mono">05 · Контакт</span>
+            <span className="mono">06 · Контакт</span>
             <h2>
               <ScrambleText text="Расскажите, что у вас делают руками" />
             </h2>
@@ -952,6 +1045,9 @@ function App() {
               Напишите в Telegram и опишите задачу в двух словах. Задам пару
               уточняющих вопросов и в тот же день скажу, сколько это стоит и
               сколько займёт. Разбор бесплатный и ни к чему не обязывает.
+            </p>
+            <p className="contact-step mono">
+              Шаг 1 из 5 · разбор 30 минут · без оплаты и обязательств
             </p>
             <a className="primary-action" href={telegramUrl} onClick={copyContactText}>
               Написать в Telegram

@@ -157,10 +157,50 @@ canvas.work-cover {
   font-size: 13px;
 }
 
+/* тонкая полоса прочитанного по нижней кромке шапки: показывает, что
+   страница конечна и сколько до конца — ширину двигает useReadingProgress */
+.header-progress {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 4px;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(254, 254, 253, 0.12);
+  overflow: hidden;
+}
+
+.header-progress::after {
+  content: '';
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--accent-bright);
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left center;
+}
+
 .site-nav {
   display: inline-flex;
   align-items: center;
   gap: 22px;
+}
+
+/* пункт раздела, который сейчас на экране */
+.site-nav a.is-current {
+  position: relative;
+  color: var(--paper);
+}
+
+.site-nav a.is-current::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -7px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent-bright);
 }
 
 .site-nav a,
@@ -268,6 +308,9 @@ canvas.work-cover {
   z-index: 2;
 }
 
+/* первый экран рисуется сразу и без анимаций: ни reveal по скроллу, ни
+   расшифровки заголовка. Всё, что должно прочитаться за три секунды, не
+   может зависеть от того, доиграла ли анимация */
 .hero-content {
   width: min(840px, 100%);
 }
@@ -302,11 +345,39 @@ canvas.work-cover {
   line-height: 1.45;
 }
 
+/* цена и срок вынесены отдельной строкой: это то, что человек ищет глазами
+   сразу после заголовка, и в общем абзаце оно теряется */
+.hero-offer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0 0;
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 17px;
+}
+
+.hero-offer strong {
+  font-weight: 700;
+}
+
+.hero-offer span {
+  color: var(--accent-bright);
+}
+
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 30px;
+}
+
+/* вторая кнопка ведёт вниз по странице, поэтому у неё стрелка вниз, а не
+   вправо: направление подсказывает, что дальше — скролл, а не переход */
+.secondary-action span {
+  margin-left: 8px;
+  color: var(--accent-bright);
 }
 
 .primary-action,
@@ -949,6 +1020,17 @@ button.project-cover:focus-visible .work-photo {
   font-size: 13px;
 }
 
+/* первый шаг — то самое действие, к которому ведёт вся страница,
+   поэтому он выделен из ряда одинаковых карточек */
+.workflow-list li.is-first {
+  background: var(--black);
+  color: var(--paper);
+}
+
+.workflow-list li.is-first::before {
+  color: var(--accent-bright);
+}
+
 .contact {
   border-top: 1px solid var(--line);
 }
@@ -1065,6 +1147,105 @@ button.project-cover:focus-visible .work-photo {
   margin-top: 16px;
   color: var(--muted-dark);
   font-size: 13px;
+}
+
+/* явно называем, на каком шаге человек находится и чем он рискует */
+.contact-step {
+  display: inline-block;
+  margin: 0 0 24px;
+  padding: 8px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 13px;
+}
+
+/* мост в конце раздела: страница нигде не заканчивается тупиком,
+   каждый блок сам предлагает следующий шаг */
+.section-bridge-wrap {
+  margin-top: 40px;
+}
+
+.section-bridge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  font-weight: 800;
+  text-decoration: none;
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease;
+}
+
+.section-bridge span {
+  color: var(--muted-dark);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  transition: color 180ms ease;
+}
+
+.section-bridge svg {
+  width: 18px;
+  height: 18px;
+  color: var(--accent);
+  transition: transform 180ms ease;
+}
+
+.section-bridge:hover,
+.section-bridge:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--black);
+  background: var(--black);
+  color: var(--paper);
+}
+
+.section-bridge:hover span,
+.section-bridge:focus-visible span {
+  color: rgba(254, 254, 253, 0.66);
+}
+
+.section-bridge:hover svg,
+.section-bridge:focus-visible svg {
+  transform: translateX(4px);
+  color: var(--accent-bright);
+}
+
+/* на графитовой секции отзывов мост инвертируется */
+.proof .section-bridge {
+  border-color: rgba(254, 254, 253, 0.24);
+  color: var(--paper);
+}
+
+.proof .section-bridge span {
+  color: rgba(254, 254, 253, 0.62);
+}
+
+.proof .section-bridge svg {
+  color: var(--accent-bright);
+}
+
+.proof .section-bridge:hover,
+.proof .section-bridge:focus-visible {
+  border-color: var(--paper);
+  background: var(--paper);
+  color: var(--black);
+}
+
+.proof .section-bridge:hover span,
+.proof .section-bridge:focus-visible span {
+  color: var(--muted-dark);
+}
+
+.proof .section-bridge:hover svg,
+.proof .section-bridge:focus-visible svg {
+  color: var(--accent);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1298,5 +1479,42 @@ button.project-cover:focus-visible .work-photo {
   .site-footer {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+/* Невысокие экраны (ноутбуки 720–800px по высоте): обещание, цена, срок и
+   кнопка обязаны помещаться до сгиба — иначе «понять за три секунды» не
+   работает. Идёт последним, чтобы перебивать ширинные брейкпоинты. */
+@media (min-width: 721px) and (max-height: 860px) {
+  .hero {
+    min-height: 100svh;
+    padding-top: 108px;
+    padding-bottom: 26px;
+  }
+
+  .hero h1 {
+    font-size: clamp(38px, 5vw, 64px);
+  }
+
+  .hero-lead {
+    margin-top: 18px;
+    font-size: 19px;
+  }
+
+  .hero-offer {
+    margin-top: 16px;
+    font-size: 16px;
+  }
+
+  .hero-actions {
+    margin-top: 22px;
+  }
+
+  .hero-footer {
+    margin-top: 26px;
+  }
+
+  .scene-code {
+    top: 128px;
   }
 }
