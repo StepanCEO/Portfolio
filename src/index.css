@@ -1,21 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Geologica:wght@400;500;600;700&family=Onest:wght@400;500;600&display=swap');
 
 :root {
-  /* Тёмная графитовая база и один сигнальный оранжевый. Оранжевый — только
-     там, где на него должен упасть взгляд: кнопка, цифры результата, CTA. */
-  --bg: #0b0b0c;
-  --bg-2: #101012;
-  --card: #151517;
-  --card-2: #1b1b1e;
-  --line: rgba(255, 255, 255, 0.08);
-  --line-2: rgba(255, 255, 255, 0.15);
-  --text: #f4f2ee;
-  --muted: rgba(244, 242, 238, 0.66);
-  --faint: rgba(244, 242, 238, 0.44);
-  --accent: #ff5b22;
-  --accent-2: #ff8a5c;
-  --accent-soft: rgba(255, 91, 34, 0.12);
-  --ok: #3ddc84;
+  /* Светлая «бумажная» база, графитовый текст и один глубокий синий.
+     Синий — только кнопка, ссылки-акценты, цифры результата и финальный блок. */
+  --bg: #f4f1ea;
+  --bg-2: #ece8de;
+  --card: #ffffff;
+  --card-2: #f7f5f0;
+  --line: rgba(28, 29, 33, 0.1);
+  --line-2: rgba(28, 29, 33, 0.18);
+  --text: #1c1d21;
+  --muted: rgba(28, 29, 33, 0.72);
+  --faint: rgba(28, 29, 33, 0.54);
+  --accent: #1f3fa8;
+  --accent-2: #18348c;
+  --accent-soft: rgba(31, 63, 168, 0.08);
+  --ok: #1e7f48;
 
   --display: 'Geologica', 'Segoe UI', sans-serif;
   --body: 'Onest', 'Segoe UI', sans-serif;
@@ -25,7 +25,7 @@
   --gutter: max(20px, calc((100vw - var(--max)) / 2));
   --radius: 20px;
 
-  color-scheme: dark;
+  color-scheme: light;
   color: var(--text);
   font: 400 17px/1.6 var(--body);
   font-synthesis: none;
@@ -76,7 +76,7 @@ svg {
 
 ::selection {
   background: var(--accent);
-  color: #0b0b0c;
+  color: #fff;
 }
 
 :focus-visible {
