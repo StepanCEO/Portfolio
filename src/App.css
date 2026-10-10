@@ -124,28 +124,34 @@
   padding: clamp(120px, 13vw, 156px) var(--gutter) clamp(56px, 7vw, 80px);
 }
 
+/* подпись под заголовком: фото и имя от руки */
 .hero-person {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  color: var(--muted);
-  font-size: 15px;
+  gap: 14px;
+  margin-top: 18px;
+  color: var(--accent);
   text-decoration: none;
 }
 
 .hero-person img {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   object-fit: cover;
 }
 
+.hero-person span {
+  font: 400 clamp(32px, 3.4vw, 44px) / 1.1 var(--script);
+  letter-spacing: 0;
+}
+
 .hero-person:hover {
-  color: var(--text);
+  color: var(--accent-2);
 }
 
 .hero h1 {
-  margin: 24px 0 0;
+  margin: 0;
   font: 400 clamp(46px, 6.4vw, 88px) / 0.98 var(--serif);
   letter-spacing: -0.055em;
   text-wrap: balance;

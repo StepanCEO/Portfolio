@@ -393,13 +393,13 @@ function App() {
         {/* ---------- первый экран ---------- */}
         <section className="hero" id="top">
           <div className="hero-copy">
-            <a className="hero-person" href="#about">
-              <img src={avatar} alt="" width="44" height="44" />
-              <span>Степан, разработчик · Its Step</span>
-            </a>
             <h1>
               Делаю <span className="nowrap">AI-системы</span>, CRM и сайты для бизнеса
             </h1>
+            <a className="hero-person" href="#about">
+              <img src={avatar} alt="" width="48" height="48" />
+              <span>Степан, разработчик</span>
+            </a>
             <p className="hero-lead">
               За два года сдал 30+ заказов: тендерную AI-систему, магазин на
               520 000 товаров, сайт бренда минеральной воды за 200 000 ₽. Веду
