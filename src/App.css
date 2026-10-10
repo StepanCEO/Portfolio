@@ -146,8 +146,8 @@
 
 .hero h1 {
   margin: 24px 0 0;
-  font: 700 clamp(38px, 4.8vw, 62px) / 1.05 var(--display);
-  letter-spacing: -0.035em;
+  font: 400 clamp(46px, 6.4vw, 88px) / 0.98 var(--serif);
+  letter-spacing: -0.055em;
   text-wrap: balance;
 }
 
@@ -299,8 +299,8 @@
 .section-head h2,
 .about-card h2 {
   margin: 0;
-  font: 700 clamp(30px, 3.8vw, 48px) / 1.05 var(--display);
-  letter-spacing: -0.03em;
+  font: 400 clamp(38px, 5vw, 64px) / 1 var(--serif);
+  letter-spacing: -0.05em;
 }
 
 .section-lead {
@@ -331,8 +331,8 @@
 
 .featured h3 {
   margin: 0 0 14px;
-  font: 700 clamp(26px, 2.8vw, 36px) / 1.08 var(--display);
-  letter-spacing: -0.025em;
+  font: 400 clamp(32px, 3.4vw, 46px) / 1.02 var(--serif);
+  letter-spacing: -0.045em;
 }
 
 .featured p {
@@ -442,8 +442,8 @@
 
 .case h3 {
   margin: 0 0 10px;
-  font: 600 clamp(21px, 2vw, 24px) / 1.18 var(--display);
-  letter-spacing: -0.02em;
+  font: 400 clamp(26px, 2.5vw, 32px) / 1.08 var(--serif);
+  letter-spacing: -0.04em;
 }
 
 .case p {
@@ -976,8 +976,8 @@
 .cta h2 {
   max-width: 16em;
   margin: 22px 0 0;
-  font: 700 clamp(30px, 4.2vw, 52px) / 1.05 var(--display);
-  letter-spacing: -0.035em;
+  font: 400 clamp(38px, 5.4vw, 68px) / 1 var(--serif);
+  letter-spacing: -0.05em;
   text-wrap: balance;
 }
 
