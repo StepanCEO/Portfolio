@@ -1,286 +1,269 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 
-const contactText = 'Здравствуйте! Хочу обсудить автоматизацию / разработку проекта.'
+const contactText = 'Здравствуйте, Степан! Хочу обсудить проект.'
 const telegramUrl = `https://t.me/SStepCEO?text=${encodeURIComponent(contactText)}`
 const telegramHandle = '@SStepCEO'
-const projectImage = (name) => `${import.meta.env.BASE_URL}projects/${name}`
-const aboutPhoto = `${import.meta.env.BASE_URL}about/stepan.jpg`
+const kworkUrl = 'https://kwork.ru/user/stepanceo'
+const tiktokUrl = 'https://www.tiktok.com/@its___step'
+const channelUrl = 'https://t.me/ItsStepss'
+const casesChannelUrl = 'https://t.me/itssteps'
+const githubUrl = 'https://github.com/StepanCEO'
 
-function copyContactText() {
-  try {
-    navigator.clipboard?.writeText(contactText)
-  } catch {
-    // не критично: текст всё равно уйдёт через ?text=
-  }
+const asset = (path) => `${import.meta.env.BASE_URL}${path}`
+const avatar = asset('about/stepan-avatar.jpg')
+
+// Все цифры на странице проверяемы: Kwork и соцсети — с публичных профилей
+// (октябрь 2026), чеки и объёмы — из ТЗ и договоров. Обновлять вручную.
+const kwork = { orders: 26, intime: '96%', reviews: 18 }
+
+const heroStats = [
+  { value: '30+', label: 'сданных заказов за 2 года' },
+  { value: '200 000 ₽', label: 'крупнейший чек — сайт бренда' },
+  { value: kwork.intime, label: 'заказов сдано в срок на Kwork' },
+  { value: '153 тыс.', label: 'лайков на роликах в TikTok' },
+]
+
+const clients = ['Conteria', 'АО «Кавминводы»', 'Новотерская', 'Кейтеринг «Нечай»', 'Hayat Nikah']
+
+const featured = {
+  id: 'conteria-tenders',
+  category: 'AI · B2B-система · по договору',
+  title: 'AI тендер-менеджер для Conteria',
+  summary:
+    'Система сама находит госзакупки по категориям и регионам, вытаскивает победителей, а AI читает документацию тендера и раскладывает смету на позиции из каталога компании. Дальше — КП, отправка, ответы из почты и CRM.',
+  points: [
+    ['13', 'стадий воронки от тендера до сделки'],
+    ['AI', 'разбирает PDF и сметы вместо менеджера'],
+    ['1 окно', 'тендер → КП → ответ → сделка'],
+  ],
+  tags: ['Django', 'React', 'Celery', 'LLM', 'IMAP'],
+  image: asset('projects/conteria-tenders.jpg'),
 }
 
-// Журнал системы вместо картинки продукта на первом экране: это буквально то,
-// что бот и AI-менеджер печатают сами, пока никого нет на месте. Пример
-// типичной ночи, а не выгрузка конкретного клиента.
-const nightLog = [
-  ['02:41', 'заявка принята'],
-  ['02:41', 'ответ отправлен'],
-  ['03:18', 'вопрос по каталогу закрыт'],
-  ['04:02', 'оплата 12 000 ₽'],
-  ['04:03', 'чек и доступ выданы'],
-  ['05:26', 'напоминание клиенту'],
-  ['06:31', 'сделка передана в CRM'],
-  ['07:04', 'смена открыта: 6 новых заявок'],
+const cases = [
+  {
+    id: 'conteria-shop',
+    category: 'E-commerce',
+    title: 'Интернет-магазин инженерного оборудования',
+    summary:
+      'Переезд с OpenCart на Next.js и Laravel: каталог поставщиков с автообновлением остатков, СДЭК и ПЭК, онлайн-оплата, фиды VK, AI-поиск и AI-консультант.',
+    metric: '520 000 товаров',
+    metricNote: 'и SEO-тексты для 155 000 страниц через AI',
+    link: 'https://conteria.ru/',
+    linkLabel: 'conteria.ru',
+    image: asset('projects/conteria-shop.jpg'),
+  },
+  {
+    id: 'novoterskaya',
+    category: 'Сайт бренда',
+    title: 'Минеральная вода «Новотерская»',
+    summary:
+      'Имиджевый сайт для АО «Кавминводы»: история бренда, состав, каталог, лаборатория и новости. 13 страниц, RU / EN, своя админка для контента.',
+    metric: '200 000 ₽',
+    metricNote: 'крупнейший чек по сайтам',
+    link: 'https://stepanceo.github.io/Novoterskiy/',
+    linkLabel: 'Открыть сайт',
+    image: asset('projects/water-novoterskaya.jpg'),
+  },
+  {
+    id: 'leasing-crm',
+    category: 'CRM',
+    title: 'CRM и каталог для лизинговой платформы',
+    summary:
+      'Каталог авто и спецтехники, калькулятор лизинга с условиями банков, заявки с автопроверкой компании по ИНН, письма поставщиков прямо в интерфейсе, роли и AI-описания.',
+    metric: '120 000 ₽',
+    metricNote: 'крупнейшая CRM, сдаётся по этапам',
+    spec: [
+      ['Каталог', 'авто и спецтехника, фильтры'],
+      ['Заявки', 'проверка компании через Checko'],
+      ['Почта', 'письма поставщиков по IMAP'],
+      ['Стек', 'Next.js · Prisma · PostgreSQL'],
+    ],
+  },
+  {
+    id: 'sales-ai',
+    category: 'AI-агент',
+    title: 'AI-ассистент отдела продаж',
+    summary:
+      'AI отвечает клиентам в MAX и почте по базе знаний компании, сам собирает коммерческое предложение в Word и ведёт сделку в amoCRM. Руководитель получает отчёты по менеджерам.',
+    metric: 'В продакшене',
+    metricNote: 'с августа, расширяется под отдел',
+    spec: [
+      ['Каналы', 'MAX · почта'],
+      ['CRM', 'amoCRM: сделки и задачи'],
+      ['Документы', 'КП в .docx по шаблону'],
+      ['Стек', 'FastAPI · OpenAI · n8n'],
+    ],
+  },
+  {
+    id: 'hayat',
+    category: 'Telegram-бот',
+    title: 'Бот брачного агентства',
+    summary:
+      'Закрытая анкетная воронка с модерацией и платным доступом. Агентство перестало вести переписку руками.',
+    metric: '100 000 ₽',
+    metricNote: 'выручки клиента за первую неделю — 50 оплат',
+    link: 'https://t.me/Hayatnikah_bot',
+    linkLabel: '@Hayatnikah_bot',
+    image: asset('projects/hayat-nikah.png'),
+  },
+  {
+    id: 'leadgen',
+    category: 'AI · Telegram',
+    title: 'Лидогенерация для эксперта',
+    summary:
+      'Аккаунты мониторят тематические чаты, AI оценивает каждое сообщение, отвечает тем, кому нужна помощь, и ведёт их через бота-сценарий к эксперту.',
+    metric: 'Заявки 24/7',
+    metricNote: 'без ручного поиска в чатах',
+    link: 'https://t.me/lidogeneration_robot',
+    linkLabel: '@lidogeneration_robot',
+    spec: [
+      ['Источник', 'чаты Telegram, мультиаккаунт'],
+      ['Оценка', 'AI решает, кому отвечать'],
+      ['Админка', 'в боте, A/B-тесты текстов'],
+      ['Стек', 'Python · PostgreSQL · Docker'],
+    ],
+  },
+  {
+    id: 'nechay',
+    category: 'Сайт',
+    title: 'Кейтеринг «Нечай»',
+    summary:
+      'Меню, портфолио мероприятий и заявки, которые сразу приходят владельцу. Метрика, мини-админка и автодеплой.',
+    metric: 'Живой сайт',
+    metricNote: 'на домене клиента',
+    link: 'https://nechay.online/',
+    linkLabel: 'nechay.online',
+    image: asset('projects/nechay-catering.jpg'),
+  },
+]
+
+// Отзывы — с Kwork, длинные слегка сокращены без изменения смысла.
+const reviews = [
+  {
+    name: 'STIZO',
+    project: 'Telegram Mini App',
+    text: 'Обратился с задачей, когда сроки уже поджимали, думал, что придётся ждать неделю. Но программист удивил: сделал качественную работающую программу менее чем за сутки. Всё чётко, без воды, багов не заметил. Рекомендую на 100%!',
+    accent: true,
+  },
+  {
+    name: 'GrigoriySE',
+    project: 'Бот брачного агентства',
+    text: 'Всё получилось даже лучше, чем я ожидал. Все пожелания были учтены. Степан — настоящий профессионал своего дела: всегда на связи, быстро вносил правки и довёл проект до отличного результата.',
+  },
+  {
+    name: 'partyzan77777',
+    project: 'AI-фильтрация контента в боте',
+    text: 'Второй раз обращаюсь к этому разработчику. Всё оперативно переделал под новые задачи, бот работает отлично. Рекомендую!',
+    repeat: true,
+  },
+  {
+    name: 'MarinaPizzaLove',
+    project: 'Сайт пиццерии',
+    text: 'Степан учёл все пожелания: подобрал стиль, сделал понятную структуру, интегрировал корзину и оплату. Сайт отлично выглядит на всех устройствах и уже приносит заказы. Продолжаем сотрудничество!',
+  },
+  {
+    name: 'daneley',
+    project: 'Магазин одежды в Telegram',
+    text: 'Перенёс магазин одежды в ТГ, сделали быстро и со вкусом. Каталог удобный, клиентам легко заказывать. Отдельное спасибо за автоответчик — заявки летят даже ночью.',
+  },
+  {
+    name: 'fomin273',
+    project: 'Бот продажи курсов с подпиской',
+    text: 'Всё отлично. Настроили бота. Советую. Исполнительный и инициативный.',
+  },
+]
+
+const reviewShots = [
+  { src: asset('reviews/review-01.png'), alt: 'Два отзыва partyzan77777 на Kwork' },
+  { src: asset('reviews/review-03.png'), alt: 'Отзывы fomin273 и STIZO на Kwork' },
+]
+
+const media = [
+  {
+    id: 'tiktok',
+    name: 'TikTok',
+    handle: '@its___step',
+    url: tiktokUrl,
+    body: 'Короткие видео о том, как с помощью AI собирать продукты, находить клиентов и зарабатывать на разработке.',
+    stats: [
+      ['153 тыс.', 'лайков'],
+      ['1 288', 'подписчиков'],
+      ['194', 'видео'],
+    ],
+  },
+  {
+    id: 'channel',
+    name: 'Telegram-канал',
+    handle: '@ItsStepss',
+    url: channelUrl,
+    body: 'AI-фриланс изнутри: как оцениваю заказы, сколько стоит разработка и какие ошибки дорого обходятся.',
+    stats: [['349', 'подписчиков']],
+  },
+  {
+    id: 'cases',
+    name: 'Кейсы и отзывы',
+    handle: '@itssteps',
+    url: casesChannelUrl,
+    body: 'Отдельный канал только с работами: задача клиента, что сделано и что он написал после сдачи.',
+  },
+]
+
+const stack = [
+  'Python',
+  'FastAPI',
+  'Django',
+  'Next.js',
+  'React',
+  'TypeScript',
+  'PostgreSQL',
+  'Redis',
+  'Docker',
+  'OpenAI',
+  'DeepSeek',
+  'n8n',
+  'amoCRM',
+  'Telegram API',
+  'ЮKassa',
 ]
 
 const services = [
   {
     title: 'Автоматизация и AI',
-    body: 'Telegram-боты и AI-менеджеры: принимают заявки, отвечают на вопросы по вашей базе знаний, принимают оплату, ведут подписки и рассылки. Забирают рутину у людей.',
+    body: 'AI-менеджеры и Telegram-боты: принимают заявки, отвечают по вашей базе знаний, берут оплату, ведут клиента до сделки.',
     price: 'от 50 000 ₽',
     term: '1–2 недели',
   },
   {
-    title: 'Веб-сервисы и кабинеты',
-    body: 'CRM, админки, личные кабинеты и дашборды. Данные в одном месте, интеграции с amoCRM, Битрикс24 и платёжными системами — ЮKassa, Tribute.',
+    title: 'Веб-сервисы и CRM',
+    body: 'CRM, кабинеты, админки и дашборды. Интеграции с amoCRM, Битрикс24, почтой и платёжными системами — ЮKassa, Tribute.',
     price: 'от 150 000 ₽',
     term: '3–6 недель',
+    accent: true,
   },
   {
     title: 'Продукт под ключ',
-    body: 'MVP или SaaS с нуля: архитектура, интерфейс, биллинг, аналитика. Для стартапов под инвестиции и внутренних систем бизнеса.',
+    body: 'MVP или SaaS с нуля: архитектура, интерфейс, биллинг, аналитика. Для стартапов и внутренних систем бизнеса.',
     price: 'от 300 000 ₽',
     term: 'от 6 недель',
   },
 ]
 
-const projects = [
-  {
-    id: 'hayat',
-    category: 'Telegram / Продажи',
-    title: 'Бот брачного агентства',
-    summary:
-      'Закрытая анкетная воронка с модерацией, платным доступом и автоматической обработкой заявок. Агентство перестало вести переписку руками.',
-    metric: '100 000 ₽ за первую неделю',
-    result:
-      '50 оплат по 2 000 ₽ за 7 дней после запуска. Сейчас в системе 991 пользователь и 262 анкеты.',
-    tags: ['Оплата', 'Воронка', 'Модерация'],
-    link: 'https://t.me/Hayatnikah_bot',
-    action: 'Открыть бота',
-    image: projectImage('hayat-nikah.png'),
-  },
-  {
-    id: 'novoterskaya',
-    category: 'Web / Бренд',
-    title: 'Сайт бренда минеральной воды',
-    summary:
-      'Имиджевый сайт «Новотерская Целебная»: история бренда, продуктовая линейка, крупная типографика и анимации. Проект в работе.',
-    metric: 'Бюджет 200 000 ₽',
-    result: 'Самый крупный текущий проект — от концепции до запуска.',
-    tags: ['Бренд', 'Анимации', 'Адаптив'],
-    action: 'Обсудить похожий',
-    image: projectImage('water-novoterskaya.jpg'),
-  },
-  {
-    id: 'pizza',
-    category: 'Web / E-commerce',
-    title: 'Сайт пиццерии с онлайн-заказом',
-    summary:
-      'Меню, корзина, оформление доставки и приём оплаты. Заказ доходит до кухни без звонка и без ручного переноса в таблицу.',
-    result: 'Сайт приносит заказы с первого дня, работаем дальше на поддержке.',
-    tags: ['Корзина', 'Оплата', 'Доставка'],
-    action: 'Обсудить похожий',
-    image: projectImage('pizza-bella.jpg'),
-  },
-  {
-    id: 'lsgarden',
-    category: 'Web / Внутренняя система',
-    title: 'CRM для цветочного магазина',
-    summary:
-      'Внутренняя система: заказы, клиентская база, статусы и ежедневная операционка в одном окне вместо переписки и таблиц.',
-    result: 'Команда видит поток заявок и статусы, ничего не теряется между сменами.',
-    tags: ['CRM', 'Внутренний продукт', 'Интерфейс'],
-    link: 'https://lsgarden.ru/',
-    action: 'Открыть',
-    image: projectImage('crm-flower.png'),
-  },
-  {
-    id: 'nexora',
-    category: 'Web / Agency',
-    title: 'Сайт для digital-агентства',
-    summary:
-      'Премиальный лендинг для агентства NEXORA: 3D-визуал, крупная типографика, блоки услуг и метрик.',
-    result: 'Сайт с первого экрана задаёт статус агентства и удерживает внимание.',
-    tags: ['Лендинг', '3D / визуал', 'Анимации'],
-    action: 'Обсудить похожий',
-    image: projectImage('nexora-agency.png'),
-  },
-  {
-    id: 'jobs-bot',
-    category: 'Telegram / Parser',
-    title: 'Бот мониторинга вакансий',
-    summary: 'Бот отслеживает группы и находит свежие вакансии по ключевым словам.',
-    result: 'Новые заказы и вакансии приходят без ручного просмотра десятков чатов.',
-    tags: ['Парсинг', 'Уведомления', 'Telegram'],
-    action: 'Обсудить похожий',
-    image: projectImage('jobs-monitor.png'),
-  },
-  {
-    id: 'slides-ai',
-    category: 'Telegram / AI',
-    title: 'AI-бот генерации презентаций',
-    summary:
-      'Работа с языковой моделью по сценарию: бот собирает вводные, генерирует структуру и материалы презентации прямо в Telegram.',
-    result: 'Пользователь получает готовый инструмент вместо хаотичного диалога с нейросетью.',
-    tags: ['LLM', 'Промпт-сценарии', 'Автоматизация'],
-    action: 'Обсудить похожий',
-    image: projectImage('slides-ai.png'),
-  },
-  {
-    id: 'course-funnel',
-    category: 'Telegram / Воронка',
-    title: 'Воронка продаж онлайн-курсов',
-    summary:
-      'Лид-магнит, прогрев по сценарию, подписка и оплата внутри Telegram. Автор перестал вручную отвечать каждому и вести таблицу оплат.',
-    metric: '20 оплат за 7 дней',
-    result: 'Путь от лид-магнита до покупки проходит без участия человека.',
-    tags: ['Лид-магнит', 'Подписка', 'Оплата'],
-    action: 'Обсудить похожий',
-    image: projectImage('courses-familia.jpg'),
-  },
+const steps = [
+  ['Разбор задачи', 'Бесплатно, 30 минут в Telegram. В тот же день — оценка сроков и цены.'],
+  ['Договор и ТЗ', 'Фиксирую объём, сроки и стоимость. Работаю как самозанятый.'],
+  ['Разработка этапами', 'Оплата по этапам, демо каждую неделю — видно, за что платите.'],
+  ['Запуск и поддержка', 'Передаю код и доступы, 2 недели поддержки включены.'],
 ]
 
-// Отзывы — расшифровка реальных сообщений клиентов.
-// Текстом, а не скриншотом: читается на телефоне и не зависит от вёрстки чужого интерфейса.
-const reviews = [
-  {
-    name: 'GrigoriySE',
-    project: 'Бот брачного агентства',
-    text: 'Всё получилось даже лучше, чем я ожидал. Телеграм-бот работает именно так, как и хотелось, все пожелания были учтены. Степан — настоящий профессионал своего дела. Всегда был на связи, быстро отвечал на вопросы, вносил правки без лишних проблем и довёл проект до отличного результата. Однозначно рекомендую к сотрудничеству!',
-  },
-  {
-    name: 'MarinaPizzaLove',
-    project: 'Сайт пиццерии',
-    text: 'Нужен был современный, удобный и аппетитный сайт с меню, онлайн-заказом и доставкой. Степан учёл все пожелания: подобрал стиль, сделал понятную структуру, интегрировал корзину и оплату. Сайт отлично выглядит на всех устройствах и уже приносит заказы. Очень довольны результатом и продолжаем сотрудничество по поддержке!',
-  },
-  {
-    name: 'STIZO',
-    project: 'Telegram Mini App',
-    text: 'Обратился с задачей, когда сроки уже поджимали, думал, что придётся ждать неделю. Но программист удивил: сделал качественную работающую программу менее чем за сутки. Всё чётко, без воды, багов не заметил. Приятно работать с человеком, который ценит и своё, и чужое время. Рекомендую на 100%!',
-  },
-  {
-    name: 'partyzan77777',
-    project: 'Мониторинг групп с уведомлениями о заказах',
-    text: 'Поставил задачу — сделать бота для мониторинга групп с поиском по ключам. Исполнитель сделал всё качественно и оперативно. Бот работает стабильно, интерфейс удобный. Контакт сохранил, в будущем планирую заказывать доработки. 10/10',
-    repeat: true,
-  },
-  {
-    name: 'daneley',
-    project: 'Магазин одежды в Telegram',
-    text: 'Всё супер! Перенёс магазин одежды в ТГ, сделали быстро и со вкусом. Оформление прям под наш стиль, каталог удобный, клиентам теперь легко заказывать. Отдельное спасибо за автоответчик — заявки летят даже ночью. Рекомендую!',
-  },
-  {
-    name: 'Traffic_Arbitration',
-    project: 'Софт для рассылок',
-    text: 'После установки и запуска софт отрабатывает на все 100%, установлена гибкая и тонкая настройка. Телеграм не видит, что это софт, — как будто эти действия делает человек, из-за этого аккаунты очень хорошо живут в работе. Сэкономил кучу времени: загрузил 3–4 аккаунта, запустил, и он работает без проблем 8–10 часов.',
-  },
-]
-
-const stats = [
-  { value: '2 года', label: 'в коммерческой разработке' },
-  { value: '20+', label: 'проектов доведено до запуска' },
-  { value: '2–3', label: 'проекта в работе одновременно' },
-]
-
-const workflow = [
-  'Бесплатный разбор задачи — 30 минут в Telegram',
-  'Фиксирую объём, сроки и цену в договоре',
-  'Прототип и согласование до старта разработки',
-  'Разработка с демо каждую неделю',
-  'Запуск, передача доступов и 2 недели поддержки',
-]
-
-// Разделы в том порядке, в котором сайт ведёт читателя: цена → доказательства
-// → кто делает → отзывы. Тот же порядок подсвечивает активный пункт в шапке.
 const navItems = [
-  { id: 'services', label: 'Услуги' },
-  { id: 'work', label: 'Кейсы' },
+  { id: 'cases', label: 'Кейсы' },
+  { id: 'reviews', label: 'Отзывы' },
+  { id: 'media', label: 'Блог' },
   { id: 'about', label: 'Обо мне' },
-  { id: 'proof', label: 'Отзывы' },
+  { id: 'pricing', label: 'Цены' },
 ]
-
-function prefersReducedMotion() {
-  return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
-}
-
-/* ---------- журнал системы ---------- */
-
-// Строки печатаются по одной. Появление сделано через DOM, а не через
-// прозрачность: журнал остаётся читаемым, даже если анимации не проигрываются.
-function useNightLog() {
-  const [shown, setShown] = useState(1)
-
-  useEffect(() => {
-    if (prefersReducedMotion()) {
-      setShown(nightLog.length)
-      return
-    }
-    let printed = 1
-    const timer = window.setInterval(() => {
-      printed += 1
-      setShown(printed)
-      if (printed >= nightLog.length) window.clearInterval(timer)
-    }, 230)
-    return () => window.clearInterval(timer)
-  }, [])
-
-  return shown
-}
-
-/* ---------- сценарий чтения: прогресс и активный раздел ---------- */
-
-function useReadingProgress() {
-  const [activeId, setActiveId] = useState('')
-  const progressRef = useRef(null)
-
-  useEffect(() => {
-    const sections = navItems
-      .map((item) => document.getElementById(item.id))
-      .filter(Boolean)
-    let frame = 0
-
-    const update = () => {
-      frame = 0
-      const doc = document.documentElement
-      const scrolled = doc.scrollTop
-      const max = doc.scrollHeight - doc.clientHeight
-      progressRef.current?.style.setProperty(
-        '--progress',
-        max > 0 ? String(Math.min(1, scrolled / max)) : '0',
-      )
-      // активен последний раздел, чья верхняя граница уже ушла под шапку —
-      // иначе на длинных секциях подсветка прыгает туда-сюда
-      const line = scrolled + 160
-      let current = ''
-      sections.forEach((section) => {
-        if (section.offsetTop <= line) current = section.id
-      })
-      setActiveId(current)
-    }
-
-    const onScroll = () => {
-      if (frame) return
-      frame = requestAnimationFrame(update)
-    }
-
-    update()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
-    return () => {
-      if (frame) cancelAnimationFrame(frame)
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-    }
-  }, [])
-
-  return { activeId, progressRef }
-}
 
 function ArrowIcon() {
   return (
@@ -291,299 +274,499 @@ function ArrowIcon() {
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth="1.5"
+        strokeWidth="1.8"
       />
     </svg>
   )
 }
 
-// Переход к следующему разделу: страница нигде не заканчивается «в никуда»,
-// каждый блок сам говорит, что смотреть дальше.
-function Bridge({ href, children }) {
+function ExternalIcon() {
   return (
-    <div className="bridge-wrap">
-      <a className="bridge" href={href}>
-        <span>Дальше</span>
-        {children}
-        <ArrowIcon />
-      </a>
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M8 16 16 8m-7 0h7v7"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.8"
+      />
+    </svg>
+  )
+}
+
+// подсветка пункта меню: активен последний раздел, чей верх ушёл под шапку
+function useActiveSection() {
+  const [activeId, setActiveId] = useState('')
+
+  useEffect(() => {
+    const sections = navItems.map((item) => document.getElementById(item.id)).filter(Boolean)
+    let frame = 0
+    const update = () => {
+      frame = 0
+      const line = window.scrollY + 140
+      let current = ''
+      sections.forEach((section) => {
+        if (section.offsetTop <= line) current = section.id
+      })
+      setActiveId(current)
+    }
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update)
+    }
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      if (frame) cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', onScroll)
+    }
+  }, [])
+
+  return activeId
+}
+
+function SectionHead({ index, title, children, aside }) {
+  return (
+    <div className="section-head">
+      <div>
+        <span className="section-index">{index}</span>
+        <h2>{title}</h2>
+        {children && <p className="section-lead">{children}</p>}
+      </div>
+      {aside}
     </div>
   )
 }
 
-function App() {
-  // открытый на весь экран скриншот кейса (null — лайтбокс закрыт)
-  const [lightbox, setLightbox] = useState(null)
-  const { activeId, progressRef } = useReadingProgress()
-  const printed = useNightLog()
+// Закрытая система клиента: вместо скриншота — её состав в окне «терминала»
+function Spec({ rows }) {
+  return (
+    <dl className="spec">
+      <div className="spec-bar" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+      </div>
+      {rows.map(([term, value]) => (
+        <div className="spec-row" key={term}>
+          <dt>{term}</dt>
+          <dd>{value}</dd>
+        </div>
+      ))}
+    </dl>
+  )
+}
 
-  // пока лайтбокс открыт — блокируем прокрутку фона и закрываем по Escape
+function App() {
+  const [lightbox, setLightbox] = useState(null)
+  const activeId = useActiveSection()
+
   useEffect(() => {
     if (!lightbox) return
     const onKey = (event) => {
       if (event.key === 'Escape') setLightbox(null)
     }
     document.addEventListener('keydown', onKey)
-    const prevOverflow = document.body.style.overflow
+    const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     return () => {
       document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = prevOverflow
+      document.body.style.overflow = prev
     }
   }, [lightbox])
 
   return (
-    <div className="site-shell">
-      <header className="site-header" ref={progressRef}>
-        <span className="header-progress" aria-hidden="true" />
+    <div className="site">
+      <header className="header">
         <a className="brand" href="#top">
+          <span className="brand-mark" aria-hidden="true">
+            S
+          </span>
           Its Step
         </a>
-        <nav className="site-nav" aria-label="Навигация">
+        <nav className="nav" aria-label="Навигация">
           {navItems.map((item) => (
             <a
               key={item.id}
               href={`#${item.id}`}
-              className={activeId === item.id ? 'is-current' : ''}
-              aria-current={activeId === item.id ? 'true' : undefined}
+              className={activeId === item.id ? 'is-active' : undefined}
             >
               {item.label}
             </a>
           ))}
         </nav>
-        <a className="header-cta" href={telegramUrl} onClick={copyContactText}>
-          Telegram
-          <ArrowIcon />
+        <a className="btn btn-small" href={telegramUrl}>
+          Обсудить проект
         </a>
       </header>
 
       <main>
+        {/* ---------- первый экран ---------- */}
         <section className="hero" id="top">
-          <div className="hero-main">
-            <h1>Системы, которые работают вместо отдела</h1>
+          <div className="hero-copy">
+            <a className="hero-person" href="#about">
+              <img src={avatar} alt="" width="40" height="40" />
+              <span>
+                <strong>Степан</strong>
+                Fullstack и AI-разработчик
+              </span>
+            </a>
+            <h1>
+              AI-системы, CRM и сайты, которые <em>работают вместо отдела</em>
+            </h1>
             <p className="hero-lead">
-              Боты, AI-менеджеры и веб-сервисы: принимают заявки, отвечают
-              клиентам, берут оплату — без участия людей.
-            </p>
-            <p className="hero-terms">
-              <span>От 50 000 ₽</span>
-              <i aria-hidden="true">·</i>
-              <span>запуск от 1 недели</span>
+              30+ сданных заказов: AI тендер-менеджер, магазин на 520 000 товаров,
+              сайт бренда за 200 000 ₽. Веду проект сам — от ТЗ до запуска, без
+              менеджеров и посредников.
             </p>
             <div className="hero-actions">
-              <a className="action" href={telegramUrl} onClick={copyContactText}>
-                Рассказать о задаче
+              <a className="btn" href={telegramUrl}>
+                Обсудить проект
                 <ArrowIcon />
               </a>
-              <a className="action-text" href="#services">
-                Смотреть, как это работает
+              <a className="btn btn-ghost" href="#cases">
+                Смотреть кейсы
               </a>
             </div>
+            <a className="hero-kwork" href={kworkUrl} target="_blank" rel="noreferrer">
+              <span className="dot" aria-hidden="true" />
+              Kwork: {kwork.orders} выполненных заказов · {kwork.intime} в срок ·{' '}
+              {kwork.reviews} отзывов
+              <ExternalIcon />
+            </a>
           </div>
 
-          <aside className="hero-log">
-            <h2>Журнал системы · ночь</h2>
-            <ol>
-              {nightLog.slice(0, printed).map(([time, event]) => (
-                <li key={time + event}>
-                  <time>{time}</time>
-                  <span>{event}</span>
-                </li>
+          <div className="hero-visual" aria-hidden="true">
+            <div className="window">
+              <div className="window-bar">
+                <i />
+                <i />
+                <i />
+                <span>Conteria Тендеры — AI-анализ закупки</span>
+              </div>
+              <img src={featured.image} alt="" />
+            </div>
+            <div className="float float-review">
+              <p>«Сделал работающую программу менее чем за сутки»</p>
+              <span>STIZO · отзыв на Kwork</span>
+            </div>
+            <div className="float float-tiktok">
+              <strong>153 тыс.</strong>
+              <span>лайков в TikTok</span>
+            </div>
+            <div className="float float-check">
+              <span>Чек</span>
+              <strong>200 000 ₽</strong>
+            </div>
+          </div>
+        </section>
+
+        <section className="stats" aria-label="Цифры">
+          {heroStats.map((item) => (
+            <div key={item.label}>
+              <strong>{item.value}</strong>
+              <span>{item.label}</span>
+            </div>
+          ))}
+        </section>
+
+        <section className="clients" aria-label="Клиенты">
+          <span className="clients-label">Работал с</span>
+          <div className="clients-track">
+            <div className="clients-row">
+              {[...clients, ...clients].map((name, i) => (
+                <span key={name + i} aria-hidden={i >= clients.length || undefined}>
+                  {name}
+                </span>
               ))}
-            </ol>
-            {printed === nightLog.length && (
-              <p>Обычная ночь. Ни одного человека в переписке.</p>
-            )}
-          </aside>
-
-          <div className="hero-footer">
-            <span>20+ проектов до запуска</span>
-            <span>По договору</span>
-            <span>Ответ в Telegram: {telegramHandle}</span>
+            </div>
           </div>
         </section>
 
-        <section className="intro" aria-label="Коротко">
-          <p className="intro-lead">Я не продаю «сайт» или «бота».</p>
-          <p className="intro-body">
-            Я закрываю участок работы, который сейчас делают руками: приём
-            заявок, ответы клиентам, оплаты, отчётность. Результат считается в
-            заявках и сэкономленных часах, а не в количестве экранов.
-          </p>
-        </section>
+        {/* ---------- кейсы ---------- */}
+        <section className="section" id="cases">
+          <SectionHead index="01" title="Крупные кейсы">
+            AI-системы, CRM и сайты для реального бизнеса. Часть работает внутри
+            компаний клиентов — там вместо скриншота показан состав системы.
+          </SectionHead>
 
-        <section className="section" id="services">
-          <div className="section-head">
-            <h2>Три формата работы</h2>
-          </div>
-          {services.map((service) => (
-            <article className="service" key={service.title}>
-              <div>
-                <h3>{service.title}</h3>
-                <p>{service.body}</p>
-              </div>
-              <div className="service-terms">
-                <strong>{service.price}</strong>
-                <span>{service.term}</span>
-              </div>
-            </article>
-          ))}
-          <p className="note">
-            Точная цена — после разбора задачи. Смета и сроки фиксируются в договоре.
-          </p>
-          <Bridge href="#work">Что из этого уже работает у клиентов</Bridge>
-        </section>
+          <article className="featured">
+            <div className="featured-copy">
+              <span className="case-cat">{featured.category}</span>
+              <h3>{featured.title}</h3>
+              <p>{featured.summary}</p>
+              <ul className="featured-points">
+                {featured.points.map(([value, label]) => (
+                  <li key={label}>
+                    <strong>{value}</strong>
+                    <span>{label}</span>
+                  </li>
+                ))}
+              </ul>
+              <ul className="tags">
+                {featured.tags.map((tag) => (
+                  <li key={tag}>{tag}</li>
+                ))}
+              </ul>
+            </div>
+            <button
+              type="button"
+              className="featured-shot"
+              onClick={() => setLightbox({ src: featured.image, alt: featured.title })}
+              aria-label={`Открыть скриншот: ${featured.title}`}
+            >
+              <img src={featured.image} alt={featured.title} loading="lazy" />
+            </button>
+          </article>
 
-        <section className="section" id="work">
-          <div className="section-head">
-            <h2>Что уже работает у клиентов</h2>
-          </div>
-          {projects.map((project) => (
-            <article className="project" key={project.id}>
-              <button
-                type="button"
-                className="project-shot"
-                onClick={() => setLightbox(project)}
-                aria-label={`Открыть скриншот: ${project.title}`}
-              >
-                <img src={project.image} alt={project.title} loading="lazy" />
-              </button>
-              <div className="project-body">
-                <span className="project-cat">{project.category}</span>
-                <h3>{project.title}</h3>
-                <p>{project.summary}</p>
-                {project.metric && (
-                  <strong className="project-metric">{project.metric}</strong>
+          <div className="case-grid">
+            {cases.map((item) => (
+              <article className="case" key={item.id}>
+                {item.image ? (
+                  <button
+                    type="button"
+                    className="case-shot"
+                    onClick={() => setLightbox({ src: item.image, alt: item.title })}
+                    aria-label={`Открыть скриншот: ${item.title}`}
+                  >
+                    <img src={item.image} alt={item.title} loading="lazy" />
+                  </button>
+                ) : (
+                  <Spec rows={item.spec} />
                 )}
-                <p>{project.result}</p>
-                <ul className="project-tags">
-                  {project.tags.map((tag) => (
-                    <li key={tag}>{tag}</li>
-                  ))}
-                </ul>
-                <a
-                  className="action-text"
-                  href={project.link ?? telegramUrl}
-                  target={project.link ? '_blank' : undefined}
-                  rel={project.link ? 'noreferrer' : undefined}
-                  onClick={project.link ? undefined : copyContactText}
-                >
-                  {project.action}
-                  <ArrowIcon />
-                </a>
-              </div>
-            </article>
-          ))}
-          <Bridge href="#about">Кто это делает</Bridge>
+                <div className="case-body">
+                  <span className="case-cat">{item.category}</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.summary}</p>
+                  <div className="case-foot">
+                    <div className="case-metric">
+                      <strong>{item.metric}</strong>
+                      <span>{item.metricNote}</span>
+                    </div>
+                    {item.link && (
+                      <a href={item.link} target="_blank" rel="noreferrer" className="case-link">
+                        {item.linkLabel}
+                        <ExternalIcon />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
         </section>
 
-        <section className="section" id="about">
-          <div className="about-grid">
-            <figure className="about-photo">
-              <img
-                src={aboutPhoto}
-                alt="Степан — разработчик Its Step"
-                onError={(event) => {
-                  // фото ещё не загружено в public/about — прячем рамку и схлопываем
-                  // сетку в одну колонку, иначе текст остаётся в узком столбце
-                  event.currentTarget.closest('.about-grid')?.classList.add('is-photoless')
-                }}
-              />
-            </figure>
-            <div className="about-copy">
-              <h2>Степан, соло-разработчик</h2>
+        {/* ---------- отзывы ---------- */}
+        <section className="section" id="reviews">
+          <SectionHead
+            index="02"
+            title="Что говорят клиенты"
+            aside={
+              <a className="kwork-card" href={kworkUrl} target="_blank" rel="noreferrer">
+                <span>Профиль на Kwork</span>
+                <strong>{kwork.reviews} отзывов</strong>
+                <em>
+                  {kwork.orders} заказов · {kwork.intime} в срок
+                </em>
+                <ExternalIcon />
+              </a>
+            }
+          >
+            Отзывы с Kwork — каждый можно проверить в профиле.
+          </SectionHead>
+
+          <div className="reviews">
+            {reviews.map((review) => (
+              <figure className={`review${review.accent ? ' review-accent' : ''}`} key={review.name}>
+                <span className="review-quote" aria-hidden="true">
+                  “
+                </span>
+                <blockquote>{review.text}</blockquote>
+                <figcaption>
+                  <span className="review-avatar" aria-hidden="true">
+                    {review.name[0].toUpperCase()}
+                  </span>
+                  <span>
+                    <strong>{review.name}</strong>
+                    {review.project}
+                  </span>
+                  {review.repeat && <em>повторный заказ</em>}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+
+          <div className="review-shots">
+            <span className="review-shots-label">Оригиналы со страницы Kwork</span>
+            <div>
+              {reviewShots.map((shot) => (
+                <button
+                  type="button"
+                  key={shot.src}
+                  onClick={() => setLightbox(shot)}
+                  aria-label={`Открыть скриншот: ${shot.alt}`}
+                >
+                  <img src={shot.src} alt={shot.alt} loading="lazy" />
+                </button>
+              ))}
+            </div>
+            <a href={casesChannelUrl} target="_blank" rel="noreferrer">
+              Новые отзывы — в канале @itssteps
+              <ArrowIcon />
+            </a>
+          </div>
+        </section>
+
+        {/* ---------- медиа ---------- */}
+        <section className="section" id="media">
+          <SectionHead index="03" title="Веду блог об AI-разработке">
+            1 600+ человек следят за тем, как я работаю. До старта проекта можно
+            посмотреть, как я думаю и как объясняю сложное.
+          </SectionHead>
+
+          <div className="media">
+            {media.map((item) => (
+              <a
+                key={item.id}
+                className={`media-card media-${item.id}`}
+                href={item.url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div className="media-top">
+                  <span className="media-name">{item.name}</span>
+                  <ExternalIcon />
+                </div>
+                <span className="media-handle">{item.handle}</span>
+                <p>{item.body}</p>
+                {item.stats ? (
+                  <ul className="media-stats">
+                    {item.stats.map(([value, label]) => (
+                      <li key={label}>
+                        <strong>{value}</strong>
+                        <span>{label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <span className="media-open">Смотреть кейсы</span>
+                )}
+              </a>
+            ))}
+          </div>
+        </section>
+
+        {/* ---------- обо мне ---------- */}
+        <section className="section about" id="about">
+          <div className="about-card">
+            <img className="about-avatar" src={avatar} alt="Степан" width="112" height="112" />
+            <div>
+              <span className="section-index">04</span>
+              <h2>Степан, разработчик Its Step</h2>
               <p>
-                Веду проект один и целиком: разбор задачи, архитектура, интерфейс,
-                код, интеграции, запуск. Вы общаетесь напрямую со мной — без
-                менеджеров, пересказов и потерянного контекста между людьми.
+                Делаю системы, которые берут на себя работу людей: AI-агенты,
+                CRM, интеграции и сайты. Веду проект один и целиком — разбор
+                задачи, архитектура, интерфейс, код, запуск. Вы общаетесь напрямую
+                со мной, контекст не теряется между людьми.
               </p>
               <p>
                 Самозанятый, работаю по договору. Беру 2–3 проекта параллельно,
                 чтобы не растягивать сроки.
               </p>
-              <ul className="about-stats">
-                {stats.map((item) => (
-                  <li key={item.label}>
-                    <strong>{item.value}</strong>
-                    <span>{item.label}</span>
-                  </li>
+              <ul className="stack">
+                {stack.map((item) => (
+                  <li key={item}>{item}</li>
                 ))}
               </ul>
+              <div className="about-links">
+                <a href={githubUrl} target="_blank" rel="noreferrer">
+                  GitHub <ExternalIcon />
+                </a>
+                <a href={kworkUrl} target="_blank" rel="noreferrer">
+                  Kwork <ExternalIcon />
+                </a>
+                <a href={tiktokUrl} target="_blank" rel="noreferrer">
+                  TikTok <ExternalIcon />
+                </a>
+                <a href={channelUrl} target="_blank" rel="noreferrer">
+                  Telegram-канал <ExternalIcon />
+                </a>
+              </div>
             </div>
           </div>
-          <Bridge href="#proof">Что говорят те, кто уже работал</Bridge>
         </section>
 
-        <section className="section" id="proof">
-          <div className="section-head">
-            <h2>Что говорят клиенты</h2>
-          </div>
-          <div className="reviews">
-            {reviews.map((review) => (
-              <figure className="review" key={review.name}>
-                <blockquote>{review.text}</blockquote>
-                <figcaption>
-                  <strong>{review.name}</strong>
-                  <span>{review.project}</span>
-                  {review.repeat && <em className="review-repeat">повторный заказ</em>}
-                </figcaption>
-              </figure>
+        {/* ---------- цены и процесс ---------- */}
+        <section className="section" id="pricing">
+          <SectionHead index="05" title="Форматы и цены">
+            Точная цена — после бесплатного разбора. Смета и сроки фиксируются в
+            договоре.
+          </SectionHead>
+          <div className="services">
+            {services.map((service) => (
+              <article
+                className={`service${service.accent ? ' service-accent' : ''}`}
+                key={service.title}
+              >
+                <h3>{service.title}</h3>
+                <p>{service.body}</p>
+                <div className="service-terms">
+                  <strong>{service.price}</strong>
+                  <span>{service.term}</span>
+                </div>
+              </article>
             ))}
           </div>
-          <Bridge href="#process">Как проходит работа и где ваши риски</Bridge>
-        </section>
 
-        <section className="section" id="process">
-          <div className="section-head">
-            <h2>Как мы работаем и где ваши риски</h2>
-          </div>
-          <ol className="workflow-list">
-            {workflow.map((step) => (
-              <li key={step}>
-                {step}
+          <ol className="steps">
+            {steps.map(([title, body], i) => (
+              <li key={title}>
+                <span>{String(i + 1).padStart(2, '0')}</span>
+                <strong>{title}</strong>
+                <p>{body}</p>
               </li>
             ))}
           </ol>
-          <Bridge href="#contact">Начать с бесплатного разбора</Bridge>
         </section>
 
-        <section className="section contact" id="contact">
-          <h2>Расскажите, что у вас делают руками</h2>
-          <p>
-            Напишите в Telegram и опишите задачу в двух словах. Задам пару
-            уточняющих вопросов и в тот же день скажу, сколько это стоит и
-            сколько займёт. Разбор бесплатный и ни к чему не обязывает.
-          </p>
-          <p className="contact-step">
-            Шаг 1 из 5 · разбор 30 минут · без оплаты и обязательств
-          </p>
-          <div>
-            <a
-              className="action action-invert"
-              href={telegramUrl}
-              onClick={copyContactText}
-            >
+        {/* ---------- контакт ---------- */}
+        <section className="cta" id="contact">
+          <div className="cta-inner">
+            <img src={avatar} alt="" width="64" height="64" />
+            <h2>Расскажите, что у вас делают руками</h2>
+            <p>
+              Опишите задачу в двух словах. В тот же день скажу, как её решить,
+              сколько это стоит и сколько займёт. Разбор бесплатный.
+            </p>
+            <a className="btn btn-dark" href={telegramUrl}>
               Написать в Telegram
               <ArrowIcon />
             </a>
+            <span className="cta-handle">{telegramHandle} · отвечаю лично</span>
           </div>
-          <p className="contact-direct">
-            Или напрямую:{' '}
-            <a href={telegramUrl} onClick={copyContactText}>
-              {telegramHandle}
-            </a>
-          </p>
         </section>
       </main>
 
-      <footer className="site-footer">
+      <footer className="footer">
         <a className="brand" href="#top">
+          <span className="brand-mark" aria-hidden="true">
+            S
+          </span>
           Its Step
         </a>
-        <p>
-          Автоматизация, AI-агенты и веб-сервисы для бизнеса. Самозанятый,
-          работаю по договору, удалённо.
-        </p>
+        <p>AI-системы, CRM и сайты для бизнеса. Самозанятый, по договору, удалённо.</p>
+        <div className="footer-links">
+          <a href={telegramUrl}>Telegram</a>
+          <a href={tiktokUrl} target="_blank" rel="noreferrer">
+            TikTok
+          </a>
+          <a href={kworkUrl} target="_blank" rel="noreferrer">
+            Kwork
+          </a>
+          <a href={githubUrl} target="_blank" rel="noreferrer">
+            GitHub
+          </a>
+        </div>
       </footer>
 
       {lightbox && (
@@ -591,7 +774,7 @@ function App() {
           className="lightbox"
           role="dialog"
           aria-modal="true"
-          aria-label={lightbox.title}
+          aria-label={lightbox.alt}
           onClick={() => setLightbox(null)}
         >
           <button
@@ -602,12 +785,11 @@ function App() {
           >
             ✕
           </button>
-          <figure className="lightbox-figure" onClick={(event) => event.stopPropagation()}>
-            <img src={lightbox.image} alt={lightbox.title} />
-            <figcaption>
-              {lightbox.category} — {lightbox.title}
-            </figcaption>
-          </figure>
+          <img
+            src={lightbox.src}
+            alt={lightbox.alt}
+            onClick={(event) => event.stopPropagation()}
+          />
         </div>
       )}
     </div>
