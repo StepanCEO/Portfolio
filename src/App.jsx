@@ -19,7 +19,7 @@ const kwork = { orders: 26, intime: '96%', reviews: 18 }
 
 const heroStats = [
   { value: '30+', label: 'сданных заказов за 2 года' },
-  { value: '200 000 ₽', label: 'крупнейший чек — сайт бренда' },
+  { value: '200 000 ₽', label: 'крупнейший чек — сайт бренда' },
   { value: kwork.intime, label: 'заказов сдано в срок на Kwork' },
   { value: '153 тыс.', label: 'лайков на роликах в TikTok' },
 ]
@@ -37,7 +37,7 @@ const featured = {
     ['AI', 'разбирает PDF и сметы вместо менеджера'],
     ['1 окно', 'тендер → КП → ответ → сделка'],
   ],
-  tags: ['Django', 'React', 'Celery', 'LLM', 'IMAP'],
+  tags: ['Django', 'React', 'Celery', 'LLM', 'почта по IMAP'],
   image: asset('projects/conteria-tenders.jpg'),
 }
 
@@ -48,8 +48,8 @@ const cases = [
     title: 'Интернет-магазин инженерного оборудования',
     summary:
       'Переезд с OpenCart на Next.js и Laravel: каталог поставщиков с автообновлением остатков, СДЭК и ПЭК, онлайн-оплата, фиды VK, AI-поиск и AI-консультант.',
-    metric: '520 000 товаров',
-    metricNote: 'и SEO-тексты для 155 000 страниц через AI',
+    metric: '520 000 товаров',
+    metricNote: 'и SEO-тексты для 155 000 страниц через AI',
     link: 'https://conteria.ru/',
     linkLabel: 'conteria.ru',
     image: asset('projects/conteria-shop.jpg'),
@@ -60,7 +60,7 @@ const cases = [
     title: 'Минеральная вода «Новотерская»',
     summary:
       'Имиджевый сайт для АО «Кавминводы»: история бренда, состав, каталог, лаборатория и новости. 13 страниц, RU / EN, своя админка для контента.',
-    metric: '200 000 ₽',
+    metric: '200 000 ₽',
     metricNote: 'крупнейший чек по сайтам',
     link: 'https://stepanceo.github.io/Novoterskiy/',
     linkLabel: 'Открыть сайт',
@@ -72,7 +72,7 @@ const cases = [
     title: 'CRM и каталог для лизинговой платформы',
     summary:
       'Каталог авто и спецтехники, калькулятор лизинга с условиями банков, заявки с автопроверкой компании по ИНН, письма поставщиков прямо в интерфейсе, роли и AI-описания.',
-    metric: '120 000 ₽',
+    metric: '120 000 ₽',
     metricNote: 'крупнейшая CRM, сдаётся по этапам',
     spec: [
       ['Каталог', 'авто и спецтехника, фильтры'],
@@ -102,7 +102,7 @@ const cases = [
     title: 'Бот брачного агентства',
     summary:
       'Закрытая анкетная воронка с модерацией и платным доступом. Агентство перестало вести переписку руками.',
-    metric: '100 000 ₽',
+    metric: '100 000 ₽',
     metricNote: 'выручки клиента за первую неделю — 50 оплат',
     link: 'https://t.me/Hayatnikah_bot',
     linkLabel: '@Hayatnikah_bot',
@@ -189,7 +189,7 @@ const media = [
     body: 'Короткие видео о том, как с помощью AI собирать продукты, находить клиентов и зарабатывать на разработке.',
     stats: [
       ['153 тыс.', 'лайков'],
-      ['1 288', 'подписчиков'],
+      ['1 288', 'подписчиков'],
       ['194', 'видео'],
     ],
   },
@@ -232,20 +232,20 @@ const services = [
   {
     title: 'Автоматизация и AI',
     body: 'AI-менеджеры и Telegram-боты: принимают заявки, отвечают по вашей базе знаний, берут оплату, ведут клиента до сделки.',
-    price: 'от 50 000 ₽',
+    price: 'от 50 000 ₽',
     term: '1–2 недели',
   },
   {
     title: 'Веб-сервисы и CRM',
     body: 'CRM, кабинеты, админки и дашборды. Интеграции с amoCRM, Битрикс24, почтой и платёжными системами — ЮKassa, Tribute.',
-    price: 'от 150 000 ₽',
+    price: 'от 150 000 ₽',
     term: '3–6 недель',
     accent: true,
   },
   {
     title: 'Продукт под ключ',
     body: 'MVP или SaaS с нуля: архитектура, интерфейс, биллинг, аналитика. Для стартапов и внутренних систем бизнеса.',
-    price: 'от 300 000 ₽',
+    price: 'от 300 000 ₽',
     term: 'от 6 недель',
   },
 ]
@@ -325,11 +325,10 @@ function useActiveSection() {
   return activeId
 }
 
-function SectionHead({ index, title, children, aside }) {
+function SectionHead({ title, children, aside }) {
   return (
     <div className="section-head">
       <div>
-        <span className="section-index">{index}</span>
         <h2>{title}</h2>
         {children && <p className="section-lead">{children}</p>}
       </div>
@@ -338,15 +337,10 @@ function SectionHead({ index, title, children, aside }) {
   )
 }
 
-// Закрытая система клиента: вместо скриншота — её состав в окне «терминала»
+// Закрытая система клиента: вместо скриншота — её состав
 function Spec({ rows }) {
   return (
     <dl className="spec">
-      <div className="spec-bar" aria-hidden="true">
-        <i />
-        <i />
-        <i />
-      </div>
       {rows.map(([term, value]) => (
         <div className="spec-row" key={term}>
           <dt>{term}</dt>
@@ -379,9 +373,6 @@ function App() {
     <div className="site">
       <header className="header">
         <a className="brand" href="#top">
-          <span className="brand-mark" aria-hidden="true">
-            S
-          </span>
           Its Step
         </a>
         <nav className="nav" aria-label="Навигация">
@@ -405,19 +396,16 @@ function App() {
         <section className="hero" id="top">
           <div className="hero-copy">
             <a className="hero-person" href="#about">
-              <img src={avatar} alt="" width="40" height="40" />
-              <span>
-                <strong>Степан</strong>
-                Fullstack и AI-разработчик
-              </span>
+              <img src={avatar} alt="" width="44" height="44" />
+              <span>Степан, разработчик · Its Step</span>
             </a>
             <h1>
-              AI-системы, CRM и сайты, которые <em>работают вместо отдела</em>
+              Делаю <span className="nowrap">AI-системы</span>, CRM и сайты для бизнеса
             </h1>
             <p className="hero-lead">
-              30+ сданных заказов: AI тендер-менеджер, магазин на 520 000 товаров,
-              сайт бренда за 200 000 ₽. Веду проект сам — от ТЗ до запуска, без
-              менеджеров и посредников.
+              За два года сдал 30+ заказов: тендерную AI-систему, магазин на
+              520 000 товаров, сайт бренда минеральной воды за 200 000 ₽. Веду
+              проект сам — от ТЗ до запуска, без менеджеров и посредников.
             </p>
             <div className="hero-actions">
               <a className="btn" href={telegramUrl}>
@@ -428,37 +416,29 @@ function App() {
                 Смотреть кейсы
               </a>
             </div>
-            <a className="hero-kwork" href={kworkUrl} target="_blank" rel="noreferrer">
-              <span className="dot" aria-hidden="true" />
-              Kwork: {kwork.orders} выполненных заказов · {kwork.intime} в срок ·{' '}
-              {kwork.reviews} отзывов
-              <ExternalIcon />
-            </a>
+            <p className="hero-kwork">
+              На Kwork —{' '}
+              <a href={kworkUrl} target="_blank" rel="noreferrer">
+                {kwork.orders} выполненных заказов и {kwork.reviews} отзывов
+              </a>
+              , {kwork.intime} сданы в срок.
+            </p>
           </div>
 
-          <div className="hero-visual" aria-hidden="true">
-            <div className="window">
-              <div className="window-bar">
-                <i />
-                <i />
-                <i />
-                <span>Conteria Тендеры — AI-анализ закупки</span>
-              </div>
-              <img src={featured.image} alt="" />
-            </div>
-            <div className="float float-review">
-              <p>«Сделал работающую программу менее чем за сутки»</p>
-              <span>STIZO · отзыв на Kwork</span>
-            </div>
-            <div className="float float-tiktok">
-              <strong>153 тыс.</strong>
-              <span>лайков в TikTok</span>
-            </div>
-            <div className="float float-check">
-              <span>Чек</span>
-              <strong>200 000 ₽</strong>
-            </div>
-          </div>
+          <figure className="hero-visual">
+            <button
+              type="button"
+              className="hero-shot"
+              onClick={() => setLightbox({ src: featured.image, alt: featured.title })}
+              aria-label={`Открыть скриншот: ${featured.title}`}
+            >
+              <img src={featured.image} alt={featured.title} />
+            </button>
+            <figcaption>
+              Тендерная система Conteria: AI разбирает документацию закупки и
+              сопоставляет смету с каталогом. Реальный экран из работы клиента.
+            </figcaption>
+          </figure>
         </section>
 
         <section className="stats" aria-label="Цифры">
@@ -472,20 +452,16 @@ function App() {
 
         <section className="clients" aria-label="Клиенты">
           <span className="clients-label">Работал с</span>
-          <div className="clients-track">
-            <div className="clients-row">
-              {[...clients, ...clients].map((name, i) => (
-                <span key={name + i} aria-hidden={i >= clients.length || undefined}>
-                  {name}
-                </span>
-              ))}
-            </div>
-          </div>
+          <ul>
+            {clients.map((name) => (
+              <li key={name}>{name}</li>
+            ))}
+          </ul>
         </section>
 
         {/* ---------- кейсы ---------- */}
         <section className="section" id="cases">
-          <SectionHead index="01" title="Крупные кейсы">
+          <SectionHead title="Крупные кейсы">
             AI-системы, CRM и сайты для реального бизнеса. Часть работает внутри
             компаний клиентов — там вместо скриншота показан состав системы.
           </SectionHead>
@@ -503,11 +479,7 @@ function App() {
                   </li>
                 ))}
               </ul>
-              <ul className="tags">
-                {featured.tags.map((tag) => (
-                  <li key={tag}>{tag}</li>
-                ))}
-              </ul>
+              <p className="featured-stack">Стек: {featured.tags.join(', ')}</p>
             </div>
             <button
               type="button"
@@ -558,9 +530,7 @@ function App() {
 
         {/* ---------- отзывы ---------- */}
         <section className="section" id="reviews">
-          <SectionHead
-            index="02"
-            title="Что говорят клиенты"
+          <SectionHead title="Что говорят клиенты"
             aside={
               <a className="kwork-card" href={kworkUrl} target="_blank" rel="noreferrer">
                 <span>Профиль на Kwork</span>
@@ -578,9 +548,6 @@ function App() {
           <div className="reviews">
             {reviews.map((review) => (
               <figure className={`review${review.accent ? ' review-accent' : ''}`} key={review.name}>
-                <span className="review-quote" aria-hidden="true">
-                  “
-                </span>
                 <blockquote>{review.text}</blockquote>
                 <figcaption>
                   <span className="review-avatar" aria-hidden="true">
@@ -619,8 +586,8 @@ function App() {
 
         {/* ---------- медиа ---------- */}
         <section className="section" id="media">
-          <SectionHead index="03" title="Веду блог об AI-разработке">
-            1 600+ человек следят за тем, как я работаю. До старта проекта можно
+          <SectionHead title="Веду блог об AI-разработке">
+            1 600+ человек следят за тем, как я работаю. До старта проекта можно
             посмотреть, как я думаю и как объясняю сложное.
           </SectionHead>
 
@@ -661,7 +628,6 @@ function App() {
           <div className="about-card">
             <img className="about-avatar" src={avatar} alt="Степан" width="112" height="112" />
             <div>
-              <span className="section-index">04</span>
               <h2>Степан, разработчик Its Step</h2>
               <p>
                 Делаю системы, которые берут на себя работу людей: AI-агенты,
@@ -673,11 +639,9 @@ function App() {
                 Самозанятый, работаю по договору. Беру 2–3 проекта параллельно,
                 чтобы не растягивать сроки.
               </p>
-              <ul className="stack">
-                {stack.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
+              <p className="stack">
+                <span>Работаю с</span> {stack.join(', ')}.
+              </p>
               <div className="about-links">
                 <a href={githubUrl} target="_blank" rel="noreferrer">
                   GitHub <ExternalIcon />
@@ -698,7 +662,7 @@ function App() {
 
         {/* ---------- цены и процесс ---------- */}
         <section className="section" id="pricing">
-          <SectionHead index="05" title="Форматы и цены">
+          <SectionHead title="Форматы и цены">
             Точная цена — после бесплатного разбора. Смета и сроки фиксируются в
             договоре.
           </SectionHead>
@@ -749,9 +713,6 @@ function App() {
 
       <footer className="footer">
         <a className="brand" href="#top">
-          <span className="brand-mark" aria-hidden="true">
-            S
-          </span>
           Its Step
         </a>
         <p>AI-системы, CRM и сайты для бизнеса. Самозанятый, по договору, удалённо.</p>
