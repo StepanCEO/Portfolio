@@ -1,5 +1,9 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import './App.css'
+
+// Демо AI-менеджера грузится отдельным файлом — только когда его открыли
+const loadDemo = () => import('./AmoDemo.jsx')
+const AmoDemo = lazy(loadDemo)
 
 const contactText = 'Здравствуйте, Степан! Хочу обсудить проект.'
 const telegramUrl = `https://t.me/SStepCEO?text=${encodeURIComponent(contactText)}`
@@ -89,6 +93,7 @@ const cases = [
       'AI отвечает клиентам в MAX и почте по базе знаний компании, сам собирает коммерческое предложение в Word и ведёт сделку в amoCRM. Руководитель получает отчёты по менеджерам.',
     metric: 'В продакшене',
     metricNote: 'с августа, расширяется под отдел',
+    demo: true,
     spec: [
       ['Каналы', 'MAX · почта'],
       ['CRM', 'amoCRM: сделки и задачи'],
@@ -351,6 +356,7 @@ function Spec({ rows }) {
 
 function App() {
   const [lightbox, setLightbox] = useState(null)
+  const [demoOpen, setDemoOpen] = useState(false)
   const activeId = useActiveSection()
 
   useEffect(() => {
@@ -513,6 +519,18 @@ function App() {
                       <strong>{item.metric}</strong>
                       <span>{item.metricNote}</span>
                     </div>
+                    {item.demo && (
+                      <button
+                        type="button"
+                        className="case-demo"
+                        onPointerEnter={loadDemo}
+                        onFocus={loadDemo}
+                        onClick={() => setDemoOpen(true)}
+                      >
+                        Попробовать менеджера
+                        <ArrowIcon />
+                      </button>
+                    )}
                     {item.link && (
                       <a href={item.link} target="_blank" rel="noreferrer" className="case-link">
                         {item.linkLabel}
@@ -727,6 +745,12 @@ function App() {
           </a>
         </div>
       </footer>
+
+      {demoOpen && (
+        <Suspense fallback={null}>
+          <AmoDemo onClose={() => setDemoOpen(false)} />
+        </Suspense>
+      )}
 
       {lightbox && (
         <div

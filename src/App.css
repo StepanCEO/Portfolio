@@ -502,6 +502,36 @@
   text-decoration-color: var(--accent);
 }
 
+.case-demo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  font: 600 15px/1 var(--body);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 180ms ease;
+}
+
+.case-demo svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 180ms ease;
+}
+
+.case-demo:hover {
+  background: var(--accent-2);
+}
+
+.case-demo:hover svg {
+  transform: translateX(3px);
+}
+
 /* состав закрытой системы — тот же формат 16:9, что и скриншоты */
 .spec {
   display: flex;
