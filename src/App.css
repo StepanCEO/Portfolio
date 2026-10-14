@@ -458,6 +458,12 @@
   font-size: 16px;
 }
 
+.case-body p.case-stack {
+  margin-top: 12px;
+  color: var(--faint);
+  font-size: 14px;
+}
+
 .case-foot {
   display: flex;
   flex-wrap: wrap;
@@ -530,41 +536,6 @@
 
 .case-demo:hover svg {
   transform: translateX(3px);
-}
-
-/* состав закрытой системы — тот же формат 16:9, что и скриншоты */
-.spec {
-  display: flex;
-  flex-direction: column;
-  aspect-ratio: 16 / 9;
-  margin: 0;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--line);
-  background: var(--bg-2);
-  font-size: 15px;
-}
-
-.spec-row {
-  display: grid;
-  grid-template-columns: 110px minmax(0, 1fr);
-  align-items: center;
-  gap: 16px;
-  flex: 1;
-  padding: 0 clamp(18px, 2.4vw, 28px);
-}
-
-.spec-row + .spec-row {
-  border-top: 1px solid var(--line);
-}
-
-.spec dt {
-  color: var(--faint);
-  font-size: 14px;
-}
-
-.spec dd {
-  margin: 0;
-  color: var(--text);
 }
 
 /* ---------- отзывы ---------- */
@@ -1189,16 +1160,6 @@
 
   .about-card {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .spec {
-    aspect-ratio: auto;
-  }
-
-  .spec-row {
-    grid-template-columns: 92px minmax(0, 1fr);
-    padding-top: 12px;
-    padding-bottom: 12px;
   }
 
   .hero-actions .btn {

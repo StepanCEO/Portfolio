@@ -78,12 +78,8 @@ const cases = [
       'Каталог авто и спецтехники, калькулятор лизинга с условиями банков, заявки с автопроверкой компании по ИНН, письма поставщиков прямо в интерфейсе, роли и AI-описания.',
     metric: '120 000 ₽',
     metricNote: 'крупнейшая CRM, сдаётся по этапам',
-    spec: [
-      ['Каталог', 'авто и спецтехника, фильтры'],
-      ['Заявки', 'проверка компании через Checko'],
-      ['Почта', 'письма поставщиков по IMAP'],
-      ['Стек', 'Next.js · Prisma · PostgreSQL'],
-    ],
+    stack: 'Next.js, Prisma, PostgreSQL',
+    image: asset('projects/leasing-crm.jpg'),
   },
   {
     id: 'sales-ai',
@@ -94,12 +90,8 @@ const cases = [
     metric: 'В продакшене',
     metricNote: 'с августа, расширяется под отдел',
     demo: true,
-    spec: [
-      ['Каналы', 'MAX · почта'],
-      ['CRM', 'amoCRM: сделки и задачи'],
-      ['Документы', 'КП в .docx по шаблону'],
-      ['Стек', 'FastAPI · OpenAI · n8n'],
-    ],
+    stack: 'FastAPI, OpenAI, n8n',
+    image: asset('projects/sales-ai.jpg'),
   },
   {
     id: 'hayat',
@@ -121,12 +113,8 @@ const cases = [
       'Аккаунты мониторят тематические чаты, AI оценивает каждое сообщение, отвечает тем, кому нужна помощь, и ведёт их через бота-сценарий к эксперту.',
     metric: 'Заявки 24/7',
     metricNote: 'без ручного поиска в чатах',
-    spec: [
-      ['Источник', 'чаты Telegram, мультиаккаунт'],
-      ['Оценка', 'AI решает, кому отвечать'],
-      ['Админка', 'в боте, A/B-тесты текстов'],
-      ['Стек', 'Python · PostgreSQL · Docker'],
-    ],
+    stack: 'Python, PostgreSQL, Docker',
+    image: asset('projects/leadgen.jpg'),
   },
   {
     id: 'nechay',
@@ -340,20 +328,6 @@ function SectionHead({ title, children, aside }) {
   )
 }
 
-// Закрытая система клиента: вместо скриншота — её состав
-function Spec({ rows }) {
-  return (
-    <dl className="spec">
-      {rows.map(([term, value]) => (
-        <div className="spec-row" key={term}>
-          <dt>{term}</dt>
-          <dd>{value}</dd>
-        </div>
-      ))}
-    </dl>
-  )
-}
-
 function App() {
   const [lightbox, setLightbox] = useState(null)
   const [demoOpen, setDemoOpen] = useState(false)
@@ -498,22 +472,19 @@ function App() {
           <div className="case-grid">
             {cases.map((item) => (
               <article className="case" key={item.id}>
-                {item.image ? (
-                  <button
-                    type="button"
-                    className="case-shot"
-                    onClick={() => setLightbox({ src: item.image, alt: item.title })}
-                    aria-label={`Открыть скриншот: ${item.title}`}
-                  >
-                    <img src={item.image} alt={item.title} loading="lazy" />
-                  </button>
-                ) : (
-                  <Spec rows={item.spec} />
-                )}
+                <button
+                  type="button"
+                  className="case-shot"
+                  onClick={() => setLightbox({ src: item.image, alt: item.title })}
+                  aria-label={`Открыть скриншот: ${item.title}`}
+                >
+                  <img src={item.image} alt={item.title} loading="lazy" />
+                </button>
                 <div className="case-body">
                   <span className="case-cat">{item.category}</span>
                   <h3>{item.title}</h3>
                   <p>{item.summary}</p>
+                  {item.stack && <p className="case-stack">Стек: {item.stack}</p>}
                   <div className="case-foot">
                     <div className="case-metric">
                       <strong>{item.metric}</strong>
