@@ -209,9 +209,8 @@
 
 .hero-shot img {
   width: 100%;
-  aspect-ratio: 12 / 8;
+  aspect-ratio: 3 / 2;
   object-fit: cover;
-  object-position: top left;
 }
 
 .hero-visual figcaption {

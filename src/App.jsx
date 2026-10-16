@@ -16,6 +16,7 @@ const githubUrl = 'https://github.com/StepanCEO'
 
 const asset = (path) => `${import.meta.env.BASE_URL}${path}`
 const avatar = asset('about/stepan-avatar.jpg')
+const heroImage = asset('projects/conteria-hero.jpg')
 
 // Все цифры на странице проверяемы: Kwork и соцсети — с публичных профилей
 // (октябрь 2026), чеки и объёмы — из ТЗ и договоров. Обновлять вручную.
@@ -407,14 +408,14 @@ function App() {
             <button
               type="button"
               className="hero-shot"
-              onClick={() => setLightbox({ src: featured.image, alt: featured.title })}
+              onClick={() => setLightbox({ src: heroImage, alt: featured.title })}
               aria-label={`Открыть скриншот: ${featured.title}`}
             >
-              <img src={featured.image} alt={featured.title} />
+              <img src={heroImage} alt={featured.title} />
             </button>
             <figcaption>
-              Тендерная система Conteria: AI разбирает документацию закупки и
-              сопоставляет смету с каталогом. Реальный экран из работы клиента.
+              Тендерная система Conteria: дашборд с найденными тендерами и лидами,
+              есть мобильная версия. Реальные экраны из работы клиента.
             </figcaption>
           </figure>
         </section>
