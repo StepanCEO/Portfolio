@@ -14,13 +14,18 @@ npm run build
 STAGE="$(mktemp -d)"
 trap 'rm -rf "$STAGE"' EXIT
 cp -R dist/. "$STAGE"/
-cp dist/app.html "$STAGE/index.html"
-# mktemp создаёт папку с правами 700, а tar переносит их на сервер: Caddy тогда не может читать сайт
+# app.html — собранная главная; на сервере она нужна как index.html, дубль не выкладываем
+mv "$STAGE/app.html" "$STAGE/index.html"
+# mktemp создаёт папку с правами 700 — сайт должен быть читаем для Caddy
 chmod 755 "$STAGE"
 find "$STAGE" -name '._*' -delete
 
-# COPYFILE_DISABLE — без служебных xattr-заголовков macOS в архиве
-COPYFILE_DISABLE=1 tar -C "$STAGE" -cf - . \
-  | ssh -i "$KEY" -o IdentitiesOnly=yes "$HOST" "mkdir -p $REMOTE_DIR && tar -C $REMOTE_DIR --no-same-owner -xf - && chmod -R a+rX $REMOTE_DIR"
+# Сервер — точная копия сборки: --delete убирает файлы, которых в сборке больше нет
+# (старые бандлы, удалённые картинки). Касается только $REMOTE_DIR.
+rsync -rlt --delete -e "ssh -i $KEY -o IdentitiesOnly=yes" "$STAGE"/ "$HOST:$REMOTE_DIR/"
+ssh -i "$KEY" -o IdentitiesOnly=yes "$HOST" "chmod -R a+rX $REMOTE_DIR"
 
 echo "Загружено: $HOST:$REMOTE_DIR"
+
+# сообщить поисковикам об обновлённых страницах; сбой здесь не отменяет деплой
+node scripts/indexnow.mjs || echo "IndexNow: не удалось отправить, сайт при этом обновлён"

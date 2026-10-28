@@ -3,7 +3,8 @@ import { dirname, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 // Собирает HTML всех страниц: главная — dist/app.html (на сервере станет index.html),
-// кейсы — dist/cases/<id>/index.html. Заодно пишет sitemap.xml со всеми адресами.
+// кейсы — dist/cases/<id>/index.html, ошибка — dist/404.html.
+// Заодно пишет sitemap.xml со всеми адресами, кроме 404.
 const root = resolve(process.cwd())
 const dist = resolve(root, 'dist')
 const ssrDir = resolve(root, 'dist-ssr')
@@ -18,6 +19,11 @@ const escape = (text) => text.replace(/&/g, '&amp;').replace(/"/g, '&quot;').rep
 
 function withMeta(html, route) {
   if (!route.title) return html
+  const extra = [
+    route.noindex && '    <meta name="robots" content="noindex" />',
+    route.jsonLd && `    <script type="application/ld+json">${JSON.stringify(route.jsonLd)}</script>`,
+  ].filter(Boolean)
+  if (extra.length) html = html.replace('  </head>', `${extra.join('\n')}\n  </head>`)
   const url = `${siteUrl}${route.path}`
   const title = escape(route.title)
   const description = escape(route.description)
@@ -37,14 +43,20 @@ function withMeta(html, route) {
 }
 
 for (const route of routes) {
-  const html = withMeta(template, route).replace(marker, `<div id="root">${render(route.path)}</div>`)
-  const file = route.path === '/' ? resolve(dist, 'app.html') : resolve(dist, `.${route.path}index.html`)
+  const root = `<div id="root" data-path="${route.path}">${render(route.path)}</div>`
+  const html = withMeta(template, route).replace(marker, root)
+  const file = route.file
+    ? resolve(dist, route.file)
+    : route.path === '/'
+      ? resolve(dist, 'app.html')
+      : resolve(dist, `.${route.path}index.html`)
   await mkdir(dirname(file), { recursive: true })
   await writeFile(file, html, 'utf8')
 }
 
 const today = new Date().toISOString().slice(0, 10)
 const urls = routes
+  .filter((route) => !route.noindex)
   .map((route) => `  <url>\n    <loc>${siteUrl}${route.path}</loc>\n    <lastmod>${today}</lastmod>\n  </url>`)
   .join('\n')
 await writeFile(
@@ -54,4 +66,4 @@ await writeFile(
 )
 
 await rm(ssrDir, { recursive: true, force: true })
-console.log(`prerender: ${routes.length} страниц + sitemap.xml`)
+console.log(`prerender: ${routes.length} страниц (включая 404) + sitemap.xml`)

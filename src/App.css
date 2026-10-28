@@ -1616,3 +1616,46 @@
     transition-duration: 0ms !important;
   }
 }
+
+/* ---------- страница 404 ---------- */
+
+.not-found h1 {
+  margin-top: 16px;
+}
+
+.not-found-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 32px;
+  margin: clamp(56px, 7vw, 96px) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line-dark);
+}
+
+.not-found-list a {
+  display: grid;
+  gap: 4px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line-dark);
+  color: var(--white);
+  font: 600 20px/1.2 var(--display);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.not-found-list a:hover {
+  color: var(--accent-glow);
+}
+
+.not-found-list span {
+  color: var(--on-dark-muted);
+  font: 400 13px/1.3 var(--body);
+  letter-spacing: 0;
+}
+
+@media (max-width: 760px) {
+  .not-found-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

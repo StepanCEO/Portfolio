@@ -1,0 +1,156 @@
+{
+  "/projects/conteria-hero.jpg": {
+    "width": 1600,
+    "height": 1067,
+    "variants": [
+      [
+        800,
+        "/projects/conteria-hero-800.webp"
+      ],
+      [
+        1600,
+        "/projects/conteria-hero-1600.webp"
+      ]
+    ]
+  },
+  "/projects/conteria-shop.jpg": {
+    "width": 1600,
+    "height": 900,
+    "variants": [
+      [
+        800,
+        "/projects/conteria-shop-800.webp"
+      ],
+      [
+        1600,
+        "/projects/conteria-shop-1600.webp"
+      ]
+    ]
+  },
+  "/projects/conteria-tenders.jpg": {
+    "width": 1200,
+    "height": 700,
+    "variants": [
+      [
+        800,
+        "/projects/conteria-tenders-800.webp"
+      ],
+      [
+        1200,
+        "/projects/conteria-tenders-1200.webp"
+      ]
+    ]
+  },
+  "/projects/hayat-nikah.png": {
+    "width": 1600,
+    "height": 900,
+    "variants": [
+      [
+        800,
+        "/projects/hayat-nikah-800.webp"
+      ],
+      [
+        1600,
+        "/projects/hayat-nikah-1600.webp"
+      ]
+    ]
+  },
+  "/projects/leadgen.jpg": {
+    "width": 1600,
+    "height": 900,
+    "variants": [
+      [
+        800,
+        "/projects/leadgen-800.webp"
+      ],
+      [
+        1600,
+        "/projects/leadgen-1600.webp"
+      ]
+    ]
+  },
+  "/projects/leasing-crm.jpg": {
+    "width": 1600,
+    "height": 900,
+    "variants": [
+      [
+        800,
+        "/projects/leasing-crm-800.webp"
+      ],
+      [
+        1600,
+        "/projects/leasing-crm-1600.webp"
+      ]
+    ]
+  },
+  "/projects/nechay-catering.jpg": {
+    "width": 1600,
+    "height": 760,
+    "variants": [
+      [
+        800,
+        "/projects/nechay-catering-800.webp"
+      ],
+      [
+        1600,
+        "/projects/nechay-catering-1600.webp"
+      ]
+    ]
+  },
+  "/projects/sales-ai.jpg": {
+    "width": 1600,
+    "height": 900,
+    "variants": [
+      [
+        800,
+        "/projects/sales-ai-800.webp"
+      ],
+      [
+        1600,
+        "/projects/sales-ai-1600.webp"
+      ]
+    ]
+  },
+  "/projects/water-novoterskaya.jpg": {
+    "width": 1536,
+    "height": 1024,
+    "variants": [
+      [
+        800,
+        "/projects/water-novoterskaya-800.webp"
+      ],
+      [
+        1536,
+        "/projects/water-novoterskaya-1536.webp"
+      ]
+    ]
+  },
+  "/reviews/review-01.png": {
+    "width": 1400,
+    "height": 546,
+    "variants": [
+      [
+        800,
+        "/reviews/review-01-800.webp"
+      ],
+      [
+        1400,
+        "/reviews/review-01-1400.webp"
+      ]
+    ]
+  },
+  "/reviews/review-03.png": {
+    "width": 1421,
+    "height": 539,
+    "variants": [
+      [
+        800,
+        "/reviews/review-03-800.webp"
+      ],
+      [
+        1421,
+        "/reviews/review-03-1421.webp"
+      ]
+    ]
+  }
+}

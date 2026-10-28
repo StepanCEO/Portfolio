@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.mjs && node scripts/copy-dist-index.mjs",
     "lint": "oxlint src vite.config.js app.html index.html",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "images": "node scripts/images.mjs"
   },
   "dependencies": {
     "react": "^19.2.7",

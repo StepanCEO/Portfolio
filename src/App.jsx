@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import './App.css'
+import imageSizes from './image-sizes.json'
 import {
   allCases,
   avatar,
@@ -29,6 +30,29 @@ const loadDemo = () => import('./AmoDemo.jsx')
 const AmoDemo = lazy(loadDemo)
 
 const pad = (n) => String(n).padStart(2, '0')
+
+// Картинка в WebP с вариантами под ширину экрана (см. scripts/images.mjs).
+// Для лайтбокса берём самый крупный вариант.
+const fullSize = (src) => imageSizes[src]?.variants.at(-1)[1] ?? src
+
+function Img({ src, alt, sizes = '100vw', eager = false, className }) {
+  const meta = imageSizes[src]
+  if (!meta) return <img className={className} src={src} alt={alt} loading={eager ? undefined : 'lazy'} />
+  return (
+    <img
+      className={className}
+      src={meta.variants.at(-1)[1]}
+      srcSet={meta.variants.map(([w, url]) => `${url} ${w}w`).join(', ')}
+      sizes={sizes}
+      width={meta.width}
+      height={meta.height}
+      alt={alt}
+      loading={eager ? undefined : 'lazy'}
+      decoding="async"
+      fetchPriority={eager ? 'high' : undefined}
+    />
+  )
+}
 
 // Страница по адресу: /cases/<id>/ — кейс, всё остальное — главная
 function findCase(path) {
@@ -192,7 +216,7 @@ function CaseDeck({ setDemoOpen }) {
               </div>
 
               <a className="deck-visual" href={item.path} tabIndex={-1}>
-                <img src={item.image} alt={item.title} loading="lazy" />
+                <Img src={item.image} alt={item.title} sizes="(max-width: 1080px) 100vw, 680px" />
               </a>
             </div>
 
@@ -230,11 +254,11 @@ function CasePage({ item, setLightbox, setDemoOpen }) {
       </div>
 
       <figure className="case-page-visual" style={{ background: item.bg }}>
-        <img src={item.image} alt={item.title} />
+        <Img src={item.image} alt={item.title} sizes="(max-width: 1280px) 100vw, 1200px" eager />
         <button
           type="button"
           className="pill pill-glass"
-          onClick={() => setLightbox({ src: item.image, alt: item.title })}
+          onClick={() => setLightbox({ src: fullSize(item.image), alt: item.title })}
         >
           Рассмотреть
           <PlusIcon />
@@ -261,10 +285,10 @@ function CasePage({ item, setLightbox, setDemoOpen }) {
         <figure className="case-page-extra">
           <button
             type="button"
-            onClick={() => setLightbox({ src: item.extraImage, alt: item.extraCaption })}
+            onClick={() => setLightbox({ src: fullSize(item.extraImage), alt: item.extraCaption })}
             aria-label={`Открыть скриншот: ${item.extraCaption}`}
           >
-            <img src={item.extraImage} alt={item.extraCaption} loading="lazy" />
+            <Img src={item.extraImage} alt={item.extraCaption} sizes="(max-width: 1280px) 100vw, 1280px" />
           </button>
           <figcaption>{item.extraCaption}</figcaption>
         </figure>
@@ -299,6 +323,37 @@ function CasePage({ item, setLightbox, setDemoOpen }) {
         <ArrowIcon />
       </a>
     </article>
+  )
+}
+
+function NotFound() {
+  return (
+    <section className="case-page not-found">
+      <p className="crumbs">Ошибка 404</p>
+      <h1>Такой страницы нет</h1>
+      <p className="case-page-lead">
+        Возможно, ссылка устарела. Всё главное — на главной, а работы — в разделе кейсов.
+      </p>
+      <div className="case-page-actions">
+        <a className="pill pill-accent" href="/">
+          На главную
+          <ArrowIcon />
+        </a>
+        <a className="pill pill-tone" href="/#cases">
+          Смотреть кейсы
+        </a>
+      </div>
+      <ul className="not-found-list">
+        {allCases.map((item) => (
+          <li key={item.id}>
+            <a href={item.path}>
+              <span>{item.category}</span>
+              {item.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
   )
 }
 
@@ -377,10 +432,10 @@ function Home({ setLightbox, setDemoOpen }) {
           <button
             type="button"
             className="hero-shot"
-            onClick={() => setLightbox({ src: heroImage, alt: featured.title })}
+            onClick={() => setLightbox({ src: fullSize(heroImage), alt: featured.title })}
             aria-label={`Открыть скриншот: ${featured.title}`}
           >
-            <img src={heroImage} alt={featured.title} />
+            <Img src={heroImage} alt={featured.title} sizes="(max-width: 1280px) 100vw, 1280px" eager />
           </button>
           <figcaption>
             <span>Conteria · тендерная система</span>
@@ -455,10 +510,10 @@ function Home({ setLightbox, setDemoOpen }) {
               <button
                 type="button"
                 key={shot.src}
-                onClick={() => setLightbox(shot)}
+                onClick={() => setLightbox({ src: fullSize(shot.src), alt: shot.alt })}
                 aria-label={`Открыть скриншот: ${shot.alt}`}
               >
-                <img src={shot.src} alt={shot.alt} loading="lazy" />
+                <Img src={shot.src} alt={shot.alt} sizes="(max-width: 760px) 100vw, 640px" />
               </button>
             ))}
           </div>
@@ -604,6 +659,8 @@ function App({ path = '/' }) {
   const [demoOpen, setDemoOpen] = useState(false)
   const activeId = useActiveSection()
   const caseItem = findCase(path)
+  const notFound = path === '/404/'
+  const dark = Boolean(caseItem) || notFound
 
   useEffect(() => {
     if (!lightbox) return
@@ -620,15 +677,13 @@ function App({ path = '/' }) {
   }, [lightbox])
 
   return (
-    <div className={`site${caseItem ? ' site-dark' : ''}`}>
-      <Header activeId={caseItem ? '' : activeId} dark={Boolean(caseItem)} />
+    <div className={`site${dark ? ' site-dark' : ''}`}>
+      <Header activeId={dark ? '' : activeId} dark={dark} />
 
       <main>
-        {caseItem ? (
-          <CasePage item={caseItem} setLightbox={setLightbox} setDemoOpen={setDemoOpen} />
-        ) : (
-          <Home setLightbox={setLightbox} setDemoOpen={setDemoOpen} />
-        )}
+        {notFound && <NotFound />}
+        {caseItem && <CasePage item={caseItem} setLightbox={setLightbox} setDemoOpen={setDemoOpen} />}
+        {!dark && <Home setLightbox={setLightbox} setDemoOpen={setDemoOpen} />}
       </main>
 
       <Footer />
