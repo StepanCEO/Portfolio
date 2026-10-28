@@ -232,7 +232,7 @@ export const services = [
   {
     title: 'Веб-сервисы и CRM',
     body: 'CRM, кабинеты, админки и дашборды. Интеграции с amoCRM, Битрикс24, почтой и платёжными системами — ЮKassa, Tribute.',
-    price: 'от 150 000 ₽',
+    price: 'от 120 000 ₽',
     term: '3–6 недель',
     accent: true,
   },
