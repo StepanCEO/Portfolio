@@ -4,7 +4,8 @@ import { resolve } from 'node:path'
 
 // https://vite.dev/config/
 export default defineConfig(({ isSsrBuild }) => ({
-  base: './',
+  // сайт живёт в корне домена; абсолютные пути нужны страницам кейсов в /cases/<id>/
+  base: '/',
   plugins: [react()],
   build: {
     rollupOptions: {
