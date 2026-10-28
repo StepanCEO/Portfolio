@@ -1,0 +1,27 @@
+# Приём заявок с itssteps.site (server/lead_service.py).
+# Отдельный временный пользователь, только чтение системы, запись — в /var/lib/itssteps-leads.
+# Уведомления в Telegram: TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID в /etc/itssteps-leads.env.
+[Unit]
+Description=itssteps.site lead form
+After=network-online.target
+
+[Service]
+ExecStart=/usr/bin/python3 /opt/itssteps-leads/lead_service.py
+EnvironmentFile=-/etc/itssteps-leads.env
+DynamicUser=yes
+StateDirectory=itssteps-leads
+StateDirectoryMode=0700
+Restart=on-failure
+RestartSec=3
+MemoryMax=64M
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target

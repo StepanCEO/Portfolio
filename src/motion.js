@@ -2,90 +2,17 @@ import { useEffect } from 'react'
 
 // Анимации сайта. Правила:
 // — двигаем только transform и opacity: это делает видеокарта, без пересчёта страницы;
-// — ничего не прячем до загрузки JS: без скрипта весь текст виден, пререндер и SEO целы;
-// — элементы, которые уже на экране при загрузке, не трогаем — иначе они мигнут;
+// — ничего не прячем скриптом: без JS весь текст виден, пререндер и SEO целы;
+// — не читаем размеры и позиции элементов при загрузке — это заставляет браузер
+//   заново раскладывать всю страницу;
 // — при «уменьшить движение» в системе анимаций нет вообще.
 
 const reducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-// Что плавно поднимается при прокрутке. Соседи в одном контейнере появляются по очереди.
-const REVEAL = [
-  '.section-head',
-  '.deck-all',
-  '.service-row',
-  '.task-card',
-  '.approach-text p',
-  '.mini-case',
-  '.mini-reviews figure',
-  '.price-card',
-  '.included li',
-  '.steps li',
-  '.faq',
-  '.review',
-  '.kwork-card',
-  '.review-shots',
-  '.media-card',
-  '.about-avatar',
-  '.about-text > p',
-  '.about-links',
-  '.service',
-  '.story-row',
-  '.case-page-facts > div',
-  '.case-page-extra',
-  '.case-page-review',
-  '.next-case',
-  '.cta-inner',
-  '.not-found-list li',
-].join(',')
-
-const STAGGER_MS = 70
-const MAX_STAGGER = 6
-
-export function useReveal(routeKey) {
-  useEffect(() => {
-    if (reducedMotion() || !('IntersectionObserver' in window)) return undefined
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return
-          const el = entry.target
-          observer.unobserve(el)
-          el.classList.add('is-in')
-          // после анимации убираем служебные атрибуты, чтобы не мешать hover-эффектам
-          const done = () => {
-            el.removeEventListener('transitionend', onEnd)
-            el.removeAttribute('data-reveal')
-            el.classList.remove('is-in')
-            el.style.removeProperty('--reveal-delay')
-          }
-          // transitionend всплывает и от вложенных элементов — ждём только свой
-          const onEnd = (event) => {
-            if (event.target === el && event.propertyName === 'transform') done()
-          }
-          el.addEventListener('transitionend', onEnd)
-          setTimeout(done, 1600)
-        })
-      },
-      { rootMargin: '0px 0px -8% 0px' },
-    )
-
-    const fold = window.innerHeight
-    const counters = new Map()
-    document.querySelectorAll(REVEAL).forEach((el) => {
-      if (el.getBoundingClientRect().top < fold) return
-      const parent = el.parentElement
-      const index = counters.get(parent) ?? 0
-      counters.set(parent, index + 1)
-      el.style.setProperty('--reveal-delay', `${Math.min(index, MAX_STAGGER) * STAGGER_MS}ms`)
-      el.setAttribute('data-reveal', '')
-      observer.observe(el)
-    })
-
-    return () => observer.disconnect()
-  }, [routeKey])
-}
+// Плавное появление блоков при прокрутке сделано на CSS (animation-timeline: view(),
+// см. App.css): состояние зависит только от положения блока на экране, поэтому
+// ничего не может «застрять» скрытым, а JavaScript и раскладка страницы не нужны.
 
 // Цифры в тёмном блоке набегают от нуля. В HTML стоят итоговые значения —
 // их видят поисковики и те, у кого не загрузился JS.
@@ -148,7 +75,7 @@ export function useHeaderOnScroll(ref) {
   useEffect(() => {
     const header = ref.current
     if (!header) return undefined
-    let lastY = window.scrollY
+    let lastY = 0
     let frame = 0
 
     const update = () => {
@@ -165,7 +92,9 @@ export function useHeaderOnScroll(ref) {
       if (!frame) frame = requestAnimationFrame(update)
     }
 
-    update()
+    // первый расчёт — в кадре отрисовки: чтение scrollY сразу после оживления
+    // страницы заставляло браузер раскладывать её внутри задачи скрипта
+    frame = requestAnimationFrame(update)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => {
       if (frame) cancelAnimationFrame(frame)

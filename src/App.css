@@ -2128,20 +2128,6 @@
    Только transform и opacity — их считает видеокарта. Всё отключается
    при «уменьшить движение» (см. motion.js и блок ниже). */
 
-/* появление при прокрутке: атрибут ставит motion.js только элементам ниже первого экрана */
-[data-reveal] {
-  opacity: 0;
-  transform: translate3d(0, 22px, 0);
-  transition:
-    opacity 700ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0ms),
-    transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0ms);
-}
-
-[data-reveal].is-in {
-  opacity: 1;
-  transform: none;
-}
-
 /* заголовок первого экрана: слова выезжают из-под маски. Только на десктопе —
    на телефоне заголовок и есть самый крупный элемент экрана, его нельзя задерживать */
 .hero-title .w {
@@ -2287,4 +2273,302 @@ html.img-fade img[loading='lazy'].is-loaded {
   .faq details[open]::details-content {
     height: auto;
   }
+}
+
+/* ---------- шапка: переключатель языка ---------- */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lang-switch {
+  display: grid;
+  place-items: center;
+  min-width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text);
+  font: 600 13px/1 var(--body);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: border-color 160ms ease;
+}
+
+.lang-switch:hover {
+  border-color: var(--text);
+}
+
+.header-dark .lang-switch {
+  border-color: var(--line-dark);
+  color: var(--white);
+}
+
+.header-dark .lang-switch:hover {
+  border-color: var(--white);
+}
+
+/* ---------- финальный блок: Telegram и форма рядом ---------- */
+
+.cta-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+
+.cta-form-note {
+  max-width: 420px;
+  margin: 28px 0 0;
+  color: var(--on-dark-muted);
+  font-size: 15px;
+}
+
+.lead-form {
+  display: grid;
+  gap: 14px;
+  padding: clamp(24px, 3vw, 36px);
+  border-radius: var(--radius-lg);
+  background: var(--ink-2);
+  scroll-margin-top: 96px;
+}
+
+.lead-form h3 {
+  margin: 0 0 6px;
+  color: var(--white);
+  font: 600 26px/1.1 var(--display);
+  letter-spacing: -0.03em;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field span {
+  color: var(--on-dark-muted);
+  font-size: 13px;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1px solid var(--line-dark);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--white);
+  font: 400 16px/1.4 var(--body);
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.field textarea {
+  min-height: 104px;
+  resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--accent-glow);
+  background: rgba(255, 255, 255, 0.07);
+  outline: none;
+}
+
+.consent {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  color: var(--on-dark-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.consent input {
+  width: 18px;
+  height: 18px;
+  margin: 1px 0 0;
+  accent-color: var(--accent-glow);
+}
+
+.consent a,
+.form-status a {
+  color: var(--white);
+  text-underline-offset: 3px;
+}
+
+.lead-form .pill {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.lead-form .pill:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.form-status {
+  min-height: 1.5em;
+  margin: 0;
+  font-size: 14px;
+}
+
+.form-sent {
+  color: #7fe0a6;
+}
+
+.form-error,
+.form-limit {
+  color: #ffb4a8;
+}
+
+/* ловушка для ботов: убрана с экрана и из доступности */
+.hp {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ---------- партнёрка и политика ---------- */
+
+.task-grid-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.steps-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 0;
+}
+
+.legal-page {
+  max-width: 860px;
+  padding-bottom: clamp(80px, 10vw, 140px);
+}
+
+.legal-page h1 {
+  font-size: clamp(44px, 6vw, 80px);
+}
+
+.legal-page section {
+  margin-top: 40px;
+}
+
+.legal-page h2 {
+  margin: 0 0 12px;
+  font: 600 26px/1.2 var(--display);
+  letter-spacing: -0.02em;
+}
+
+.legal-page p:not(.eyebrow) {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.review figcaption small {
+  display: block;
+  color: var(--faint);
+  font-size: 12px;
+}
+
+@media (max-width: 1080px) {
+  .cta-grid,
+  .task-grid-4 {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .cta-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .task-grid-4,
+  .steps-3 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lang-switch {
+    min-width: 38px;
+    height: 38px;
+  }
+
+  .header-actions .pill-header {
+    padding: 0 16px;
+  }
+}
+
+/* ---------- появление блоков при прокрутке ----------
+   Анимация привязана к положению блока на экране (scroll-driven), идёт в видеокарте
+   и не требует JavaScript. Блок, который уже на экране, полностью виден; блок выше
+   экрана — тоже. Где это не поддерживается, блоки просто видны сразу. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    :is(
+        .section-head,
+        .deck-all,
+        .service-row,
+        .task-card,
+        .approach-text p,
+        .mini-case,
+        .mini-reviews figure,
+        .price-card,
+        .included li,
+        .steps li,
+        .faq,
+        .review,
+        .kwork-card,
+        .review-shots,
+        .media-card,
+        .about-avatar,
+        .about-text > p,
+        .about-links,
+        .service,
+        .story-row,
+        .case-page-facts > div,
+        .case-page-extra,
+        .case-page-review,
+        .next-case,
+        .cta-copy,
+        .lead-form,
+        .legal-page section,
+        .not-found-list li
+      ) {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+
+    /* соседи в одной строке сетки появляются по очереди */
+    :is(.task-card, .review, .media-card, .service, .mini-case, .steps li):nth-child(3n + 2) {
+      animation-range: entry 10% entry 80%;
+    }
+
+    :is(.task-card, .review, .media-card, .service, .mini-case, .steps li):nth-child(3n + 3) {
+      animation-range: entry 20% entry 90%;
+    }
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+  }
+}
+
+/* Секции ниже первого экрана браузер не раскладывает и не рисует, пока до них
+   не долистали, — на длинной странице это главная экономия при загрузке.
+   auto 900px — размер-заглушка, после первого показа браузер помнит настоящий. */
+main > .section,
+main > .stats,
+main > .marquee,
+main > .cta {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
 }

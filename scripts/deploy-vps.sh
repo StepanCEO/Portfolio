@@ -27,5 +27,14 @@ ssh -i "$KEY" -o IdentitiesOnly=yes "$HOST" "chmod -R a+rX $REMOTE_DIR"
 
 echo "Загружено: $HOST:$REMOTE_DIR"
 
+# сервис формы заявок (server/lead_service.py): перезапускаем, только если файл изменился
+LOCAL_SUM="$(shasum -a 256 server/lead_service.py | cut -d' ' -f1)"
+REMOTE_SUM="$(ssh -i "$KEY" -o IdentitiesOnly=yes "$HOST" "sha256sum /opt/itssteps-leads/lead_service.py 2>/dev/null | cut -d' ' -f1")"
+if [ "$LOCAL_SUM" != "$REMOTE_SUM" ]; then
+  rsync -rlt -e "ssh -i $KEY -o IdentitiesOnly=yes" server/lead_service.py "$HOST:/opt/itssteps-leads/"
+  ssh -i "$KEY" -o IdentitiesOnly=yes "$HOST" "chmod 644 /opt/itssteps-leads/lead_service.py && systemctl restart itssteps-leads"
+  echo "Сервис заявок обновлён"
+fi
+
 # сообщить поисковикам об обновлённых страницах; сбой здесь не отменяет деплой
 node scripts/indexnow.mjs || echo "IndexNow: не удалось отправить, сайт при этом обновлён"

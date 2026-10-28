@@ -3,7 +3,7 @@ import { dirname, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 // Собирает HTML всех страниц: главная — dist/app.html (на сервере станет index.html),
-// кейсы — dist/cases/<id>/index.html, ошибка — dist/404.html.
+// остальные — dist/<путь>/index.html (кейсы, услуги, /en/...), ошибка — dist/404.html.
 // Заодно пишет sitemap.xml со всеми адресами, кроме 404.
 const root = resolve(process.cwd())
 const dist = resolve(root, 'dist')
@@ -17,13 +17,31 @@ if (!template.includes(marker)) throw new Error(`${marker} не найден в 
 
 const escape = (text) => text.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 
+// пара страниц на двух языках: поисковики показывают каждому его версию
+function hreflang(route) {
+  if (!route.alternate) return []
+  const ru = route.lang === 'ru' ? route.path : route.alternate
+  const en = route.lang === 'en' ? route.path : route.alternate
+  return [
+    `    <link rel="alternate" hreflang="ru" href="${siteUrl}${ru}" />`,
+    `    <link rel="alternate" hreflang="en" href="${siteUrl}${en}" />`,
+    `    <link rel="alternate" hreflang="x-default" href="${siteUrl}${ru}" />`,
+  ]
+}
+
 function withMeta(html, route) {
-  if (!route.title) return html
   const extra = [
+    ...hreflang(route),
     route.noindex && '    <meta name="robots" content="noindex" />',
     route.jsonLd && `    <script type="application/ld+json">${JSON.stringify(route.jsonLd)}</script>`,
   ].filter(Boolean)
   if (extra.length) html = html.replace('  </head>', `${extra.join('\n')}\n  </head>`)
+  if (route.lang === 'en') {
+    html = html
+      .replace('<html lang="ru">', '<html lang="en">')
+      .replace('content="ru_RU"', 'content="en_US"')
+  }
+  if (!route.title) return html
   const url = `${siteUrl}${route.path}`
   const title = escape(route.title)
   const description = escape(route.description)
