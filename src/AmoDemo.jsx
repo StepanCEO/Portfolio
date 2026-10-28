@@ -6,7 +6,7 @@ import './AmoDemo.css'
 // компании здесь нет, и добавлять их нельзя: страница публичная.
 
 const RATE = 11.05 // «курс ЦБ» для демо
-const MARKUP = 1.3 // наценка на закупку в юанях, как в боевой системе
+const MARKUP = 1.25 // условная наценка для демо — не цифра реального клиента
 
 const spaced = (value) => value.toLocaleString('ru-RU').replace(/\s/g, ' ')
 const rub = (value) => `${spaced(value)} ₽`
@@ -89,7 +89,7 @@ const commands = [
       label: 'Цена в юанях',
       text: [
         `VMC-855 у завода — ${cny(items[0].cny)}, оснастка — ${cny(items[1].cny)}. Это закупка.`,
-        `Клиенту: ${cny(items[0].cny)} × ${String(RATE).replace('.', ',')} ₽ по курсу ЦБ × 1,3 наценки = ${rub(items[0].price)}.`,
+        `Клиенту: ${cny(items[0].cny)} × ${String(RATE).replace('.', ',')} ₽ по курсу ЦБ × ${String(MARKUP).replace('.', ',')} наценки = ${rub(items[0].price)}.`,
         'Курс беру из выгрузки ЦБ, а не придумываю: нет курса — нет цены.',
       ],
     },

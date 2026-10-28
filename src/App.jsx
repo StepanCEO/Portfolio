@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import './App.css'
 import imageSizes from './image-sizes.json'
+import { included, servicePages } from './services.js'
 import {
   allCases,
   avatar,
@@ -54,10 +55,15 @@ function Img({ src, alt, sizes = '100vw', eager = false, className }) {
   )
 }
 
-// Страница по адресу: /cases/<id>/ — кейс, всё остальное — главная
+const normalize = (path) => (path.endsWith('/') ? path : `${path}/`)
+
+// Страница по адресу: /cases/<id>/ — кейс, /<услуга>/ — услуга, всё остальное — главная
 function findCase(path) {
-  const normalized = path.endsWith('/') ? path : `${path}/`
-  return allCases.find((item) => item.path === normalized) || null
+  return allCases.find((item) => item.path === normalize(path)) || null
+}
+
+function findService(path) {
+  return servicePages.find((page) => page.path === normalize(path)) || null
 }
 
 function ArrowIcon({ back = false }) {
@@ -169,7 +175,7 @@ function CaseDeck({ setDemoOpen }) {
   return (
     <section className="section dark deck-section" id="cases">
       <div className="deck-head">
-        <SectionHead index="01" title={<>Лучшие кейсы<span className="dot">.</span></>}>
+        <SectionHead index="02" title={<>Лучшие кейсы<span className="dot">.</span></>}>
           AI-системы, CRM и сайты для реального бизнеса — с цифрами и стеком. Подробности —
           на странице каждого кейса.
         </SectionHead>
@@ -230,6 +236,178 @@ function CaseDeck({ setDemoOpen }) {
   )
 }
 
+function ServiceRow({ page }) {
+  return (
+    <a className="service-row" href={page.path}>
+      <span className="service-row-title">{page.nav}</span>
+      <span className="service-row-text">{page.short}</span>
+      <span className="service-row-price">{page.price}</span>
+      <ArrowIcon />
+    </a>
+  )
+}
+
+function ServicesSection() {
+  return (
+    <section className="section" id="services">
+      <SectionHead index="01" title={<>Услуги<span className="dot dot-light">.</span></>}>
+        Что делаю, сколько это стоит и как проходит работа — подробно на странице каждой услуги.
+      </SectionHead>
+      <div className="services-list">
+        {servicePages.map((page) => (
+          <ServiceRow key={page.id} page={page} />
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function ServicePage({ page }) {
+  const related = page.caseIds.map((id) => allCases.find((item) => item.id === id)).filter(Boolean)
+  const pageReviews = page.reviewNames ? reviews.filter((review) => page.reviewNames.includes(review.name)) : []
+  const others = servicePages.filter((other) => other.id !== page.id)
+
+  return (
+    <>
+      <section className="hero service-hero">
+        <nav className="eyebrow crumbs-light" aria-label="Хлебные крошки">
+          <a href="/">Its Step</a> / <a href="/#services">Услуги</a> / <span>{page.nav}</span>
+        </nav>
+        <h1>{page.title}</h1>
+        <div className="hero-row">
+          <p className="hero-lead">{page.lead}</p>
+          <div className="hero-actions">
+            <a className="pill pill-accent" href={telegramUrl}>
+              Обсудить проект
+              <ArrowIcon />
+            </a>
+            <a className="pill pill-line" href="#service-cases">
+              Кейсы по теме
+            </a>
+          </div>
+        </div>
+        <dl className="service-facts">
+          <div>
+            <dt>Стоимость</dt>
+            <dd>{page.price}</dd>
+          </div>
+          <div>
+            <dt>Сроки</dt>
+            <dd>{page.term}</dd>
+          </div>
+          <div>
+            <dt>Формат</dt>
+            <dd>по договору, оплата по этапам</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section className="section">
+        <SectionHead index="01" title={page.tasksTitle} />
+        <div className="task-grid">
+          {page.tasks.map(([title, body]) => (
+            <article className="task-card" key={title}>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section section-tint">
+        <div className="approach">
+          <SectionHead index="02" title={page.approachTitle} />
+          <div className="approach-text">
+            {page.approach.map((paragraph) => (
+              <p key={paragraph.slice(0, 32)}>{paragraph}</p>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section dark" id="service-cases">
+        <SectionHead index="03" title={<>Кейсы по теме<span className="dot">.</span></>} />
+        <div className="mini-cases">
+          {related.map((item) => (
+            <a className={`mini-case deck-${item.tone}`} style={{ background: item.bg }} href={item.path} key={item.id}>
+              <Img src={item.image} alt={item.title} sizes="(max-width: 760px) 100vw, 600px" />
+              <span className="mini-case-cat">{item.category}</span>
+              <strong>{item.title}</strong>
+              <span className="mini-case-metric">
+                {item.metric} — {item.metricNote}
+              </span>
+            </a>
+          ))}
+        </div>
+        {pageReviews.length > 0 && (
+          <div className="mini-reviews">
+            {pageReviews.map((review) => (
+              <figure key={review.name}>
+                <blockquote>«{review.text}»</blockquote>
+                <figcaption>
+                  {review.name} · {review.project} · отзыв на Kwork
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <section className="section">
+        <SectionHead index="04" title="Сроки и цена" />
+        <div className="price-block">
+          <div className="price-card">
+            <strong>{page.price}</strong>
+            <span>{page.term}</span>
+            <p>{page.priceText}</p>
+            <a className="pill pill-accent" href={telegramUrl}>
+              Получить оценку
+              <ArrowIcon />
+            </a>
+          </div>
+          <ul className="included">
+            {included.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+        </div>
+        <ol className="steps">
+          {steps.map(([title, body], i) => (
+            <li key={title}>
+              <span>{String(i + 1).padStart(2, '0')}</span>
+              <strong>{title}</strong>
+              <p>{body}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="section section-tint">
+        <SectionHead index="05" title="Частые вопросы" />
+        <div className="faq">
+          {page.faq.map(([question, answer]) => (
+            <details key={question}>
+              <summary>{question}</summary>
+              <p>{answer}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <section className="section">
+        <SectionHead title="Другие услуги" />
+        <div className="services-list">
+          {others.map((other) => (
+            <ServiceRow key={other.id} page={other} />
+          ))}
+        </div>
+      </section>
+
+      <Cta />
+    </>
+  )
+}
+
 function CasePage({ item, setLightbox, setDemoOpen }) {
   const index = allCases.indexOf(item)
   const next = allCases[(index + 1) % allCases.length]
@@ -280,6 +458,34 @@ function CasePage({ item, setLightbox, setDemoOpen }) {
           </div>
         )}
       </div>
+
+      {item.details && (
+        <section className="case-story" aria-label="Как делали проект">
+          <div className="story-row">
+            <h2>Задача</h2>
+            <p>{item.details.task}</p>
+          </div>
+          <div className="story-row">
+            <h2>Что сделал</h2>
+            <ul>
+              {item.details.done.map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="story-row">
+            <h2>Результат в цифрах</h2>
+            <div className="story-results">
+              {item.details.results.map(([value, label]) => (
+                <div key={label}>
+                  <strong>{value}</strong>
+                  <span>{label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {item.extraImage && (
         <figure className="case-page-extra">
@@ -385,6 +591,13 @@ function Footer() {
   return (
     <footer className="footer">
       <p>AI-системы, CRM и сайты для бизнеса. Самозанятый, по договору, удалённо.</p>
+      <nav className="footer-links" aria-label="Услуги">
+        {servicePages.map((page) => (
+          <a key={page.id} href={page.path}>
+            {page.nav}
+          </a>
+        ))}
+      </nav>
       <div className="footer-links">
         <a href={telegramUrl}>Telegram</a>
         <a href={tiktokUrl} target="_blank" rel="noreferrer">
@@ -398,6 +611,31 @@ function Footer() {
         </a>
       </div>
     </footer>
+  )
+}
+
+function Cta() {
+  return (
+    <section className="cta dark" id="contact">
+      <div className="cta-inner">
+        <p className="eyebrow eyebrow-light">Следующий шаг</p>
+        <h2>Расскажите, что у вас делают руками</h2>
+        <p>
+          Опишите задачу в двух словах. В тот же день скажу, как её решить, сколько это
+          стоит и сколько займёт. Разбор бесплатный.
+        </p>
+        <div className="cta-actions">
+          <a className="pill pill-accent" href={telegramUrl}>
+            Написать в Telegram
+            <ArrowIcon />
+          </a>
+          <span className="cta-handle">{telegramHandle} · отвечаю лично</span>
+        </div>
+      </div>
+      <div className="wordmark" aria-hidden="true">
+        Its Step
+      </div>
+    </section>
   )
 }
 
@@ -467,12 +705,14 @@ function Home({ setLightbox, setDemoOpen }) {
         ))}
       </section>
 
+      <ServicesSection />
+
       <CaseDeck setDemoOpen={setDemoOpen} />
 
       {/* ---------- отзывы ---------- */}
       <section className="section section-tint" id="reviews">
         <div className="section-head-row">
-          <SectionHead index="02" title="Что говорят клиенты">
+          <SectionHead index="03" title="Что говорят клиенты">
             Отзывы с Kwork — каждый можно проверить в профиле.
           </SectionHead>
           <a className="kwork-card" href={kworkUrl} target="_blank" rel="noreferrer">
@@ -526,7 +766,7 @@ function Home({ setLightbox, setDemoOpen }) {
 
       {/* ---------- медиа ---------- */}
       <section className="section dark" id="media">
-        <SectionHead index="03" title={<>Веду блог об <span className="nowrap">AI-разработке</span></>}>
+        <SectionHead index="04" title={<>Веду блог об <span className="nowrap">AI-разработке</span></>}>
           2 900+ человек следят за тем, как я работаю. До старта проекта можно посмотреть,
           как я думаю и как объясняю сложное.
         </SectionHead>
@@ -567,7 +807,7 @@ function Home({ setLightbox, setDemoOpen }) {
       <section className="section about" id="about">
         <img className="about-avatar" src={avatar} alt="Степан" width="160" height="160" />
         <div className="about-text">
-          <SectionHead index="04" title="Степан, разработчик Its Step" />
+          <SectionHead index="05" title="Степан, разработчик Its Step" />
           <p>
             Делаю системы, которые берут на себя работу людей: AI-агенты, CRM, интеграции и
             сайты. Веду проект один и целиком — разбор задачи, архитектура, интерфейс, код,
@@ -599,7 +839,7 @@ function Home({ setLightbox, setDemoOpen }) {
 
       {/* ---------- цены и процесс ---------- */}
       <section className="section section-tint" id="pricing">
-        <SectionHead index="05" title="Форматы и цены">
+        <SectionHead index="06" title="Форматы и цены">
           Точная цена — после бесплатного разбора. Смета и сроки фиксируются в договоре.
         </SectionHead>
         <div className="services">
@@ -629,27 +869,7 @@ function Home({ setLightbox, setDemoOpen }) {
         </ol>
       </section>
 
-      {/* ---------- контакт ---------- */}
-      <section className="cta dark" id="contact">
-        <div className="cta-inner">
-          <p className="eyebrow eyebrow-light">Следующий шаг</p>
-          <h2>Расскажите, что у вас делают руками</h2>
-          <p>
-            Опишите задачу в двух словах. В тот же день скажу, как её решить, сколько это
-            стоит и сколько займёт. Разбор бесплатный.
-          </p>
-          <div className="cta-actions">
-            <a className="pill pill-accent" href={telegramUrl}>
-              Написать в Telegram
-              <ArrowIcon />
-            </a>
-            <span className="cta-handle">{telegramHandle} · отвечаю лично</span>
-          </div>
-        </div>
-        <div className="wordmark" aria-hidden="true">
-          Its Step
-        </div>
-      </section>
+      <Cta />
     </>
   )
 }
@@ -659,6 +879,7 @@ function App({ path = '/' }) {
   const [demoOpen, setDemoOpen] = useState(false)
   const activeId = useActiveSection()
   const caseItem = findCase(path)
+  const service = findService(path)
   const notFound = path === '/404/'
   const dark = Boolean(caseItem) || notFound
 
@@ -678,12 +899,13 @@ function App({ path = '/' }) {
 
   return (
     <div className={`site${dark ? ' site-dark' : ''}`}>
-      <Header activeId={dark ? '' : activeId} dark={dark} />
+      <Header activeId={dark || service ? '' : activeId} dark={dark} />
 
       <main>
         {notFound && <NotFound />}
         {caseItem && <CasePage item={caseItem} setLightbox={setLightbox} setDemoOpen={setDemoOpen} />}
-        {!dark && <Home setLightbox={setLightbox} setDemoOpen={setDemoOpen} />}
+        {service && <ServicePage page={service} />}
+        {!dark && !service && <Home setLightbox={setLightbox} setDemoOpen={setDemoOpen} />}
       </main>
 
       <Footer />

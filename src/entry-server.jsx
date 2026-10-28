@@ -3,6 +3,7 @@ import { renderToString } from 'react-dom/server'
 import App from './App.jsx'
 import { allCases, siteUrl } from './content.js'
 import imageSizes from './image-sizes.json'
+import { servicePages } from './services.js'
 
 // Пререндер: HTML каждой страницы на этапе сборки, чтобы поисковики видели текст без JavaScript
 export function render(path) {
@@ -46,9 +47,62 @@ const caseJsonLd = (item) => {
   }
 }
 
+// Разметка страницы услуги: сама услуга с ценой «от», хлебные крошки и вопросы-ответы
+const serviceJsonLd = (page) => {
+  const url = `${siteUrl}${page.path}`
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Its Step', item: `${siteUrl}/` },
+          { '@type': 'ListItem', position: 2, name: page.nav, item: url },
+        ],
+      },
+      {
+        '@type': 'Service',
+        '@id': `${url}#service`,
+        name: page.title,
+        description: page.metaDescription,
+        url,
+        serviceType: page.nav,
+        areaServed: 'RU',
+        inLanguage: 'ru',
+        provider: { '@id': `${siteUrl}/#person` },
+        offers: page.minPrice
+          ? {
+              '@type': 'Offer',
+              priceCurrency: 'RUB',
+              priceSpecification: { '@type': 'PriceSpecification', minPrice: page.minPrice, priceCurrency: 'RUB' },
+            }
+          : undefined,
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: page.faq.map(([question, answer]) => ({
+          '@type': 'Question',
+          name: question,
+          acceptedAnswer: { '@type': 'Answer', text: answer },
+        })),
+      },
+    ],
+  }
+}
+
 // Страницы для пререндера и их мета-теги. Главная берёт мета-теги из app.html как есть.
 export const routes = [
   { path: '/' },
+  ...servicePages.map((page) => {
+    const firstCase = allCases.find((item) => item.id === page.caseIds[0])
+    return {
+      path: page.path,
+      title: page.metaTitle,
+      description: page.metaDescription,
+      image: `${siteUrl}${firstCase.image}`,
+      jsonLd: serviceJsonLd(page),
+    }
+  }),
   ...allCases.map((item) => ({
     path: item.path,
     title: `${item.title} — кейс Its Step`,
