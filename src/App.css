@@ -2123,3 +2123,168 @@
     font-size: 17px;
   }
 }
+
+/* ---------- движение ----------
+   Только transform и opacity — их считает видеокарта. Всё отключается
+   при «уменьшить движение» (см. motion.js и блок ниже). */
+
+/* появление при прокрутке: атрибут ставит motion.js только элементам ниже первого экрана */
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  transition:
+    opacity 700ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0ms),
+    transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0ms);
+}
+
+[data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* заголовок первого экрана: слова выезжают из-под маски. Только на десктопе —
+   на телефоне заголовок и есть самый крупный элемент экрана, его нельзя задерживать */
+.hero-title .w {
+  display: inline-block;
+  margin: -0.08em 0 -0.14em;
+  padding: 0.08em 0 0.14em;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.hero-title .w-in {
+  display: inline-block;
+}
+
+@media (min-width: 761px) and (prefers-reduced-motion: no-preference) {
+  .hero-title .w-in {
+    animation: word-up 800ms cubic-bezier(0.2, 0.75, 0.2, 1) both;
+    animation-delay: calc(var(--w) * 45ms + 60ms);
+  }
+}
+
+@keyframes word-up {
+  from {
+    transform: translate3d(0, 110%, 0);
+  }
+}
+
+/* шапка: уезжает при прокрутке вниз, тень на прокрученной странице */
+.header {
+  transition:
+    transform 350ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 250ms ease;
+}
+
+.header-hidden {
+  transform: translate3d(0, -100%, 0);
+}
+
+.header-scrolled {
+  box-shadow: 0 1px 0 var(--line), 0 12px 32px -24px rgba(17, 19, 18, 0.35);
+}
+
+.header-dark.header-scrolled {
+  box-shadow: 0 1px 0 var(--line-dark), 0 12px 32px -24px rgba(0, 0, 0, 0.8);
+}
+
+/* картинки, которые грузятся при прокрутке, проявляются (класс ставит motion.js) */
+html.img-fade img[loading='lazy'] {
+  opacity: 0;
+  transition:
+    opacity 500ms ease,
+    transform 600ms ease;
+}
+
+html.img-fade img[loading='lazy'].is-loaded {
+  opacity: 1;
+}
+
+/* кнопки чуть «нажимаются» */
+.pill {
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
+    transform 120ms ease;
+}
+
+.pill:active {
+  transform: scale(0.97);
+}
+
+/* бегущая строка останавливается под курсором */
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* цифры не прыгают по ширине, пока набегают */
+.stat strong {
+  font-variant-numeric: tabular-nums;
+}
+
+/* колода кейсов: карточка, на которую наезжает следующая, уменьшается и темнеет.
+   Анимация привязана к прокрутке и идёт в видеокарте; где это не поддерживается —
+   обычная стопка. На планшете и низких экранах колода не липнет, там эффекта нет. */
+@supports (animation-timeline: view()) {
+  @media (min-width: 1081px) and (min-height: 761px) and (prefers-reduced-motion: no-preference) {
+    .deck {
+      view-timeline-name: --deck;
+    }
+
+    .deck-card:not(:last-child) {
+      transform-origin: 50% 0;
+      animation: deck-shrink linear both;
+      animation-timeline: --deck;
+      animation-range:
+        exit-crossing calc(var(--i) / var(--n) * 100%)
+        exit-crossing calc((var(--i) + 1) / var(--n) * 100%);
+    }
+
+    .deck-card:not(:last-child)::after {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: #000;
+      opacity: 0;
+      pointer-events: none;
+      content: '';
+      animation: deck-dim linear both;
+      animation-timeline: --deck;
+      animation-range:
+        exit-crossing calc(var(--i) / var(--n) * 100%)
+        exit-crossing calc((var(--i) + 1) / var(--n) * 100%);
+    }
+  }
+}
+
+@keyframes deck-shrink {
+  to {
+    transform: scale(0.94);
+  }
+}
+
+@keyframes deck-dim {
+  to {
+    opacity: 0.45;
+  }
+}
+
+/* FAQ раскрывается плавно (Chrome 131+, в остальных — сразу) */
+@supports (interpolate-size: allow-keywords) {
+  .faq {
+    interpolate-size: allow-keywords;
+  }
+
+  .faq details::details-content {
+    height: 0;
+    overflow: clip;
+    transition:
+      height 320ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      content-visibility 320ms allow-discrete;
+  }
+
+  .faq details[open]::details-content {
+    height: auto;
+  }
+}

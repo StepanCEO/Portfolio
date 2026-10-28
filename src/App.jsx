@@ -1,7 +1,15 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { Fragment, lazy, Suspense, useEffect, useRef, useState } from 'react'
 import './App.css'
 import imageSizes from './image-sizes.json'
 import { included, servicePages } from './services.js'
+import {
+  clearCaseVisual,
+  markCaseVisual,
+  useCountUp,
+  useHeaderOnScroll,
+  useImageFade,
+  useReveal,
+} from './motion.js'
 import {
   allCases,
   avatar,
@@ -32,16 +40,28 @@ const AmoDemo = lazy(loadDemo)
 
 const pad = (n) => String(n).padStart(2, '0')
 
+// Заголовок первого экрана по словам: так строки выезжают из-под маски при загрузке
+const heroWords = [
+  ['Делаю'],
+  ['AI-системы,'],
+  ['CRM'],
+  ['и'],
+  ['сайты'],
+  ['для', true],
+  ['бизнеса', true],
+]
+
 // Картинка в WebP с вариантами под ширину экрана (см. scripts/images.mjs).
 // Для лайтбокса берём самый крупный вариант.
 const fullSize = (src) => imageSizes[src]?.variants.at(-1)[1] ?? src
 
-function Img({ src, alt, sizes = '100vw', eager = false, className }) {
+function Img({ src, alt, sizes = '100vw', eager = false, className, style }) {
   const meta = imageSizes[src]
-  if (!meta) return <img className={className} src={src} alt={alt} loading={eager ? undefined : 'lazy'} />
+  if (!meta) return <img className={className} style={style} src={src} alt={alt} loading={eager ? undefined : 'lazy'} />
   return (
     <img
       className={className}
+      style={style}
       src={meta.variants.at(-1)[1]}
       srcSet={meta.variants.map(([w, url]) => `${url} ${w}w`).join(', ')}
       sizes={sizes}
@@ -185,12 +205,13 @@ function CaseDeck({ setDemoOpen }) {
         </a>
       </div>
 
-      <ol className="deck">
+      <ol className="deck" style={{ '--n': allCases.length }}>
         {allCases.map((item, index) => (
           <li
             key={item.id}
             className={`deck-card deck-${item.tone}`}
             style={{ '--i': index, background: item.bg }}
+            onClick={markCaseVisual}
           >
             <div className="deck-top">
               <span>
@@ -329,7 +350,13 @@ function ServicePage({ page }) {
         <SectionHead index="03" title={<>Кейсы по теме<span className="dot">.</span></>} />
         <div className="mini-cases">
           {related.map((item) => (
-            <a className={`mini-case deck-${item.tone}`} style={{ background: item.bg }} href={item.path} key={item.id}>
+            <a
+              className={`mini-case deck-${item.tone}`}
+              style={{ background: item.bg }}
+              href={item.path}
+              key={item.id}
+              onClick={markCaseVisual}
+            >
               <Img src={item.image} alt={item.title} sizes="(max-width: 760px) 100vw, 600px" />
               <span className="mini-case-cat">{item.category}</span>
               <strong>{item.title}</strong>
@@ -432,7 +459,13 @@ function CasePage({ item, setLightbox, setDemoOpen }) {
       </div>
 
       <figure className="case-page-visual" style={{ background: item.bg }}>
-        <Img src={item.image} alt={item.title} sizes="(max-width: 1280px) 100vw, 1200px" eager />
+        <Img
+          src={item.image}
+          alt={item.title}
+          sizes="(max-width: 1280px) 100vw, 1200px"
+          eager
+          style={{ viewTransitionName: 'case-visual' }}
+        />
         <button
           type="button"
           className="pill pill-glass"
@@ -473,6 +506,16 @@ function CasePage({ item, setLightbox, setDemoOpen }) {
               ))}
             </ul>
           </div>
+          {item.details.changes && (
+            <div className="story-row">
+              <h2>Что изменилось для клиента</h2>
+              <ul>
+                {item.details.changes.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </div>
+          )}
           <div className="story-row">
             <h2>Результат в цифрах</h2>
             <div className="story-results">
@@ -564,8 +607,10 @@ function NotFound() {
 }
 
 function Header({ activeId, dark }) {
+  const ref = useRef(null)
+  useHeaderOnScroll(ref)
   return (
-    <header className={`header${dark ? ' header-dark' : ''}`}>
+    <header ref={ref} className={`header${dark ? ' header-dark' : ''}`}>
       <a className="brand" href="/">
         Its Step
       </a>
@@ -645,9 +690,17 @@ function Home({ setLightbox, setDemoOpen }) {
       {/* ---------- первый экран ---------- */}
       <section className="hero" id="top">
         <p className="eyebrow">Степан · разработчик · самозанятый</p>
-        <h1>
-          Делаю <span className="nowrap">AI-системы</span>, CRM и сайты{' '}
-          <span className="hero-accent">для бизнеса</span>
+        <h1 className="hero-title">
+          {heroWords.map(([word, accent], index) => (
+            <Fragment key={word}>
+              <span className={`w${accent ? ' hero-accent' : ''}`}>
+                <span className="w-in" style={{ '--w': index }}>
+                  {word}
+                </span>
+              </span>
+              {index < heroWords.length - 1 && ' '}
+            </Fragment>
+          ))}
         </h1>
 
         <div className="hero-row">
@@ -882,6 +935,16 @@ function App({ path = '/' }) {
   const service = findService(path)
   const notFound = path === '/404/'
   const dark = Boolean(caseItem) || notFound
+
+  useReveal(path)
+  useCountUp('.stat strong', path)
+  useImageFade(path)
+
+  // страница из кэша «назад/вперёд»: снимаем имя перехода с картинки, по которой кликнули
+  useEffect(() => {
+    window.addEventListener('pageshow', clearCaseVisual)
+    return () => window.removeEventListener('pageshow', clearCaseVisual)
+  }, [])
 
   useEffect(() => {
     if (!lightbox) return
