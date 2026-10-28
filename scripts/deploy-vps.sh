@@ -15,9 +15,12 @@ STAGE="$(mktemp -d)"
 trap 'rm -rf "$STAGE"' EXIT
 cp -R dist/. "$STAGE"/
 cp dist/app.html "$STAGE/index.html"
+# mktemp создаёт папку с правами 700, а tar переносит их на сервер: Caddy тогда не может читать сайт
+chmod 755 "$STAGE"
+find "$STAGE" -name '._*' -delete
 
 # COPYFILE_DISABLE — без служебных xattr-заголовков macOS в архиве
 COPYFILE_DISABLE=1 tar -C "$STAGE" -cf - . \
-  | ssh -i "$KEY" -o IdentitiesOnly=yes "$HOST" "mkdir -p $REMOTE_DIR && tar -C $REMOTE_DIR -xf -"
+  | ssh -i "$KEY" -o IdentitiesOnly=yes "$HOST" "mkdir -p $REMOTE_DIR && tar -C $REMOTE_DIR --no-same-owner -xf - && chmod -R a+rX $REMOTE_DIR"
 
 echo "Загружено: $HOST:$REMOTE_DIR"
