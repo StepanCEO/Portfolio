@@ -252,7 +252,7 @@ const steps = [
 const navItems = [
   { id: 'cases', label: 'Кейсы' },
   { id: 'reviews', label: 'Отзывы' },
-  { id: 'media', label: 'Блог' },
+  { id: 'media', label: 'Медиа' },
   { id: 'about', label: 'Обо мне' },
   { id: 'pricing', label: 'Цены' },
 ]
@@ -317,15 +317,13 @@ function useActiveSection() {
   return activeId
 }
 
-function SectionHead({ title, children, aside }) {
+function SectionHead({ index, title, children }) {
   return (
-    <div className="section-head">
-      <div>
-        <h2>{title}</h2>
-        {children && <p className="section-lead">{children}</p>}
-      </div>
-      {aside}
-    </div>
+    <header className="section-head">
+      {index && <span className="section-index">{index}</span>}
+      <h2>{title}</h2>
+      {children && <p className="section-lead">{children}</p>}
+    </header>
   )
 }
 
@@ -365,7 +363,7 @@ function App() {
             </a>
           ))}
         </nav>
-        <a className="btn btn-small" href={telegramUrl}>
+        <a className="pill pill-dark" href={telegramUrl}>
           Обсудить проект
         </a>
       </header>
@@ -373,35 +371,26 @@ function App() {
       <main>
         {/* ---------- первый экран ---------- */}
         <section className="hero" id="top">
-          <div className="hero-copy">
-            <h1>
-              Делаю <span className="nowrap">AI-системы</span>, CRM и сайты для бизнеса
-            </h1>
-            <a className="hero-person" href="#about">
-              <img src={avatar} alt="" width="48" height="48" />
-              <span>Степан, разработчик</span>
-            </a>
+          <p className="eyebrow">Степан · разработчик · самозанятый</p>
+          <h1>
+            Делаю <span className="nowrap">AI-системы</span>, CRM и сайты{' '}
+            <span className="hero-accent">для бизнеса</span>
+          </h1>
+
+          <div className="hero-row">
             <p className="hero-lead">
-              За два года сдал 30+ заказов: тендерную AI-систему, магазин на
-              520 000 товаров, сайт бренда минеральной воды за 200 000 ₽. Веду
-              проект сам — от ТЗ до запуска, без менеджеров и посредников.
+              За два года сдал 30+ заказов: тендерную AI-систему, магазин на 520 000 товаров,
+              сайт бренда минеральной воды за 200 000 ₽. Веду проект сам — от ТЗ до запуска.
             </p>
             <div className="hero-actions">
-              <a className="btn" href={telegramUrl}>
+              <a className="pill pill-accent" href={telegramUrl}>
                 Обсудить проект
                 <ArrowIcon />
               </a>
-              <a className="btn btn-ghost" href="#cases">
+              <a className="pill pill-line" href="#cases">
                 Смотреть кейсы
               </a>
             </div>
-            <p className="hero-kwork">
-              На Kwork —{' '}
-              <a href={kworkUrl} target="_blank" rel="noreferrer">
-                {kwork.orders} выполненных заказов и {kwork.reviews} отзывов
-              </a>
-              , {kwork.intime} сданы в срок.
-            </p>
           </div>
 
           <figure className="hero-visual">
@@ -414,40 +403,45 @@ function App() {
               <img src={heroImage} alt={featured.title} />
             </button>
             <figcaption>
-              Тендерная система Conteria: дашборд с найденными тендерами и лидами,
-              есть мобильная версия. Реальные экраны из работы клиента.
+              <span>Conteria · тендерная система</span>
+              Дашборд с найденными тендерами и лидами, есть мобильная версия. Реальные экраны
+              из работы клиента.
             </figcaption>
           </figure>
         </section>
 
-        <section className="stats" aria-label="Цифры">
+        <div className="marquee" aria-label="Клиенты">
+          <div className="marquee-track">
+            {[0, 1].map((group) => (
+              <ul key={group} aria-hidden={group === 1 || undefined}>
+                {clients.map((name) => (
+                  <li key={`${group}-${name}`}>{name}</li>
+                ))}
+              </ul>
+            ))}
+          </div>
+        </div>
+
+        {/* ---------- цифры ---------- */}
+        <section className="stats dark" aria-label="Цифры">
           {heroStats.map((item) => (
-            <div key={item.label}>
+            <div key={item.label} className="stat">
               <strong>{item.value}</strong>
               <span>{item.label}</span>
             </div>
           ))}
         </section>
 
-        <section className="clients" aria-label="Клиенты">
-          <span className="clients-label">Работал с</span>
-          <ul>
-            {clients.map((name) => (
-              <li key={name}>{name}</li>
-            ))}
-          </ul>
-        </section>
-
         {/* ---------- кейсы ---------- */}
         <section className="section" id="cases">
-          <SectionHead title="Крупные кейсы">
-            AI-системы, CRM и сайты для реального бизнеса. Часть работает внутри
-            компаний клиентов — там вместо скриншота показан состав системы.
+          <SectionHead index="01" title="Крупные кейсы">
+            AI-системы, CRM и сайты для реального бизнеса. Часть работает внутри компаний
+            клиентов — там вместо скриншота показан состав системы.
           </SectionHead>
 
           <article className="featured">
             <div className="featured-copy">
-              <span className="case-cat">{featured.category}</span>
+              <span className="tag">{featured.category}</span>
               <h3>{featured.title}</h3>
               <p>{featured.summary}</p>
               <ul className="featured-points">
@@ -458,7 +452,7 @@ function App() {
                   </li>
                 ))}
               </ul>
-              <p className="featured-stack">Стек: {featured.tags.join(', ')}</p>
+              <p className="case-stack">Стек: {featured.tags.join(', ')}</p>
             </div>
             <button
               type="button"
@@ -482,7 +476,7 @@ function App() {
                   <img src={item.image} alt={item.title} loading="lazy" />
                 </button>
                 <div className="case-body">
-                  <span className="case-cat">{item.category}</span>
+                  <span className="tag">{item.category}</span>
                   <h3>{item.title}</h3>
                   <p>{item.summary}</p>
                   {item.stack && <p className="case-stack">Стек: {item.stack}</p>}
@@ -494,7 +488,7 @@ function App() {
                     {item.demo && (
                       <button
                         type="button"
-                        className="case-demo"
+                        className="pill pill-accent pill-small"
                         onPointerEnter={loadDemo}
                         onFocus={loadDemo}
                         onClick={() => setDemoOpen(true)}
@@ -517,21 +511,20 @@ function App() {
         </section>
 
         {/* ---------- отзывы ---------- */}
-        <section className="section" id="reviews">
-          <SectionHead title="Что говорят клиенты"
-            aside={
-              <a className="kwork-card" href={kworkUrl} target="_blank" rel="noreferrer">
-                <span>Профиль на Kwork</span>
-                <strong>{kwork.reviews} отзывов</strong>
-                <em>
-                  {kwork.orders} заказов · {kwork.intime} в срок
-                </em>
-                <ExternalIcon />
-              </a>
-            }
-          >
-            Отзывы с Kwork — каждый можно проверить в профиле.
-          </SectionHead>
+        <section className="section section-tint" id="reviews">
+          <div className="section-head-row">
+            <SectionHead index="02" title="Что говорят клиенты">
+              Отзывы с Kwork — каждый можно проверить в профиле.
+            </SectionHead>
+            <a className="kwork-card" href={kworkUrl} target="_blank" rel="noreferrer">
+              <span>Профиль на Kwork</span>
+              <strong>{kwork.reviews} отзывов</strong>
+              <em>
+                {kwork.orders} заказов · {kwork.intime} в срок
+              </em>
+              <ExternalIcon />
+            </a>
+          </div>
 
           <div className="reviews">
             {reviews.map((review) => (
@@ -573,10 +566,10 @@ function App() {
         </section>
 
         {/* ---------- медиа ---------- */}
-        <section className="section" id="media">
-          <SectionHead title="Веду блог об AI-разработке">
-            1 600+ человек следят за тем, как я работаю. До старта проекта можно
-            посмотреть, как я думаю и как объясняю сложное.
+        <section className="section dark" id="media">
+          <SectionHead index="03" title={<>Веду блог об <span className="nowrap">AI-разработке</span></>}>
+            1 600+ человек следят за тем, как я работаю. До старта проекта можно посмотреть,
+            как я думаю и как объясняю сложное.
           </SectionHead>
 
           <div className="media">
@@ -613,46 +606,42 @@ function App() {
 
         {/* ---------- обо мне ---------- */}
         <section className="section about" id="about">
-          <div className="about-card">
-            <img className="about-avatar" src={avatar} alt="Степан" width="112" height="112" />
-            <div>
-              <h2>Степан, разработчик Its Step</h2>
-              <p>
-                Делаю системы, которые берут на себя работу людей: AI-агенты,
-                CRM, интеграции и сайты. Веду проект один и целиком — разбор
-                задачи, архитектура, интерфейс, код, запуск. Вы общаетесь напрямую
-                со мной, контекст не теряется между людьми.
-              </p>
-              <p>
-                Самозанятый, работаю по договору. Беру 2–3 проекта параллельно,
-                чтобы не растягивать сроки.
-              </p>
-              <p className="stack">
-                <span>Работаю с</span> {stack.join(', ')}.
-              </p>
-              <div className="about-links">
-                <a href={githubUrl} target="_blank" rel="noreferrer">
-                  GitHub <ExternalIcon />
-                </a>
-                <a href={kworkUrl} target="_blank" rel="noreferrer">
-                  Kwork <ExternalIcon />
-                </a>
-                <a href={tiktokUrl} target="_blank" rel="noreferrer">
-                  TikTok <ExternalIcon />
-                </a>
-                <a href={channelUrl} target="_blank" rel="noreferrer">
-                  Telegram-канал <ExternalIcon />
-                </a>
-              </div>
+          <img className="about-avatar" src={avatar} alt="Степан" width="160" height="160" />
+          <div className="about-text">
+            <SectionHead index="04" title="Степан, разработчик Its Step" />
+            <p>
+              Делаю системы, которые берут на себя работу людей: AI-агенты, CRM, интеграции и
+              сайты. Веду проект один и целиком — разбор задачи, архитектура, интерфейс, код,
+              запуск. Вы общаетесь напрямую со мной, контекст не теряется между людьми.
+            </p>
+            <p>
+              Самозанятый, работаю по договору. Беру 2–3 проекта параллельно, чтобы не растягивать
+              сроки.
+            </p>
+            <p className="stack">
+              <span>Работаю с</span> {stack.join(', ')}.
+            </p>
+            <div className="about-links">
+              <a href={githubUrl} target="_blank" rel="noreferrer">
+                GitHub <ExternalIcon />
+              </a>
+              <a href={kworkUrl} target="_blank" rel="noreferrer">
+                Kwork <ExternalIcon />
+              </a>
+              <a href={tiktokUrl} target="_blank" rel="noreferrer">
+                TikTok <ExternalIcon />
+              </a>
+              <a href={channelUrl} target="_blank" rel="noreferrer">
+                Telegram-канал <ExternalIcon />
+              </a>
             </div>
           </div>
         </section>
 
         {/* ---------- цены и процесс ---------- */}
-        <section className="section" id="pricing">
-          <SectionHead title="Форматы и цены">
-            Точная цена — после бесплатного разбора. Смета и сроки фиксируются в
-            договоре.
+        <section className="section section-tint" id="pricing">
+          <SectionHead index="05" title="Форматы и цены">
+            Точная цена — после бесплатного разбора. Смета и сроки фиксируются в договоре.
           </SectionHead>
           <div className="services">
             {services.map((service) => (
@@ -682,27 +671,29 @@ function App() {
         </section>
 
         {/* ---------- контакт ---------- */}
-        <section className="cta" id="contact">
+        <section className="cta dark" id="contact">
           <div className="cta-inner">
-            <img src={avatar} alt="" width="64" height="64" />
+            <p className="eyebrow eyebrow-light">Следующий шаг</p>
             <h2>Расскажите, что у вас делают руками</h2>
             <p>
-              Опишите задачу в двух словах. В тот же день скажу, как её решить,
-              сколько это стоит и сколько займёт. Разбор бесплатный.
+              Опишите задачу в двух словах. В тот же день скажу, как её решить, сколько это
+              стоит и сколько займёт. Разбор бесплатный.
             </p>
-            <a className="btn btn-dark" href={telegramUrl}>
-              Написать в Telegram
-              <ArrowIcon />
-            </a>
-            <span className="cta-handle">{telegramHandle} · отвечаю лично</span>
+            <div className="cta-actions">
+              <a className="pill pill-accent" href={telegramUrl}>
+                Написать в Telegram
+                <ArrowIcon />
+              </a>
+              <span className="cta-handle">{telegramHandle} · отвечаю лично</span>
+            </div>
+          </div>
+          <div className="wordmark" aria-hidden="true">
+            Its Step
           </div>
         </section>
       </main>
 
       <footer className="footer">
-        <a className="brand" href="#top">
-          Its Step
-        </a>
         <p>AI-системы, CRM и сайты для бизнеса. Самозанятый, по договору, удалённо.</p>
         <div className="footer-links">
           <a href={telegramUrl}>Telegram</a>
