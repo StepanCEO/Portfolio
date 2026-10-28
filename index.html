@@ -41,7 +41,8 @@
       const isGitHubPages = location.hostname.endsWith('github.io')
 
       if (isGitHubPages) {
-        location.replace(new URL('./dist/index.html', location.href).href)
+        // сайт переехал на свой домен; хеш (#cases и т.п.) сохраняем
+        location.replace('https://itssteps.site/' + location.hash)
       } else {
         import('/src/main.jsx')
       }
