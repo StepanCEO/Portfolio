@@ -216,8 +216,14 @@ export const media = [
 
 export const services = [
   {
+    title: 'Telegram bots',
+    body: 'Requests, bookings, payments and subscriptions, a store or a Mini App right inside Telegram.',
+    price: 'Fixed quote',
+    term: '1–2 weeks',
+  },
+  {
     title: 'Automation and AI',
-    body: 'AI managers and Telegram bots: they take requests, answer from your knowledge base, accept payments and guide the client to a deal.',
+    body: 'AI managers and integrations: they take requests, answer from your knowledge base, accept payments and guide the client to a deal.',
     price: 'Fixed quote',
     term: '1–2 weeks',
   },
