@@ -112,16 +112,16 @@
     ]
   },
   "/projects/water-novoterskaya.jpg": {
-    "width": 1536,
-    "height": 1024,
+    "width": 1600,
+    "height": 910,
     "variants": [
       [
         800,
         "/projects/water-novoterskaya-800.webp"
       ],
       [
-        1536,
-        "/projects/water-novoterskaya-1536.webp"
+        1600,
+        "/projects/water-novoterskaya-1600.webp"
       ]
     ]
   },
