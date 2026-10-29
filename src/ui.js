@@ -1,6 +1,15 @@
 // Надписи интерфейса и тексты служебных страниц на двух языках.
 // Данные (кейсы, услуги, отзывы) — в content*.js и services*.js.
 
+// Русское склонение по числу: 1 отзыв, 2 отзыва, 5 отзывов, 21 отзыв, 24 отзыва
+const plural = (n, [one, few, many]) => {
+  const mod10 = n % 10
+  const mod100 = n % 100
+  if (mod10 === 1 && mod100 !== 11) return one
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return few
+  return many
+}
+
 const ru = {
   meta: {
     home: null, // мета-теги главной — в app.html
@@ -50,8 +59,8 @@ const ru = {
   reviewsTitle: 'Что говорят клиенты',
   reviewsLead: 'Отзывы с Kwork — каждый можно проверить в профиле.',
   kworkProfile: 'Профиль на Kwork',
-  reviewsCount: (n) => `${n} отзывов`,
-  kworkStats: (orders, intime) => `${orders} заказов · ${intime} в срок`,
+  reviewsCount: (n) => `${n} ${plural(n, ['отзыв', 'отзыва', 'отзывов'])}`,
+  kworkStats: (orders, intime) => `${orders} ${plural(orders, ['заказ', 'заказа', 'заказов'])} · ${intime} в срок`,
   repeatOrder: 'повторный заказ',
   translatedNote: null,
   originals: 'Оригиналы со страницы Kwork',
