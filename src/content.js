@@ -18,7 +18,7 @@ export const heroImage = asset('projects/conteria-hero.jpg')
 
 // Все цифры на странице проверяемы: Kwork и соцсети — с публичных профилей
 // (октябрь 2026), чеки и объёмы — из ТЗ и договоров. Обновлять вручную.
-export const kwork = { orders: 26, intime: '96%', reviews: 18 }
+export const kwork = { orders: 33, intime: '96%', reviews: 24 }
 
 export const heroStats = [
   { value: '30+', label: 'сданных заказов за 2 года' },
