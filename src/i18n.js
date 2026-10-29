@@ -46,6 +46,7 @@ export function resolvePage(path) {
   if (p === `${site.prefix}/`) return { site, kind: 'home' }
   if (p === `${site.prefix}/partners/`) return { site, kind: 'partners' }
   if (p === `${site.prefix}/privacy/`) return { site, kind: 'privacy' }
+  if (p === `${site.prefix}/consent/`) return { site, kind: 'consent' }
   const caseItem = site.allCases.find((item) => item.path === p)
   if (caseItem) return { site, kind: 'case', caseItem }
   const service = site.servicePages.find((page) => page.path === p)

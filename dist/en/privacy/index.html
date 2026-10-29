@@ -9,10 +9,10 @@
     <link rel="preload" href="/fonts/geologica-cyrillic.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/geologica-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/onest-cyrillic.woff2" as="font" type="font/woff2" crossorigin />
-    <title>Privacy policy — Its Step</title>
+    <title>Personal data processing policy — Its Step</title>
     <meta
       name="description"
-      content="What data itssteps.site collects, why, and how to have it deleted."
+      content="What personal data itssteps.site processes, why, on what basis and how to have it deleted."
     />
 
     <!-- превью ссылки: сайт чаще всего открывают из Telegram, поэтому карточка
@@ -21,18 +21,18 @@
     <meta property="og:site_name" content="Its Step" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:url" content="https://itssteps.site/en/privacy/" />
-    <meta property="og:title" content="Privacy policy — Its Step" />
+    <meta property="og:title" content="Personal data processing policy — Its Step" />
     <meta
       property="og:description"
-      content="What data itssteps.site collects, why, and how to have it deleted."
+      content="What personal data itssteps.site processes, why, on what basis and how to have it deleted."
     />
     <meta property="og:image" content="https://itssteps.site/projects/conteria-hero.jpg" />
-    <meta property="og:image:alt" content="Privacy policy — Its Step" />
+    <meta property="og:image:alt" content="Personal data processing policy — Its Step" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Privacy policy — Its Step" />
+    <meta name="twitter:title" content="Personal data processing policy — Its Step" />
     <meta
       name="twitter:description"
-      content="What data itssteps.site collects, why, and how to have it deleted."
+      content="What personal data itssteps.site processes, why, on what basis and how to have it deleted."
     />
     <meta name="twitter:image" content="https://itssteps.site/projects/conteria-hero.jpg" />
     <meta name="theme-color" content="#f2f2ee" />
@@ -75,9 +75,10 @@
       (function(m,e,t,r,i,k,a){
         m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
         m[i].l=1*new Date();
-        // Скрипт Метрики грузим не сразу: через 5 секунд после загрузки страницы или при
-        // первом действии посетителя — и только в свободное время браузера, чтобы он не
-        // тормозил ни первый экран, ни прокрутку. Вызовы ym() до этого копятся в очереди.
+        // Метрика (cookie, Вебвизор) включается только с согласия посетителя — плашка
+        // о cookie на сайте. Сам скрипт грузим не сразу: через 5 секунд после загрузки
+        // страницы или при первом действии — и в свободное время браузера, чтобы он не
+        // тормозил первый экран и прокрутку. Вызовы ym() до этого копятся в очереди.
         var load = function () {
           if (load.done) return; load.done = 1;
           for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
@@ -87,24 +88,27 @@
           if (soon.done) return; soon.done = 1;
           if (m.requestIdleCallback) m.requestIdleCallback(load, { timeout: 4000 }); else setTimeout(load, 200);
         };
-        var later = function () { setTimeout(soon, 5000) };
-        if (e.readyState === 'complete') later(); else m.addEventListener('load', later);
-        ['scroll', 'pointerdown', 'keydown', 'touchstart'].forEach(function (name) {
-          m.addEventListener(name, soon, { once: true, passive: true });
-        });
+        m.itsLoadMetrika = soon;
+        var consent; try { consent = m.localStorage.getItem('cookie-consent'); } catch (error) {}
+        if (consent === 'yes') {
+          var later = function () { setTimeout(soon, 5000) };
+          if (e.readyState === 'complete') later(); else m.addEventListener('load', later);
+          ['scroll', 'pointerdown', 'keydown', 'touchstart'].forEach(function (name) {
+            m.addEventListener(name, soon, { once: true, passive: true });
+          });
+        }
       })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=113863773', 'ym');
 
       ym(113863773, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
     </script>
     <!-- /Yandex.Metrika counter -->
-    <script type="module" crossorigin src="/assets/app-Dols75-3.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/app-BEnivUil.css">
+    <script type="module" crossorigin src="/assets/app-ClKddAYj.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/app-CNcNGq20.css">
     <link rel="alternate" hreflang="ru" href="https://itssteps.site/privacy/" />
     <link rel="alternate" hreflang="en" href="https://itssteps.site/en/privacy/" />
     <link rel="alternate" hreflang="x-default" href="https://itssteps.site/privacy/" />
   </head>
   <body>
-    <noscript><div><img src="https://mc.yandex.ru/watch/113863773" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <div id="root" data-path="/en/privacy/"><div class="site"><header class="header"><a class="brand" href="/en/">Its Step</a><nav class="nav" aria-label="Navigation"><a href="/en/#services">Services</a><a href="/en/#cases">Cases</a><a href="/en/#reviews">Reviews</a><a href="/en/#media">Media</a><a href="/en/#about">About</a><a href="/en/#pricing">Pricing</a><a href="/en/partners/">Partners</a></nav><div class="header-actions"><a class="lang-switch" href="/privacy/" hrefLang="ru" aria-label="Русская версия">RU</a><a class="pill pill-dark pill-header" href="https://t.me/SStepCEO?text=Hi%20Stepan!%20I&#x27;d%20like%20to%20discuss%20a%20project.">Discuss a project</a></div></header><main><article class="hero legal-page"><h1>Privacy policy</h1><p class="eyebrow">Updated: October 29, 2026</p><section><h2>Who processes the data</h2><p>itssteps.site is run by Stepan, an independent developer registered as self-employed in Russia. For any data questions, message Telegram @SStepCEO.</p></section><section><h2>What data is collected</h2><p>From the request form: name, contact (email, phone or Telegram), company and task description — only what you enter yourself.</p><p>Yandex Metrica collects anonymised visit data: pages, referral source, device and browser, actions on the page. It uses cookies for this.</p></section><section><h2>Why</h2><p>Form data is used to reply to your request and discuss the project. Metrica data helps understand which pages are useful and improve the site.</p></section><section><h2>Where it is stored and who receives it</h2><p>Requests are stored on the site’s server. A notification about a new request may be delivered to the developer via Telegram. Metrica data is processed by Yandex LLC. The data is not shared with or sold to anyone else.</p></section><section><h2>How long it is kept</h2><p>Requests are kept while the project is being discussed or built, but no longer than 3 years, or until you withdraw consent.</p></section><section><h2>Your rights</h2><p>You can ask what data of yours is stored, correct it, delete it or withdraw consent — message Telegram @SStepCEO. Cookies can be disabled in your browser settings.</p></section></article></main><footer class="footer"><p>AI systems, CRMs and websites for business. Contract-based, remote.</p><nav class="footer-links" aria-label="Services"><a href="/en/ai-agents/">AI agents</a><a href="/en/crm/">CRM</a><a href="/en/websites/">Websites</a><a href="/en/telegram-bots/">Telegram bots</a><a href="/en/partners/">Partners</a><a href="/en/privacy/">Privacy policy</a></nav><div class="footer-links"><a href="https://t.me/SStepCEO?text=Hi%20Stepan!%20I&#x27;d%20like%20to%20discuss%20a%20project.">Telegram</a><a href="https://www.tiktok.com/@its___step" target="_blank" rel="noreferrer">TikTok</a><a href="https://kwork.ru/user/stepanceo" target="_blank" rel="noreferrer">Kwork</a><a href="https://github.com/StepanCEO" target="_blank" rel="noreferrer">GitHub</a></div></footer></div></div>
+    <div id="root" data-path="/en/privacy/"><div class="site"><header class="header"><a class="brand" href="/en/">Its Step</a><nav class="nav" aria-label="Navigation"><a href="/en/#services">Services</a><a href="/en/#cases">Cases</a><a href="/en/#reviews">Reviews</a><a href="/en/#media">Media</a><a href="/en/#about">About</a><a href="/en/#pricing">Pricing</a><a href="/en/partners/">Partners</a></nav><div class="header-actions"><a class="lang-switch" href="/privacy/" hrefLang="ru" aria-label="Русская версия">RU</a><a class="pill pill-dark pill-header" href="https://t.me/SStepCEO?text=Hi%20Stepan!%20I&#x27;d%20like%20to%20discuss%20a%20project.">Discuss a project</a></div></header><main><article class="legal-page"><header class="legal-head"><h1>Personal data processing policy</h1><p>Version of October 29, 2026. This is a translation; the Russian version prevails.</p></header><section class="legal-section"><h2>1. General provisions</h2><div class="legal-body"><p>This policy sets out how personal data of visitors to https://itssteps.site (the Site) is processed and protected under Russian Federal Law No. 152-FZ “On Personal Data” of July 27, 2006.</p><p>The data operator is Stepan, an individual registered as self-employed in Russia (professional income tax regime) (the Operator). Contact: Telegram @SStepCEO.</p><p>The policy covers all personal data the Operator receives through the Site and is publicly available on this page.</p></div></section><section class="legal-section"><h2>2. What data, why and on what basis</h2><div class="legal-body"><p>Handling requests, discussing, preparing and signing a service contract:</p><ul><li>data: name, contact details (phone, email or Telegram account), company name, information from the request text;</li><li>basis: consent of the data subject (Art. 6(1)(1) of 152-FZ); when a contract is signed — Art. 6(1)(5);</li><li>period: until the purpose is achieved, but no longer than 3 years from receipt, or until consent is withdrawn.</li></ul><p>Partner program: the same data, basis and period.</p><p>Visit statistics and site improvement — only if you accept cookies:</p><ul><li>data: cookies, IP address, browser and device information, referral source, actions on the Site’s pages;</li><li>processed by Yandex Metrica (Yandex LLC), including its Webvisor session replay;</li><li>basis: consent given in the cookie notice.</li></ul><p>The Operator does not process special categories of personal data or biometric data.</p></div></section><section class="legal-section"><h2>3. How data is processed</h2><div class="legal-body"><p>Actions performed: collection, recording, systematisation, accumulation, storage, clarification (updating, changing), retrieval, use, transfer (provision, access), blocking, deletion, destruction.</p><p>Processing is automated and mixed. The Operator makes no decisions with legal effects for the data subject based solely on automated processing.</p><p>Requests sent through the form are recorded and stored on the Site’s server and are accessible only to the Operator.</p></div></section><section class="legal-section"><h2>4. Transfer to third parties</h2><div class="legal-body"><ul><li>Yandex LLC — Yandex Metrica, only if you accept cookies;</li><li>Telegram messenger — a notification to the Operator about a new request with the data in it. This is a cross-border transfer of personal data and happens only with the data subject’s consent.</li></ul><p>Personal data is not shared with or sold to anyone else, except as required by Russian law.</p></div></section><section class="legal-section"><h2>5. Cookies</h2><div class="legal-body"><p>On the first visit the Site shows a cookie notice. Yandex Metrica is enabled only if you click “Accept”. You can change your choice at any time via “Cookie settings” at the bottom of the page or by deleting cookies in your browser.</p></div></section><section class="legal-section"><h2>6. Your rights</h2><div class="legal-body"><p>You have the right to:</p><ul><li>receive information about the processing of your personal data (Art. 14 of 152-FZ);</li><li>demand that your data be clarified, blocked or destroyed if it is incomplete, outdated, inaccurate, unlawfully obtained or not needed for the stated purpose;</li><li>withdraw your consent (Art. 9(2) of 152-FZ);</li><li>appeal the Operator’s actions to Roskomnadzor or in court.</li></ul><p>Send requests or consent withdrawal to Telegram @SStepCEO. The Operator replies within 10 business days; this may be extended by up to 5 business days with an explanation. After consent is withdrawn, the Operator stops processing and destroys the data within 30 days unless the law requires otherwise.</p></div></section><section class="legal-section"><h2>7. Security measures</h2><div class="legal-body"><ul><li>data is sent to the Site only over an encrypted HTTPS connection;</li><li>only the Operator has access to the server, and only with a cryptographic key;</li><li>the request service runs as a separate system user with minimal rights, and only it can read the requests file;</li><li>the form is protected against automated submissions.</li></ul></div></section><section class="legal-section"><h2>8. Final provisions</h2><div class="legal-body"><p>The Operator may update this policy. A new version takes effect when published on this page. For any data questions — Telegram @SStepCEO.</p></div></section></article></main><footer class="footer"><p>AI systems, CRMs and websites for business. Contract-based, remote.</p><nav class="footer-links" aria-label="Services"><a href="/en/ai-agents/">AI agents</a><a href="/en/crm/">CRM</a><a href="/en/websites/">Websites</a><a href="/en/telegram-bots/">Telegram bots</a><a href="/en/partners/">Partners</a><a href="/en/privacy/">Data processing policy</a><a href="/en/consent/">Consent to data processing</a><button type="button" class="footer-button">Cookie settings</button></nav><div class="footer-links"><a href="https://t.me/SStepCEO?text=Hi%20Stepan!%20I&#x27;d%20like%20to%20discuss%20a%20project.">Telegram</a><a href="https://www.tiktok.com/@its___step" target="_blank" rel="noreferrer">TikTok</a><a href="https://kwork.ru/user/stepanceo" target="_blank" rel="noreferrer">Kwork</a><a href="https://github.com/StepanCEO" target="_blank" rel="noreferrer">GitHub</a></div></footer></div></div>
   </body>
 </html>

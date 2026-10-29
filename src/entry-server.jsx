@@ -118,6 +118,7 @@ function routesFor(lang) {
     })),
     { path: `${prefix}/partners/`, ...ui.meta.partners, image: defaultImage },
     { path: `${prefix}/privacy/`, ...ui.meta.privacy, image: defaultImage },
+    { path: `${prefix}/consent/`, ...ui.meta.consent, image: defaultImage, noindex: true },
   ].map((route) => ({ ...route, lang, alternate: alternatePath(route.path) }))
 }
 

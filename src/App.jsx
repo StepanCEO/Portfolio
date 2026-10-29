@@ -2,6 +2,7 @@ import { Fragment, lazy, Suspense, useEffect, useRef, useState } from 'react'
 import './App.css'
 import imageSizes from './image-sizes.json'
 import { SiteContext, alternatePath, normalize, resolvePage, useSite } from './i18n.js'
+import { legal } from './legal.js'
 import {
   clearCaseVisual,
   markCaseVisual,
@@ -236,7 +237,13 @@ function LeadForm({ type = 'client', page }) {
         <input type="checkbox" name="consent" required />
         <span>
           {f.consentStart}
-          <a href={`${prefix}/privacy/`}>{f.consentLink}</a>
+          <a href={`${prefix}/consent/`} target="_blank" rel="noreferrer">
+            {f.consentLink}
+          </a>
+          {f.consentMid}
+          <a href={`${prefix}/privacy/`} target="_blank" rel="noreferrer">
+            {f.policyLink}
+          </a>
         </span>
       </label>
       <button className="pill pill-accent" type="submit" disabled={status === 'sending'}>
@@ -747,22 +754,86 @@ function PartnersPage({ path }) {
   )
 }
 
-function PrivacyPage() {
-  const { ui } = useSite()
-  const t = ui.privacy
+function LegalPage({ doc }) {
+  const { lang } = useSite()
+  const t = legal[lang][doc]
   return (
-    <article className="hero legal-page">
-      <h1>{t.title}</h1>
-      <p className="eyebrow">{t.updated}</p>
-      {t.sections.map(([heading, paragraphs]) => (
-        <section key={heading}>
+    <article className="legal-page">
+      <header className="legal-head">
+        <h1>{t.title}</h1>
+        <p>{t.updated}</p>
+      </header>
+      {t.sections.map(([heading, blocks]) => (
+        <section className="legal-section" key={heading}>
           <h2>{heading}</h2>
-          {paragraphs.map((paragraph) => (
-            <p key={paragraph.slice(0, 32)}>{paragraph}</p>
-          ))}
+          <div className="legal-body">
+            {blocks.map((block) =>
+              typeof block === 'string' ? (
+                <p key={block.slice(0, 40)}>{block}</p>
+              ) : (
+                <ul key={block.list[0].slice(0, 40)}>
+                  {block.list.map((item) => (
+                    <li key={item.slice(0, 40)}>{item}</li>
+                  ))}
+                </ul>
+              ),
+            )}
+          </div>
         </section>
       ))}
     </article>
+  )
+}
+
+// Плашка о cookie. Яндекс Метрика включается только после «Принять»
+// (загрузчик в app.html читает выбор из localStorage). Выбор можно поменять
+// в подвале — «Настройки cookie».
+const COOKIE_KEY = 'cookie-consent'
+
+function readCookieChoice() {
+  try {
+    return window.localStorage.getItem(COOKIE_KEY)
+  } catch {
+    return 'unavailable'
+  }
+}
+
+function CookieBanner() {
+  const { ui, prefix } = useSite()
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    if (!readCookieChoice()) setOpen(true)
+    const reopen = () => setOpen(true)
+    window.addEventListener('cookie-settings', reopen)
+    return () => window.removeEventListener('cookie-settings', reopen)
+  }, [])
+
+  const choose = (value) => {
+    try {
+      window.localStorage.setItem(COOKIE_KEY, value)
+    } catch {
+      // хранилище недоступно — выбор действует до закрытия вкладки
+    }
+    if (value === 'yes' && typeof window.itsLoadMetrika === 'function') window.itsLoadMetrika()
+    setOpen(false)
+  }
+
+  if (!open) return null
+  return (
+    <div className="cookie-banner" role="region" aria-label={ui.cookie.settings}>
+      <p>
+        {ui.cookie.text} <a href={`${prefix}/privacy/`}>{ui.cookie.more}</a>
+      </p>
+      <div className="cookie-actions">
+        <button type="button" className="pill pill-accent pill-small" onClick={() => choose('yes')}>
+          {ui.cookie.accept}
+        </button>
+        <button type="button" className="pill pill-tone pill-small" onClick={() => choose('no')}>
+          {ui.cookie.decline}
+        </button>
+      </div>
+    </div>
   )
 }
 
@@ -853,6 +924,10 @@ function Footer() {
         ))}
         <a href={`${prefix}/partners/`}>{ui.partnersLink}</a>
         <a href={`${prefix}/privacy/`}>{ui.privacyLink}</a>
+        <a href={`${prefix}/consent/`}>{ui.consentLink}</a>
+        <button type="button" className="footer-button" onClick={() => window.dispatchEvent(new Event('cookie-settings'))}>
+          {ui.cookie.settings}
+        </button>
       </nav>
       <div className="footer-links">
         <a href={telegramUrl}>Telegram</a>
@@ -1167,11 +1242,13 @@ function App({ path = '/' }) {
             <CasePage item={caseItem} path={page} setLightbox={setLightbox} setDemoOpen={setDemoOpen} />
           )}
           {kind === 'partners' && <PartnersPage path={page} />}
-          {kind === 'privacy' && <PrivacyPage />}
+          {kind === 'privacy' && <LegalPage doc="privacy" />}
+          {kind === 'consent' && <LegalPage doc="consent" />}
           {kind === 'notFound' && <NotFound />}
         </main>
 
         <Footer />
+        <CookieBanner />
 
         {demoOpen && (
           <Suspense fallback={null}>

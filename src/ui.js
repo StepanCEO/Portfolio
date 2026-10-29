@@ -10,8 +10,12 @@ const ru = {
         'Для веб-студий, маркетологов и агентств без своей разработки: приводите клиента на AI-агента, CRM, сайт или бота и получайте 10% от суммы договора.',
     },
     privacy: {
-      title: 'Политика конфиденциальности — Its Step',
-      description: 'Какие данные собирает сайт itssteps.site, зачем и как их удалить.',
+      title: 'Политика обработки персональных данных — Its Step',
+      description: 'Какие персональные данные обрабатывает сайт itssteps.site, зачем, на каком основании и как их удалить.',
+    },
+    consent: {
+      title: 'Согласие на обработку персональных данных — Its Step',
+      description: 'Условия согласия на обработку персональных данных при отправке заявки на itssteps.site.',
     },
   },
 
@@ -88,8 +92,10 @@ const ru = {
     partnerCompany: 'Студия, агентство или ваша специализация',
     message: 'Коротко о задаче',
     partnerMessage: 'Каких клиентов вы можете приводить',
-    consentStart: 'Согласен на обработку персональных данных по ',
-    consentLink: 'политике конфиденциальности',
+    consentStart: 'Даю ',
+    consentLink: 'согласие на обработку персональных данных',
+    consentMid: ' и подтверждаю, что ознакомлен с ',
+    policyLink: 'политикой обработки данных',
     submit: 'Отправить заявку',
     partnerSubmit: 'Отправить',
     sending: 'Отправляю…',
@@ -101,7 +107,8 @@ const ru = {
   footerTagline: 'AI-системы, CRM и сайты для бизнеса. Самозанятый, по договору, удалённо.',
   footerServices: 'Услуги',
   partnersLink: 'Партнёрам',
-  privacyLink: 'Политика конфиденциальности',
+  privacyLink: 'Политика обработки данных',
+  consentLink: 'Согласие на обработку данных',
 
   casePage: {
     allCases: 'Все кейсы',
@@ -168,46 +175,12 @@ const ru = {
     portfolioText: 'Кейсы с цифрами, страницы услуг с ценами и отзывы с Kwork — всё на этом сайте, ссылками можно делиться.',
   },
 
-  privacy: {
-    title: 'Политика конфиденциальности',
-    updated: 'Обновлено: 29 октября 2026',
-    sections: [
-      [
-        'Кто обрабатывает данные',
-        [
-          'Сайт itssteps.site ведёт Степан — разработчик, самозанятый (плательщик налога на профессиональный доход). Связь по вопросам данных — Telegram @SStepCEO.',
-        ],
-      ],
-      [
-        'Какие данные собираются',
-        [
-          'Из формы заявки: имя, контакт (телефон, email или Telegram), компания и описание задачи — только то, что вы указали сами.',
-          'Яндекс Метрика собирает обезличенные данные о посещении: страницы, источник перехода, устройство и браузер, действия на странице. Для этого используются cookie.',
-        ],
-      ],
-      [
-        'Зачем',
-        [
-          'Данные из формы — чтобы ответить на заявку и обсудить проект. Данные Метрики — чтобы понимать, какие страницы полезны, и улучшать сайт.',
-        ],
-      ],
-      [
-        'Где хранятся и кому передаются',
-        [
-          'Заявки хранятся на сервере сайта. Уведомление о новой заявке может приходить разработчику в Telegram. Данные Метрики обрабатывает ООО «Яндекс». Больше никому данные не передаются и не продаются.',
-        ],
-      ],
-      [
-        'Сколько хранятся',
-        ['Заявки — пока идёт обсуждение и работа над проектом, но не дольше 3 лет, или до отзыва согласия.'],
-      ],
-      [
-        'Ваши права',
-        [
-          'Вы можете узнать, какие ваши данные хранятся, исправить их, удалить или отозвать согласие — напишите в Telegram @SStepCEO. Cookie можно отключить в настройках браузера.',
-        ],
-      ],
-    ],
+  cookie: {
+    text: 'Сайт использует cookie и Яндекс Метрику, чтобы понимать, какие страницы полезны. Метрика включится только с вашего согласия.',
+    more: 'Подробнее',
+    accept: 'Принять',
+    decline: 'Отклонить',
+    settings: 'Настройки cookie',
   },
 }
 
@@ -224,8 +197,12 @@ const en = {
         'For web studios, marketers and agencies without in-house development: refer a client who needs an AI agent, CRM, website or bot and get 10% of the contract.',
     },
     privacy: {
-      title: 'Privacy policy — Its Step',
-      description: 'What data itssteps.site collects, why, and how to have it deleted.',
+      title: 'Personal data processing policy — Its Step',
+      description: 'What personal data itssteps.site processes, why, on what basis and how to have it deleted.',
+    },
+    consent: {
+      title: 'Consent to personal data processing — Its Step',
+      description: 'Terms of consent to personal data processing when sending a request on itssteps.site.',
     },
   },
 
@@ -299,8 +276,10 @@ const en = {
     partnerCompany: 'Studio, agency or your specialty',
     message: 'What do you need?',
     partnerMessage: 'What clients could you refer?',
-    consentStart: 'I agree to the processing of my personal data under the ',
-    consentLink: 'privacy policy',
+    consentStart: 'I give my ',
+    consentLink: 'consent to personal data processing',
+    consentMid: ' and confirm I have read the ',
+    policyLink: 'data processing policy',
     submit: 'Send request',
     partnerSubmit: 'Send',
     sending: 'Sending…',
@@ -312,7 +291,8 @@ const en = {
   footerTagline: 'AI systems, CRMs and websites for business. Contract-based, remote.',
   footerServices: 'Services',
   partnersLink: 'Partners',
-  privacyLink: 'Privacy policy',
+  privacyLink: 'Data processing policy',
+  consentLink: 'Consent to data processing',
 
   casePage: {
     allCases: 'All case studies',
@@ -379,46 +359,12 @@ const en = {
     portfolioText: 'Case studies with numbers, service pages and reviews — all on this site, feel free to share the links.',
   },
 
-  privacy: {
-    title: 'Privacy policy',
-    updated: 'Updated: October 29, 2026',
-    sections: [
-      [
-        'Who processes the data',
-        [
-          'itssteps.site is run by Stepan, an independent developer registered as self-employed in Russia. For any data questions, message Telegram @SStepCEO.',
-        ],
-      ],
-      [
-        'What data is collected',
-        [
-          'From the request form: name, contact (email, phone or Telegram), company and task description — only what you enter yourself.',
-          'Yandex Metrica collects anonymised visit data: pages, referral source, device and browser, actions on the page. It uses cookies for this.',
-        ],
-      ],
-      [
-        'Why',
-        [
-          'Form data is used to reply to your request and discuss the project. Metrica data helps understand which pages are useful and improve the site.',
-        ],
-      ],
-      [
-        'Where it is stored and who receives it',
-        [
-          'Requests are stored on the site’s server. A notification about a new request may be delivered to the developer via Telegram. Metrica data is processed by Yandex LLC. The data is not shared with or sold to anyone else.',
-        ],
-      ],
-      [
-        'How long it is kept',
-        ['Requests are kept while the project is being discussed or built, but no longer than 3 years, or until you withdraw consent.'],
-      ],
-      [
-        'Your rights',
-        [
-          'You can ask what data of yours is stored, correct it, delete it or withdraw consent — message Telegram @SStepCEO. Cookies can be disabled in your browser settings.',
-        ],
-      ],
-    ],
+  cookie: {
+    text: 'This site uses cookies and Yandex Metrica to understand which pages are useful. Analytics turns on only with your consent.',
+    more: 'Learn more',
+    accept: 'Accept',
+    decline: 'Decline',
+    settings: 'Cookie settings',
   },
 }
 
