@@ -797,7 +797,7 @@ function NotFound() {
   )
 }
 
-function Header({ activeId, dark, path }) {
+function Header({ activeId, dark, path, partnersActive }) {
   const { ui, prefix, navItems, lang } = useSite()
   const ref = useRef(null)
   useHeaderOnScroll(ref)
@@ -817,6 +817,9 @@ function Header({ activeId, dark, path }) {
             {item.label}
           </a>
         ))}
+        <a href={`${prefix}/partners/`} className={partnersActive ? 'is-active' : undefined}>
+          {ui.partnersLink}
+        </a>
       </nav>
       <div className="header-actions">
         {other && (
@@ -893,7 +896,6 @@ function Home({ path, setLightbox, setDemoOpen }) {
     <>
       {/* ---------- первый экран ---------- */}
       <section className="hero" id="top">
-        <p className="eyebrow">{ui.eyebrow}</p>
         <h1 className="hero-title">
           {ui.heroWords.map(([word, accent], index) => (
             <Fragment key={word}>
@@ -1070,9 +1072,10 @@ function Home({ path, setLightbox, setDemoOpen }) {
           {ui.aboutText.map((paragraph) => (
             <p key={paragraph.slice(0, 32)}>{paragraph}</p>
           ))}
-          <p className="stack">
-            <span>{ui.worksWith}</span> {stack.join(', ')}.
-          </p>
+          <div className="about-stack">
+            <span>{ui.worksWith}</span>
+            <Chips items={stack} />
+          </div>
           <div className="about-links">
             <a href={githubUrl} target="_blank" rel="noreferrer">
               GitHub <ExternalIcon />
@@ -1150,7 +1153,12 @@ function App({ path = '/' }) {
   return (
     <SiteContext.Provider value={site}>
       <div className={`site${dark ? ' site-dark' : ''}`}>
-        <Header activeId={kind === 'home' ? activeId : ''} dark={dark} path={page} />
+        <Header
+          activeId={kind === 'home' ? activeId : ''}
+          dark={dark}
+          path={page}
+          partnersActive={kind === 'partners'}
+        />
 
         <main>
           {kind === 'home' && <Home path={page} setLightbox={setLightbox} setDemoOpen={setDemoOpen} />}

@@ -20,10 +20,13 @@ export {
   kwork,
   clients,
   reviewShots,
-  stack,
 } from './content.js'
 
-import { asset, tiktokUrl, channelUrl, casesChannelUrl } from './content.js'
+import { asset, tiktokUrl, channelUrl, casesChannelUrl, stack as stackRu } from './content.js'
+
+// тот же стек, что в русской версии, но с английскими названиями сервисов
+const stackNames = { 'Битрикс24': 'Bitrix24', 'ЮKassa': 'YooKassa' }
+export const stack = stackRu.map((name) => stackNames[name] ?? name)
 
 export const contactText = "Hi Stepan! I'd like to discuss a project."
 export const telegramUrl = `https://t.me/SStepCEO?text=${encodeURIComponent(contactText)}`
@@ -32,7 +35,7 @@ export const heroStats = [
   { value: '30+', label: 'orders delivered in 2 years' },
   { value: '520,000', label: 'products in the largest online store I built' },
   { value: kwork.intime, label: 'of Kwork orders delivered on time' },
-  { value: '153K', label: 'likes on TikTok videos' },
+  { value: '301K', label: 'likes on TikTok videos' },
 ]
 
 export const featured = {
@@ -189,9 +192,9 @@ export const media = [
     url: tiktokUrl,
     body: 'Short videos on how to build products with AI, find clients and earn money from development.',
     stats: [
-      ['153K', 'likes'],
+      ['301K', 'likes'],
       ['2,100', 'followers'],
-      ['194', 'videos'],
+      ['300', 'videos'],
     ],
   },
   {

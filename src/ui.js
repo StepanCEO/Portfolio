@@ -22,7 +22,6 @@ const ru = {
   close: 'Закрыть',
   openShot: 'Открыть скриншот',
 
-  eyebrow: 'Степан · разработчик · самозанятый',
   heroWords: [['Делаю'], ['AI-системы,'], ['CRM'], ['и'], ['сайты'], ['для', true], ['бизнеса', true]],
   heroLead:
     'За два года сдал 30+ заказов: тендерную AI-систему, магазин на 520 000 товаров, сайт бренда минеральной воды за 200 000 ₽. Веду проект сам — от ТЗ до запуска.',
@@ -64,7 +63,7 @@ const ru = {
   aboutTitle: 'Степан, разработчик Its Step',
   aboutText: [
     'Делаю системы, которые берут на себя работу людей: AI-агенты, CRM, интеграции и сайты. Веду проект один и целиком — разбор задачи, архитектура, интерфейс, код, запуск. Вы общаетесь напрямую со мной, контекст не теряется между людьми.',
-    'Самозанятый, работаю по договору. Беру 2–3 проекта параллельно, чтобы не растягивать сроки.',
+    'Самозанятый, работаю по договору.',
   ],
   worksWith: 'Работаю с',
   telegramChannel: 'Telegram-канал',
@@ -237,7 +236,6 @@ const en = {
   close: 'Close',
   openShot: 'Open screenshot',
 
-  eyebrow: 'Stepan · developer · independent',
   heroWords: [['I'], ['build'], ['AI'], ['systems,'], ['CRMs'], ['and'], ['websites'], ['for', true], ['business', true]],
   heroLead:
     'Over two years I have delivered 30+ projects: an AI tender system, an online store with 520,000 products, a brand website for a mineral water producer. I run every project myself — from spec to launch.',
@@ -276,9 +274,9 @@ const en = {
   aboutTitle: 'Stepan, developer at Its Step',
   aboutText: [
     'I build systems that take work off people’s plates: AI agents, CRMs, integrations and websites. I run each project alone and end to end — analysis, architecture, interface, code and launch. You talk to me directly, so no context gets lost between people.',
-    'I work under a contract and take 2–3 projects at a time so deadlines don’t slip.',
+    'I work under a contract.',
   ],
-  worksWith: 'Stack:',
+  worksWith: 'Stack',
   telegramChannel: 'Telegram channel',
 
   pricingTitle: 'Formats',

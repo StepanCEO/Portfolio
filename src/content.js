@@ -24,7 +24,7 @@ export const heroStats = [
   { value: '30+', label: 'сданных заказов за 2 года' },
   { value: '200 000 ₽', label: 'крупнейший чек — сайт бренда' },
   { value: kwork.intime, label: 'заказов сдано в срок на Kwork' },
-  { value: '153 тыс.', label: 'лайков на роликах в TikTok' },
+  { value: '301 тыс.', label: 'лайков на роликах в TikTok' },
 ]
 
 export const clients = ['Conteria', 'АО «Кавминводы»', 'Новотерская', 'Кейтеринг «Нечай»', 'Hayat Nikah']
@@ -182,9 +182,9 @@ export const media = [
     url: tiktokUrl,
     body: 'Короткие видео о том, как с помощью AI собирать продукты, находить клиентов и зарабатывать на разработке.',
     stats: [
-      ['153 тыс.', 'лайков'],
+      ['301 тыс.', 'лайков'],
       ['2 100', 'подписчиков'],
-      ['194', 'видео'],
+      ['300', 'видео'],
     ],
   },
   {
@@ -204,21 +204,37 @@ export const media = [
   },
 ]
 
+// Технологии из реальных проектов: Conteria (Django, Celery, OCR), лизинговая CRM
+// (Next.js, Prisma, Tailwind), AI-ассистент (FastAPI, n8n, Playwright), боты (aiogram),
+// открытые репозитории на GitHub (MCP-сервер, RAG-ассистент)
 export const stack = [
   'Python',
   'FastAPI',
   'Django',
+  'Celery',
   'Next.js',
   'React',
   'TypeScript',
+  'Tailwind CSS',
+  'Laravel',
   'PostgreSQL',
+  'Prisma',
   'Redis',
   'Docker',
+  'GitHub Actions',
+  'Nginx',
+  'Caddy',
   'OpenAI',
   'DeepSeek',
+  'RAG',
+  'MCP',
+  'OCR',
+  'Playwright',
   'n8n',
-  'amoCRM',
+  'aiogram',
   'Telegram API',
+  'amoCRM',
+  'Битрикс24',
   'ЮKassa',
 ]
 

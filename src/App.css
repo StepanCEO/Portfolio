@@ -230,7 +230,7 @@
 }
 
 .hero h1 {
-  margin: 28px 0 0;
+  margin: 0;
   font: 600 clamp(56px, 9.4vw, 152px)/0.9 var(--display);
   letter-spacing: -0.06em;
 }
@@ -1162,14 +1162,7 @@
   line-height: 1.6;
 }
 
-.about-text .stack {
-  font-size: 16px;
-}
 
-.about-text .stack span {
-  color: var(--text);
-  font-weight: 500;
-}
 
 .about-links {
   display: flex;
@@ -2571,4 +2564,27 @@ main > .marquee,
 main > .cta {
   content-visibility: auto;
   contain-intrinsic-size: auto 900px;
+}
+
+/* у страниц услуг и партнёрки над заголовком крошки или подпись — нужен отступ */
+.hero > .eyebrow + h1 {
+  margin-top: 28px;
+}
+
+/* ---------- стек в «Обо мне» ---------- */
+
+.about-stack {
+  display: grid;
+  gap: 12px;
+}
+
+.about-stack > span {
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.about-stack .chips li {
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px var(--line);
 }
