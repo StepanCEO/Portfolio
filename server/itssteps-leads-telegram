@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Подключает уведомления о заявках с itssteps.site к вашему Telegram-боту.
+# Запуск: ssh -t root@сервер itssteps-leads-telegram
+# Токен вводится скрыто и сохраняется только в /etc/itssteps-leads.env (права 600).
+set -euo pipefail
+
+read -rsp "Вставьте токен бота от @BotFather (ввод не отображается) и нажмите Enter: " TOKEN
+echo
+[ -n "$TOKEN" ] || { echo "Токен пустой — отмена."; exit 1; }
+
+echo "Ищу ваш чат с ботом. Если ещё не нажали «Старт» у бота — нажмите сейчас, жду до минуты…"
+CHAT_ID=""
+for _ in $(seq 1 30); do
+  CHAT_ID=$(curl -s "https://api.telegram.org/bot${TOKEN}/getUpdates" | python3 -c '
+import json, sys
+data = json.load(sys.stdin)
+if not data.get("ok"):
+    print("ERR:" + data.get("description", "неизвестная ошибка"))
+    sys.exit()
+ids = [u["message"]["chat"]["id"] for u in data["result"]
+       if "message" in u and u["message"]["chat"]["type"] == "private"]
+print(ids[-1] if ids else "")')
+  case "$CHAT_ID" in
+    ERR:*) echo "Telegram не принял токен: ${CHAT_ID#ERR:}"; exit 1 ;;
+  esac
+  [ -n "$CHAT_ID" ] && break
+  sleep 2
+done
+[ -n "$CHAT_ID" ] || { echo "Не нашёл сообщений боту. Нажмите «Старт» у бота и запустите команду ещё раз."; exit 1; }
+
+umask 077
+printf 'TELEGRAM_BOT_TOKEN=%s\nTELEGRAM_CHAT_ID=%s\n' "$TOKEN" "$CHAT_ID" > /etc/itssteps-leads.env
+chmod 600 /etc/itssteps-leads.env
+systemctl restart itssteps-leads
+
+curl -s -o /dev/null "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+  --data-urlencode "chat_id=${CHAT_ID}" \
+  --data-urlencode "text=Готово: заявки с itssteps.site будут приходить сюда."
+echo "Готово. Бот прислал вам проверочное сообщение в Telegram."
