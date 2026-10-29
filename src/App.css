@@ -2192,10 +2192,6 @@ html.img-fade img[loading='lazy'].is-loaded {
   transform: scale(0.97);
 }
 
-/* бегущая строка останавливается под курсором */
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
-}
 
 /* цифры не прыгают по ширине, пока набегают */
 .stat strong {
