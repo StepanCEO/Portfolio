@@ -911,35 +911,34 @@ function Header({ activeId, dark, path, partnersActive }) {
   )
 }
 
+// Подвал: сверху крупные ссылки на соцсети и площадки, снизу — документы
 function Footer() {
-  const { ui, prefix, servicePages, telegramUrl, tiktokUrl, kworkUrl, githubUrl } = useSite()
+  const { ui, prefix, telegramUrl, tiktokUrl, kworkUrl, githubUrl } = useSite()
+  const social = [
+    ['Telegram', telegramUrl, false],
+    ['TikTok', tiktokUrl, true],
+    ['Kwork', kworkUrl, true],
+    ['GitHub', githubUrl, true],
+  ]
   return (
     <footer className="footer">
-      <p>{ui.footerTagline}</p>
-      <nav className="footer-links" aria-label={ui.footerServices}>
-        {servicePages.map((page) => (
-          <a key={page.id} href={page.path}>
-            {page.nav}
+      <nav className="footer-social" aria-label={ui.footerSocial}>
+        {social.map(([name, url, external]) => (
+          <a key={name} href={url} {...(external && { target: '_blank', rel: 'noreferrer' })}>
+            {name}
+            <ExternalIcon />
           </a>
         ))}
-        <a href={`${prefix}/partners/`}>{ui.partnersLink}</a>
-        <a href={`${prefix}/privacy/`}>{ui.privacyLink}</a>
-        <a href={`${prefix}/consent/`}>{ui.consentLink}</a>
-        <button type="button" className="footer-button" onClick={() => window.dispatchEvent(new Event('cookie-settings'))}>
-          {ui.cookie.settings}
-        </button>
       </nav>
-      <div className="footer-links">
-        <a href={telegramUrl}>Telegram</a>
-        <a href={tiktokUrl} target="_blank" rel="noreferrer">
-          TikTok
-        </a>
-        <a href={kworkUrl} target="_blank" rel="noreferrer">
-          Kwork
-        </a>
-        <a href={githubUrl} target="_blank" rel="noreferrer">
-          GitHub
-        </a>
+      <div className="footer-bottom">
+        <span>© 2026 Its Step</span>
+        <nav className="footer-legal" aria-label={ui.footerLegal}>
+          <a href={`${prefix}/privacy/`}>{ui.privacyLink}</a>
+          <a href={`${prefix}/consent/`}>{ui.consentLink}</a>
+          <button type="button" onClick={() => window.dispatchEvent(new Event('cookie-settings'))}>
+            {ui.cookie.settings}
+          </button>
+        </nav>
       </div>
     </footer>
   )

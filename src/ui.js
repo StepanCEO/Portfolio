@@ -104,8 +104,8 @@ const ru = {
     tooMany: 'Слишком много заявок подряд. Напишите, пожалуйста, в Telegram',
   },
 
-  footerTagline: 'AI-системы, CRM и сайты для бизнеса. Самозанятый, по договору, удалённо.',
-  footerServices: 'Услуги',
+  footerSocial: 'Соцсети и площадки',
+  footerLegal: 'Документы',
   partnersLink: 'Партнёрам',
   privacyLink: 'Политика обработки данных',
   consentLink: 'Согласие на обработку данных',
@@ -288,8 +288,8 @@ const en = {
     tooMany: 'Too many requests in a row. Please message me on Telegram',
   },
 
-  footerTagline: 'AI systems, CRMs and websites for business. Contract-based, remote.',
-  footerServices: 'Services',
+  footerSocial: 'Social and marketplaces',
+  footerLegal: 'Legal',
   partnersLink: 'Partners',
   privacyLink: 'Data processing policy',
   consentLink: 'Consent to data processing',
