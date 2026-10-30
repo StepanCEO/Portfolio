@@ -47,7 +47,8 @@ const caseJsonLd = (item, prefix) => {
   }
 }
 
-// Разметка страницы услуги: сама услуга с ценой «от», хлебные крошки и вопросы-ответы
+// Разметка страницы услуги: сама услуга с ценой «от» (рубли — русская версия, доллары — английская),
+// хлебные крошки и вопросы-ответы
 const serviceJsonLd = (page, prefix, parent) => {
   const url = `${siteUrl}${page.path}`
   return {
@@ -68,14 +69,18 @@ const serviceJsonLd = (page, prefix, parent) => {
         description: page.metaDescription,
         url,
         serviceType: page.nav,
-        areaServed: prefix ? undefined : 'RU',
+        areaServed: prefix ? 'US' : 'RU',
         inLanguage: prefix ? 'en' : 'ru',
         provider: { '@id': `${siteUrl}/#person` },
         offers: page.minPrice
           ? {
               '@type': 'Offer',
-              priceCurrency: 'RUB',
-              priceSpecification: { '@type': 'PriceSpecification', minPrice: page.minPrice, priceCurrency: 'RUB' },
+              priceCurrency: prefix ? 'USD' : 'RUB',
+              priceSpecification: {
+                '@type': 'PriceSpecification',
+                minPrice: page.minPrice,
+                priceCurrency: prefix ? 'USD' : 'RUB',
+              },
             }
           : undefined,
       },

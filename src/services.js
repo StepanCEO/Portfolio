@@ -282,7 +282,7 @@ export const servicePages = [
     priceText:
       'Столько стоит простой бот: меню, ответы и приём заявок. Оплата и подписки, админка, AI и интеграции добавляют к цене — оценку даю в день обращения, смету фиксирую в договоре.',
     minPrice: 10000,
-    caseIds: ['hayat', 'leadgen'],
+    caseIds: ['hayat', 'ton-access-pass', 'leadgen'],
     reviewNames: ['STIZO', 'GrigoriySE', 'daneley', 'fomin273', 'partyzan77777'],
     faq: [
       [

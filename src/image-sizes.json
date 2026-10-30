@@ -111,6 +111,34 @@
       ]
     ]
   },
+  "/projects/ton-access-pass-ru.png": {
+    "width": 1600,
+    "height": 950,
+    "variants": [
+      [
+        800,
+        "/projects/ton-access-pass-ru-800.webp"
+      ],
+      [
+        1600,
+        "/projects/ton-access-pass-ru-1600.webp"
+      ]
+    ]
+  },
+  "/projects/ton-access-pass.png": {
+    "width": 1600,
+    "height": 950,
+    "variants": [
+      [
+        800,
+        "/projects/ton-access-pass-800.webp"
+      ],
+      [
+        1600,
+        "/projects/ton-access-pass-1600.webp"
+      ]
+    ]
+  },
   "/projects/water-novoterskaya.jpg": {
     "width": 1600,
     "height": 910,

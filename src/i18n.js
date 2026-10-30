@@ -3,7 +3,8 @@ import * as ruContent from './content.js'
 import * as enContent from './content.en.js'
 import * as ruServices from './services.js'
 import * as enServices from './services.en.js'
-import { nichePages } from './niches.js'
+import { nichePages as ruNichePages } from './niches.js'
+import { nichePages as enNichePages } from './niches.en.js'
 import { ui } from './ui.js'
 
 // Две версии сайта: русская в корне, английская в /en/. Компоненты берут данные
@@ -14,9 +15,10 @@ export const langOf = (path) => (path === '/en' || path.startsWith('/en/') ? 'en
 export const normalize = (path) => (path.endsWith('/') ? path : `${path}/`)
 
 const sites = {
-  // нишевые страницы («ии для тендеров», «бот с оплатой»…) — только русские: под них собран спрос
-  ru: { ...ruContent, ...ruServices, nichePages, lang: 'ru', prefix: '', ui: ui.ru },
-  en: { ...enContent, ...enServices, nichePages: [], lang: 'en', prefix: '/en', ui: ui.en },
+  // нишевые страницы у каждой версии свои: темы собраны по спросу своего рынка
+  // (Яндекс и Google для русской, Google US для английской), пар между ними нет
+  ru: { ...ruContent, ...ruServices, nichePages: ruNichePages, lang: 'ru', prefix: '', ui: ui.ru },
+  en: { ...enContent, ...enServices, nichePages: enNichePages, lang: 'en', prefix: '/en', ui: ui.en },
 }
 
 export const getSite = (lang) => sites[lang]
@@ -29,7 +31,7 @@ export const useSite = () => useContext(SiteContext)
 export function alternatePath(path) {
   const p = normalize(path)
   if (p === '/404/') return null
-  if (sites.ru.nichePages.some((page) => page.path === p)) return null
+  if ([...sites.ru.nichePages, ...sites.en.nichePages].some((page) => page.path === p)) return null
   if (langOf(p) === 'en') {
     const service = sites.en.servicePages.find((page) => page.path === p)
     if (service) return `/${service.ruId}/`

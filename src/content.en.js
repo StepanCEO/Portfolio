@@ -1,8 +1,8 @@
 // English site content: mirrors the exports of content.js for the /en/ pages.
 // Language-neutral values (links, images, numbers from public profiles) are imported
 // from content.js so the two versions cannot drift apart.
-// Developer prices in rubles are not shown on English pages: where the Russian version
-// shows a budget, a non-monetary fact from the same project is used instead.
+// Aimed at US and other English-speaking clients: service prices are starting prices
+// in USD; client budgets from Russian projects are not converted or shown.
 
 import { kwork } from './content.js'
 
@@ -34,7 +34,7 @@ export const telegramUrl = `https://t.me/SStepCEO?text=${encodeURIComponent(cont
 export const heroStats = [
   { value: '30+', label: 'orders delivered in 2 years' },
   { value: '520,000', label: 'products in the largest online store I built' },
-  { value: kwork.intime, label: 'of Kwork orders delivered on time' },
+  { value: kwork.intime, label: 'of freelance orders delivered on time' },
   { value: '301K', label: 'likes on TikTok videos' },
 ]
 
@@ -105,13 +105,26 @@ export const cases = [
     image: asset('projects/sales-ai.jpg'),
   },
   {
+    id: 'ton-access-pass',
+    category: 'Web3 · Telegram Mini App',
+    title: 'Paid channel access on TON',
+    summary:
+      'My open-source project: a Mini App that sells a subscription to a private Telegram channel for TON. A Tact smart contract stores the expiry date, and the bot lets subscribers in and removes them when it runs out.',
+    metric: '25 tests',
+    metricNote: 'for the contract and backend, plus a real testnet payment',
+    link: 'https://github.com/StepanCEO/ton-access-pass',
+    linkLabel: 'Code on GitHub',
+    stack: 'Tact, TON Connect, Node.js, TypeScript',
+    image: asset('projects/ton-access-pass.png'),
+  },
+  {
     id: 'hayat',
     category: 'Telegram bot',
     title: 'Marriage agency bot',
     summary:
       'A closed questionnaire funnel with moderation and paid access. The agency stopped handling conversations by hand.',
-    metric: '100,000 RUB',
-    metricNote: 'of client revenue in the first week — 50 payments',
+    metric: '50 payments',
+    metricNote: 'in the first week after launch',
     link: 'https://t.me/Hayatnikah_bot',
     linkLabel: '@Hayatnikah_bot',
     image: asset('projects/hayat-nikah.png'),
@@ -218,32 +231,32 @@ export const services = [
   {
     title: 'Telegram bots',
     body: 'Requests, bookings, payments and subscriptions, a store or a Mini App right inside Telegram.',
-    price: 'Fixed quote',
+    price: 'from $300',
     term: '1–2 weeks',
   },
   {
     title: 'Automation and AI',
-    body: 'AI managers and integrations: they take requests, answer from your knowledge base, accept payments and guide the client to a deal.',
-    price: 'Fixed quote',
+    body: 'AI agents and integrations: they take requests, answer from your knowledge base, accept payments and guide the client to a deal.',
+    price: 'from $1,000',
     term: '1–2 weeks',
   },
   {
     title: 'Web services and CRM',
-    body: 'CRMs, client portals, admin panels and dashboards. Integrations with amoCRM, Bitrix24, email and payment systems — YooKassa, Tribute.',
-    price: 'Fixed quote',
+    body: 'CRMs, client portals, admin panels and dashboards. Integrations with your CRM, email and payment systems through their APIs.',
+    price: 'from $2,500',
     term: '3–6 weeks',
     accent: true,
   },
   {
     title: 'Turnkey product',
     body: 'An MVP or SaaS from scratch: architecture, interface, billing, analytics. For startups and internal business systems.',
-    price: 'Fixed quote',
+    price: 'from $6,000',
     term: 'from 6 weeks',
   },
 ]
 
 export const steps = [
-  ['Task review', 'Free, 30 minutes in Telegram. An estimate of timeline and price the same day.'],
+  ['Task review', 'Free, 30 minutes on a call or in Telegram. An estimate of timeline and price the same day.'],
   ['Contract and spec', 'I fix the scope, timeline and cost. I work as a registered self-employed professional.'],
   ['Development in stages', 'Payment by stage, a demo every week — you see what you’re paying for.'],
   ['Launch and support', 'I hand over the code and access; 2 weeks of support are included.'],
@@ -260,6 +273,7 @@ export const navItems = [
 
 // Case card look: background and text tone to match the project image (same as content.js)
 const caseLooks = {
+  'ton-access-pass': { tone: 'dark', bg: 'linear-gradient(135deg, #08121e 0%, #0b3a66 100%)' },
   'conteria-tenders': { tone: 'light', bg: 'linear-gradient(135deg, #eef3ff 0%, #d6e2ff 100%)' },
   'conteria-shop': { tone: 'light', bg: 'linear-gradient(135deg, #f2f6fd 0%, #dce8fa 100%)' },
   novoterskaya: { tone: 'dark', bg: 'linear-gradient(135deg, #0e1a2b 0%, #1d3a5c 100%)' },
@@ -273,6 +287,22 @@ const caseLooks = {
 // Detailed case stories: task → what was done → result. Translated from content.js;
 // same facts, no new ones.
 const caseDetails = {
+  'ton-access-pass': {
+    task: 'Show, as an open project, how to sell access to a private Telegram channel for crypto with no payment provider and no manual checks. The blockchain is the source of truth: anyone can verify a subscription without trusting the server.',
+    done: [
+      'Two Tact smart contracts. The main one takes payments and deploys a small per-subscriber contract that stores the expiry date. Renewing early adds to the time left, and underpayments are bounced back automatically.',
+      'The bot admits people to the channel only through join requests. Before approving, it reads the subscription from the blockchain, and every minute it removes members whose subscription has expired.',
+      'A Mini App that looks like Telegram itself: subscription status, payment with TON Connect, confirmation and a button to open the channel. Colors follow the user’s Telegram theme.',
+      'The server verifies Telegram’s signature on every Mini App request, so nobody can view or pay for a subscription as someone else.',
+      'Deployed to testnet and tested with a real payment. It caught a bug the tests had missed: the wallet took the fee out of the amount and the contract bounced the payment. The server now asks for a 0.01 TON reserve, covered by its own test.',
+    ],
+    results: [
+      ['25 tests', 'for the contract, bot and API on the TON sandbox'],
+      ['≈ 0.001 TON', 'network fee per payment'],
+      ['2 contracts', 'a main one and one per subscriber'],
+      ['Testnet', 'deployed and verified with a real payment'],
+    ],
+  },
   'leasing-crm': {
     task: 'A platform for leasing cars and special machinery: a catalog, a payment calculator based on bank terms, leasing applications with a CRM for bank managers, and an admin panel. The client also asked for machinery to be pulled from leasing companies’ websites every night and for a feed export to Yandex.',
     done: [

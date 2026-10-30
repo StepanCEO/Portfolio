@@ -1,7 +1,7 @@
-// English service pages: mirrors services.js for the /en/ pages.
-// Same facts as the Russian version; developer prices in rubles are not shown —
-// the price is fixed in the contract after a free call. ruId links each page to its
-// Russian counterpart. Update together with services.js.
+// English service pages: mirrors services.js for the /en/ pages, aimed at US and
+// other English-speaking clients. Same facts as the Russian version; prices are
+// starting prices in USD (minPrice feeds the Service markup). ruId links each page to
+// its Russian counterpart. Update together with services.js.
 
 // What every client gets, whatever the format
 export const included = [
@@ -16,10 +16,10 @@ export const servicePages = [
     id: 'ai-agents',
     ruId: 'ai-agenty',
     nav: 'AI agents',
-    title: 'AI agent development for business',
-    metaTitle: 'Turnkey AI Agent Development for Business — Its Step',
+    title: 'AI agent development services',
+    metaTitle: 'AI Agent Development Services for Business | Its Step',
     metaDescription:
-      'AI agents that answer clients, put together proposals, parse documents and run deals in your CRM. Fixed quote, first working version in 1–2 weeks.',
+      'Custom AI agents that answer customers, draft proposals, process documents and update your CRM. From $1,000, first working version in 1–2 weeks, fixed-price contract.',
     short: 'They answer clients, put together proposals, parse documents and run deals in the CRM.',
     lead: 'An AI agent takes over your managers’ repetitive work: it answers clients from your knowledge base, parses documents, puts together commercial proposals and runs the deal in the CRM. I build these systems for real businesses — from a single-task agent to a tender system with a 13-stage pipeline.',
     tasksTitle: 'What the agents I build can do',
@@ -55,15 +55,16 @@ export const servicePages = [
       'The agent starts in prompter mode: it drafts the reply and a person sends it. Once the answers prove accurate, part of the flow moves to autopilot. Every action of the agent is logged, so you can always see what it did and why.',
       'I work with OpenAI and DeepSeek models and connect them to your CRM, email, messengers and knowledge base. The logic is written in Python and FastAPI and the workflows in n8n, so the system can keep growing without a rewrite from scratch.',
     ],
-    price: 'Fixed quote',
+    price: 'from $1,000',
+    minPrice: 1000,
     term: '1–2 weeks to the first working version',
     priceText:
-      'The price is fixed in the contract after a free 30-minute call and depends on scope: the number of channels, integrations and the size of the knowledge base. A single-task agent covers one job — answers from the knowledge base, request handling or proposal assembly. A large system for several departments, with CRM, documents and reports, is built as a turnkey product and takes from 6 weeks.',
+      'From $1,000 for a single-task agent: answers from your knowledge base, request handling or proposal drafting. The final price depends on the channels, integrations and the size of the knowledge base, and it is fixed in the contract after a free 30-minute call. A large system for several departments, with CRM, documents and reports, is built as a turnkey product and takes from 6 weeks.',
     caseIds: ['conteria-tenders', 'sales-ai', 'leadgen', 'conteria-shop'],
     faq: [
       [
         'How much does an AI agent cost?',
-        'The quote is fixed in the contract after a free 30-minute call. It depends on the number of channels, integrations and the size of the knowledge base. The first working version of a single-task agent takes 1–2 weeks.',
+        'From $1,000 for a single-task agent, with the first working version in 1–2 weeks. The final quote depends on channels, integrations and the knowledge base, and it is fixed in the contract after a free 30-minute call.',
       ],
       [
         'Won’t the agent make up prices and facts?',
@@ -71,7 +72,7 @@ export const servicePages = [
       ],
       [
         'Which CRMs and channels do you work with?',
-        'amoCRM and Bitrix24, email, Telegram and MAX. If the integration you need isn’t on the list, we’ll discuss it on the call.',
+        'Delivered projects run on amoCRM, Bitrix24, email, Telegram and the MAX messenger. HubSpot, Pipedrive, Slack, WhatsApp Business and other tools with an API are connected the same way, through their APIs. We go over your stack on the call.',
       ],
       [
         'Can we start with a small pilot?',
@@ -91,10 +92,10 @@ export const servicePages = [
     id: 'crm',
     ruId: 'crm',
     nav: 'CRM',
-    title: 'Custom CRM development for your business',
-    metaTitle: 'Custom CRM Development — Its Step',
+    title: 'Custom CRM development',
+    metaTitle: 'Custom CRM Development for Small Business | Its Step',
     metaDescription:
-      'CRMs, client portals and admin panels built around your process: requests, catalogs, calculators, email, roles. amoCRM, Bitrix24, payments. 3–6 weeks.',
+      'A CRM, client portal or admin panel built around how your team works: pipeline, catalogs, calculators, email and roles. From $2,500, 3–6 weeks, you own the code.',
     short: 'Requests, catalogs, calculators and email in one window — built around your process.',
     lead: 'I build CRMs and internal systems around a company’s specific process — when an off-the-shelf CRM forces you to work “like everyone else” or customizing it already costs more than having your own. Requests, catalogs, calculators, documents and email come together in one window, with roles and access rights.',
     tasksTitle: 'What I build into a CRM',
@@ -109,7 +110,7 @@ export const servicePages = [
       ],
       [
         'Counterparty checks',
-        'A company is checked by its tax ID (INN) right when the request is created — no manual searching in third-party services.',
+        'Company details are pulled from public registries by tax ID as soon as a request is created. In the leasing CRM this runs through the Checko API, with no manual searching.',
       ],
       [
         'Email inside the CRM',
@@ -121,7 +122,7 @@ export const servicePages = [
       ],
       [
         'Integrations and AI',
-        'amoCRM, Bitrix24, email, YooKassa and Tribute. AI product descriptions and document parsing — where they save hours of work.',
+        'Email, payments and other CRMs through their APIs: amoCRM and Bitrix24 in delivered projects, HubSpot, Pipedrive or Stripe the same way. AI product descriptions and document parsing where they save hours of work.',
       ],
     ],
     approachTitle: 'The CRM is built around the process, not the other way round',
@@ -130,18 +131,19 @@ export const servicePages = [
       'I deliver in stages: a demo of the working part every week, and payment by stage too. You see what you’re paying for, and changes are made along the way rather than in one list at the end. That’s how the CRM for the leasing platform was delivered — with a machinery catalog, a calculator and company checks by tax ID.',
       'The stack is Next.js, Django or FastAPI, and PostgreSQL. I hand over the code and access to you: you can develop the system in-house or together with me.',
     ],
-    price: 'Fixed quote',
+    price: 'from $2,500',
+    minPrice: 2500,
     term: '3–6 weeks',
     priceText:
-      'The price is fixed in the contract after a free 30-minute call and depends on scope: the number of modules, roles and integrations. It covers design, interface, database, integrations and launch on your server.',
+      'From $2,500 for a CRM with one pipeline, roles and email. Every extra module, role or integration adds to the scope. The price covers design, interface, database, integrations and launch on your server, and it is fixed in the contract after a free 30-minute call.',
     caseIds: ['leasing-crm', 'conteria-tenders', 'sales-ai'],
     faq: [
       [
         'How much does CRM development cost?',
-        'The quote is fixed in the contract after a free 30-minute call, and the timeline is 3–6 weeks. The final price depends on modules, roles and integrations.',
+        'From $2,500, with a timeline of 3–6 weeks. The final price depends on modules, roles and integrations, and it is fixed in the contract after a free 30-minute call.',
       ],
       [
-        'Why a custom CRM instead of amoCRM or Bitrix24?',
+        'Why a custom CRM instead of HubSpot or Salesforce?',
         'An off-the-shelf CRM works well if your process fits its logic. A custom one is needed when your own reference data, calculators, documents and rules matter — or when customizing an off-the-shelf one already costs more. Often an integration with amoCRM is enough, and I’ll tell you so honestly on the call.',
       ],
       [
@@ -166,10 +168,10 @@ export const servicePages = [
     id: 'websites',
     ruId: 'sajty',
     nav: 'Websites',
-    title: 'Website development for business',
-    metaTitle: 'Turnkey Business Website Development — Its Step',
+    title: 'Website development for small business',
+    metaTitle: 'Small Business Website Development | Its Step',
     metaDescription:
-      'Brand websites, online stores and service sites: admin panel, integrations, SEO from day one. A store with 520,000 products. Under contract.',
+      'Business websites, online stores and restaurant sites with an admin panel and SEO from day one. From $800. Built an online store with 520,000 products.',
     short: 'Brand websites, online stores and service sites — with an admin panel and SEO from day one.',
     lead: 'I build websites that work for the business: they take requests, sell and are updated without a developer. From a brand website for a mineral water to an online store with 520,000 products and stock levels updated automatically from suppliers.',
     tasksTitle: 'Websites I build',
@@ -180,7 +182,7 @@ export const servicePages = [
       ],
       [
         'Online store',
-        'A catalog with filters, cart and online payment, delivery via CDEK and PEC, product feeds for VKontakte ads.',
+        'A catalog with filters, cart and online payment, shipping integrations and product feeds for ads.',
       ],
       [
         'Service website',
@@ -196,24 +198,25 @@ export const servicePages = [
       ],
       [
         'Admin panel and analytics',
-        'Texts, photos and products are edited without a developer; Yandex Metrica and automatic deployment are set up from the start.',
+        'Texts, photos and products are edited without a developer; analytics and automatic deployment are set up from the start.',
       ],
     ],
     approachTitle: 'SEO and speed are built in from the start',
     approach: [
       'I build the whole website: structure, interface, code and launch. That’s why it looks the way it was designed and opens quickly on a phone — images are compressed, text is visible to search engines without JavaScript, and there are no unnecessary scripts.',
-      'Basic SEO is part of the work: pages for real search queries, meta tags and messenger previews, structured data, a sitemap, and Yandex Webmaster and Metrica setup. You won’t have to rebuild the site for promotion later.',
+      'Basic SEO is part of the work: pages for real search queries, meta tags and messenger previews, structured data, a sitemap, and Google Search Console and analytics setup. You won’t have to rebuild the site for promotion later.',
       'For small websites — a static build and fast hosting. For stores and large catalogs — Next.js and Laravel with a database, an admin panel and integrations.',
     ],
-    price: 'Fixed quote',
+    price: 'from $800',
+    minPrice: 800,
     term: 'estimate on the day you get in touch',
     priceText:
-      'The price depends on the number of pages, the catalog, languages and integrations. It is fixed in the contract after a free 30-minute call, together with the timeline.',
+      'From $800 for a small business website with several pages, a contact form and basic SEO. A store, a catalog, more languages and integrations add to the scope. The price and timeline are fixed in the contract after a free 30-minute call.',
     caseIds: ['novoterskaya', 'conteria-shop', 'nechay'],
     faq: [
       [
         'How much does a website cost?',
-        'It depends on scope: the number of pages, the catalog, languages and integrations. I give an estimate on the day you get in touch, and the quote is fixed in the contract after a free 30-minute call.',
+        'From $800 for a small business website. The final price depends on pages, catalog, languages and integrations. I give an estimate on the day you get in touch, and the quote is fixed in the contract after a free 30-minute call.',
       ],
       [
         'Can I edit texts and products myself?',
@@ -225,7 +228,7 @@ export const servicePages = [
       ],
       [
         'Can you connect payment and delivery?',
-        'Yes: online payment — for example, via YooKassa — and delivery via CDEK and PEC, as in the Conteria store.',
+        'Yes. Payments and shipping are connected through the providers’ APIs. The Conteria store, for example, takes online payments and calculates delivery with two carriers.',
       ],
       [
         'Can a store be moved from OpenCart?',
@@ -241,10 +244,10 @@ export const servicePages = [
     id: 'telegram-bots',
     ruId: 'telegram-boty',
     nav: 'Telegram bots',
-    title: 'Turnkey Telegram bot development',
-    metaTitle: 'Turnkey Telegram Bot Development — Its Step',
+    title: 'Telegram bot development',
+    metaTitle: 'Telegram Bot Developer for Hire: Bots and Mini Apps | Its Step',
     metaDescription:
-      'Bots for sales, requests, payments and subscriptions, Telegram Mini Apps, AI in bots. A marriage agency bot brought its client 100,000 RUB in week one.',
+      'Telegram bots for sales, requests, payments and subscriptions, plus Telegram Mini Apps and TON smart contracts. From $300, 1–2 weeks, fixed-price contract.',
     short: 'They sell, take requests and payments, and grant access — with no human involved.',
     lead: 'I build bots that sell, take requests and accept payments with no human involved. One of them — a marriage agency bot — brought the client 100,000 RUB in its first week: 50 payments, and the agency stopped handling conversations by hand.',
     tasksTitle: 'What the bots can do',
@@ -255,7 +258,7 @@ export const servicePages = [
       ],
       [
         'Payments and subscriptions',
-        'Payments via YooKassa and Tribute, paid access to a channel or course, subscription renewal without manual checks.',
+        'Telegram Stars, TON via TON Connect, YooKassa or Tribute: paid access to a channel or course and subscription renewals without manual checks.',
       ],
       [
         'Store in Telegram',
@@ -263,7 +266,7 @@ export const servicePages = [
       ],
       [
         'Telegram Mini Apps',
-        'A full-fledged app inside Telegram — no installation or sign-up for the client.',
+        'A full app inside Telegram with no installation or sign-up, and TON Connect payments when you need them.',
       ],
       [
         'AI in the bot',
@@ -280,20 +283,21 @@ export const servicePages = [
       'Small tasks I do quickly: a Telegram Mini App for one of my clients was ready in less than a day. Bots with payments, moderation and an admin panel are delivered in stages, with a demo every week.',
       'I write in Python with a PostgreSQL database. The bot runs around the clock and is deployed on your server, and the access stays with you.',
     ],
-    price: 'Fixed quote',
+    price: 'from $300',
+    minPrice: 300,
     term: '1–2 weeks',
     priceText:
-      'The price is fixed in the contract after a free 30-minute call and depends on scope: the funnel, payments and admin panel. Small improvements and Mini Apps take less time — I give an estimate on the day you get in touch.',
-    caseIds: ['hayat', 'leadgen'],
+      'From $300 for a bot with a simple scenario. Payments, moderation, an admin panel and Mini Apps add to the scope. I give an estimate on the day you get in touch, and the price is fixed in the contract after a free 30-minute call.',
+    caseIds: ['hayat', 'ton-access-pass', 'leadgen'],
     reviewNames: ['STIZO', 'GrigoriySE', 'daneley', 'fomin273', 'partyzan77777'],
     faq: [
       [
         'How much does a Telegram bot cost?',
-        'The quote is fixed in the contract after a free 30-minute call and depends on the funnel, payments and admin panel. A bot like that takes 1–2 weeks. Simple improvements cost less and are faster — I’ll estimate them the day you get in touch.',
+        'From $300 for a simple bot. A bot with a funnel, payments and an admin panel takes 1–2 weeks, and the price is fixed in the contract after a free 30-minute call.',
       ],
       [
         'Which payment systems do you connect?',
-        'YooKassa and Tribute: one-time payments, paid access and subscriptions.',
+        'Telegram Stars, TON via TON Connect, YooKassa and Tribute: one-time payments, paid access and subscriptions. Other providers are connected through their APIs.',
       ],
       [
         'Can you build a bot with AI?',

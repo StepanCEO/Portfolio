@@ -198,9 +198,9 @@ const ru = {
 const en = {
   meta: {
     home: {
-      title: 'AI systems, CRMs and websites for business — Stepan, Its Step',
+      title: 'Freelance AI Agent, Telegram Bot and CRM Developer | Stepan, Its Step',
       description:
-        'I build AI agents, CRMs, Telegram bots and websites end to end. 30+ projects delivered in 2 years, 96% on time on Kwork. Fixed quote after a free call.',
+        'I build AI agents, Telegram bots and Mini Apps, custom CRMs and websites for small businesses, end to end. 30+ projects in 2 years. Fixed price from $300.',
     },
     partners: {
       title: 'Partner program: 10% per client — Its Step',
@@ -268,7 +268,7 @@ const en = {
   telegramChannel: 'Telegram channel',
 
   pricingTitle: 'Formats',
-  pricingLead: 'The price is fixed in the contract after a free call where we go through the task.',
+  pricingLead: 'Starting prices in USD. The final price is fixed in the contract after a free call where we go through the task.',
 
   ctaEyebrow: 'Next step',
   ctaTitle: 'Tell me what your team still does by hand',

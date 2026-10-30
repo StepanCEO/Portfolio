@@ -17,7 +17,8 @@ if (!template.includes(marker)) throw new Error(`${marker} не найден в 
 
 const escape = (text) => text.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 
-// пара страниц на двух языках: поисковики показывают каждому его версию
+// пара страниц на двух языках: поисковики показывают каждому его версию,
+// а всем остальным языкам (x-default) — английскую
 function hreflang(route) {
   if (!route.alternate) return []
   const ru = route.lang === 'ru' ? route.path : route.alternate
@@ -25,7 +26,7 @@ function hreflang(route) {
   return [
     `    <link rel="alternate" hreflang="ru" href="${siteUrl}${ru}" />`,
     `    <link rel="alternate" hreflang="en" href="${siteUrl}${en}" />`,
-    `    <link rel="alternate" hreflang="x-default" href="${siteUrl}${ru}" />`,
+    `    <link rel="alternate" hreflang="x-default" href="${siteUrl}${en}" />`,
   ]
 }
 
@@ -35,7 +36,7 @@ function withMeta(html, route) {
     route.noindex && '    <meta name="robots" content="noindex" />',
     route.jsonLd && `    <script type="application/ld+json">${JSON.stringify(route.jsonLd)}</script>`,
   ].filter(Boolean)
-  if (extra.length) html = html.replace('  </head>', `${extra.join('\n')}\n  </head>`)
+  if (extra.length) html = html.replace('  </head>', () => `${extra.join('\n')}\n  </head>`)
   if (route.lang === 'en') {
     html = html
       .replace('<html lang="ru">', '<html lang="en">')
@@ -45,24 +46,27 @@ function withMeta(html, route) {
   const url = `${siteUrl}${route.path}`
   const title = escape(route.title)
   const description = escape(route.description)
-  return html
-    .replace(/<title>[^<]*<\/title>/, `<title>${title}</title>`)
-    .replace(/(<meta\s+name="description"\s+content=")[^"]*"/, `$1${description}"`)
-    .replace(/(<link rel="canonical" href=")[^"]*"/, `$1${url}"`)
-    .replace(/(<meta property="og:url" content=")[^"]*"/, `$1${url}"`)
-    .replace(/(<meta property="og:title" content=")[^"]*"/, `$1${title}"`)
-    .replace(/(<meta\s+property="og:description"\s+content=")[^"]*"/, `$1${description}"`)
-    .replace(/(<meta name="twitter:title" content=")[^"]*"/, `$1${title}"`)
-    .replace(/(<meta\s+name="twitter:description"\s+content=")[^"]*"/, `$1${description}"`)
-    .replace(/(<meta property="og:image" content=")[^"]*"/, `$1${route.image}"`)
-    .replace(/(<meta name="twitter:image" content=")[^"]*"/, `$1${route.image}"`)
-    .replace(/\s*<meta property="og:image:(width|height)" content="[^"]*" \/>/g, '')
-    .replace(/(<meta property="og:image:alt" content=")[^"]*"/, `$1${title}"`)
+  // подстановка через функцию: в тексте замены «$1» значит «группа 1», а в описаниях бывают цены вроде $1,000
+  const set = (pattern, value) => (text) => text.replace(pattern, (_, start) => `${start}${value}"`)
+  return [
+    (text) => text.replace(/<title>[^<]*<\/title>/, () => `<title>${title}</title>`),
+    set(/(<meta\s+name="description"\s+content=")[^"]*"/, description),
+    set(/(<link rel="canonical" href=")[^"]*"/, url),
+    set(/(<meta property="og:url" content=")[^"]*"/, url),
+    set(/(<meta property="og:title" content=")[^"]*"/, title),
+    set(/(<meta\s+property="og:description"\s+content=")[^"]*"/, description),
+    set(/(<meta name="twitter:title" content=")[^"]*"/, title),
+    set(/(<meta\s+name="twitter:description"\s+content=")[^"]*"/, description),
+    set(/(<meta property="og:image" content=")[^"]*"/, route.image),
+    set(/(<meta name="twitter:image" content=")[^"]*"/, route.image),
+    (text) => text.replace(/\s*<meta property="og:image:(width|height)" content="[^"]*" \/>/g, ''),
+    set(/(<meta property="og:image:alt" content=")[^"]*"/, title),
+  ].reduce((text, apply) => apply(text), html)
 }
 
 for (const route of routes) {
   const root = `<div id="root" data-path="${route.path}">${render(route.path)}</div>`
-  const html = withMeta(template, route).replace(marker, root)
+  const html = withMeta(template, route).replace(marker, () => root)
   const file = route.file
     ? resolve(dist, route.file)
     : route.path === '/'

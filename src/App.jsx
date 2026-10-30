@@ -367,7 +367,7 @@ function ServiceRow({ page }) {
 }
 
 function ServicesSection() {
-  const { ui, servicePages, lang } = useSite()
+  const { ui, servicePages, nichePages, lang } = useSite()
   return (
     <section className="section" id="services">
       <SectionHead index="01" title={<>{ui.servicesTitle}<span className="dot dot-light">.</span></>}>
@@ -382,6 +382,18 @@ function ServicesSection() {
         <p className="services-geo">
           Работаю удалённо с компаниями из России, <a href="/kazahstan/">Казахстана</a> и{' '}
           <a href="/belarus/">Беларуси</a>.
+        </p>
+      )}
+      {lang === 'en' && (
+        <p className="services-geo">
+          Popular requests:{' '}
+          {nichePages.map((page, i) => (
+            <Fragment key={page.id}>
+              {i > 0 && ', '}
+              <a href={page.path}>{page.nav}</a>
+            </Fragment>
+          ))}
+          .
         </p>
       )}
     </section>
