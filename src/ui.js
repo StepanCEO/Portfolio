@@ -145,6 +145,8 @@ const ru = {
     getQuote: 'Получить оценку',
     faq: 'Частые вопросы',
     otherServices: 'Другие услуги',
+    popularTasks: 'Частые задачи',
+    similarSolutions: 'Похожие решения',
   },
 
   notFound: {
@@ -329,6 +331,8 @@ const en = {
     getQuote: 'Get a quote',
     faq: 'FAQ',
     otherServices: 'Other services',
+    popularTasks: 'Common tasks',
+    similarSolutions: 'Similar solutions',
   },
 
   notFound: {

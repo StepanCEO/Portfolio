@@ -398,17 +398,27 @@ function Steps() {
 }
 
 function ServicePage({ page, path }) {
-  const { ui, prefix, allCases, reviews, servicePages, included } = useSite()
+  const { ui, prefix, allCases, reviews, servicePages, nichePages, included } = useSite()
   const t = ui.servicePage
   const related = page.caseIds.map((id) => allCases.find((item) => item.id === id)).filter(Boolean)
   const pageReviews = page.reviewNames ? reviews.filter((review) => page.reviewNames.includes(review.name)) : []
   const others = servicePages.filter((other) => other.id !== page.id)
+  // нишевая страница знает свою услугу; у услуги — список её нишевых страниц
+  const parent = page.parent ? servicePages.find((item) => item.id === page.parent) : null
+  const solutions = parent
+    ? nichePages.filter((item) => item.parent === page.parent && item.id !== page.id)
+    : nichePages.filter((item) => item.parent === page.id)
 
   return (
     <>
       <section className="hero service-hero">
         <nav className="eyebrow crumbs-light" aria-label={t.crumbs}>
           <a href={`${prefix}/`}>Its Step</a> / <a href={`${prefix}/#services`}>{t.services}</a> /{' '}
+          {parent && (
+            <>
+              <a href={parent.path}>{parent.nav}</a> /{' '}
+            </>
+          )}
           <span>{page.nav}</span>
         </nav>
         <h1>{page.title}</h1>
@@ -529,6 +539,17 @@ function ServicePage({ page, path }) {
           ))}
         </div>
       </section>
+
+      {solutions.length > 0 && (
+        <section className="section">
+          <SectionHead title={parent ? t.similarSolutions : t.popularTasks} />
+          <div className="services-list">
+            {solutions.map((item) => (
+              <ServiceRow key={item.id} page={item} />
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="section">
         <SectionHead title={t.otherServices} />

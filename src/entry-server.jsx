@@ -48,7 +48,7 @@ const caseJsonLd = (item, prefix) => {
 }
 
 // Разметка страницы услуги: сама услуга с ценой «от», хлебные крошки и вопросы-ответы
-const serviceJsonLd = (page, prefix) => {
+const serviceJsonLd = (page, prefix, parent) => {
   const url = `${siteUrl}${page.path}`
   return {
     '@context': 'https://schema.org',
@@ -57,7 +57,8 @@ const serviceJsonLd = (page, prefix) => {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Its Step', item: `${siteUrl}${prefix}/` },
-          { '@type': 'ListItem', position: 2, name: page.nav, item: url },
+          ...(parent ? [{ '@type': 'ListItem', position: 2, name: parent.nav, item: `${siteUrl}${parent.path}` }] : []),
+          { '@type': 'ListItem', position: parent ? 3 : 2, name: page.nav, item: url },
         ],
       },
       {
@@ -95,7 +96,7 @@ const defaultImage = `${siteUrl}/projects/conteria-hero.jpg`
 // Страницы одной языковой версии и их мета-теги. Русская главная берёт мета-теги из app.html.
 function routesFor(lang) {
   const site = getSite(lang)
-  const { prefix, ui, servicePages, allCases } = site
+  const { prefix, ui, servicePages, nichePages, allCases } = site
   const caseSuffix = lang === 'en' ? 'case study, Its Step' : 'кейс Its Step'
   return [
     { path: `${prefix}/`, ...(ui.meta.home && { ...ui.meta.home, image: defaultImage }) },
@@ -107,6 +108,17 @@ function routesFor(lang) {
         description: page.metaDescription,
         image: `${siteUrl}${firstCase.image}`,
         jsonLd: serviceJsonLd(page, prefix),
+      }
+    }),
+    ...nichePages.map((page) => {
+      const parent = servicePages.find((item) => item.id === page.parent)
+      const firstCase = allCases.find((item) => item.id === page.caseIds[0])
+      return {
+        path: page.path,
+        title: page.metaTitle,
+        description: page.metaDescription,
+        image: `${siteUrl}${firstCase.image}`,
+        jsonLd: serviceJsonLd(page, prefix, parent),
       }
     }),
     ...allCases.map((item) => ({
