@@ -367,7 +367,7 @@ function ServiceRow({ page }) {
 }
 
 function ServicesSection() {
-  const { ui, servicePages } = useSite()
+  const { ui, servicePages, lang } = useSite()
   return (
     <section className="section" id="services">
       <SectionHead index="01" title={<>{ui.servicesTitle}<span className="dot dot-light">.</span></>}>
@@ -378,6 +378,12 @@ function ServicesSection() {
           <ServiceRow key={page.id} page={page} />
         ))}
       </div>
+      {lang === 'ru' && (
+        <p className="services-geo">
+          Работаю удалённо с компаниями из России, <a href="/kazahstan/">Казахстана</a> и{' '}
+          <a href="/belarus/">Беларуси</a>.
+        </p>
+      )}
     </section>
   )
 }

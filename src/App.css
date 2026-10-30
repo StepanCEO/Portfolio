@@ -2771,4 +2771,19 @@ main > .cta {
   }
 }
 
+.services-geo {
+  margin: 28px 0 0;
+  color: var(--muted);
+  font-size: 16px;
+}
 
+.services-geo a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--line-2);
+  text-underline-offset: 4px;
+}
+
+.services-geo a:hover {
+  text-decoration-color: var(--accent);
+}
